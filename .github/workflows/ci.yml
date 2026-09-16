@@ -89,19 +89,3 @@ jobs:
           pip install opencv-python-headless numpy
           pip install -e . --no-deps
           python scripts/build_site.py --out build/site
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: build/site
-
-  deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [lint, test, cpp, site]
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: https://karthiksubramanian07.github.io/UAV-Ground-School/
-    steps:
-      - uses: actions/deploy-pages@v4
