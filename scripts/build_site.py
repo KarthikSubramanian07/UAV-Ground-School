@@ -1,11 +1,11 @@
-"""Build the static showcase site into a directory ready for GitHub Pages.
+"""Build the static showcase site into a directory ready for Cloudflare Pages.
 
     PYTHONPATH=. python scripts/build_site.py --out build/site
 
 Steps: copy ``site/``, re-encode the committed images from ``docs/week02`` as
 WebP (800 and 1600 px wide), copy the Color Me Impressed test images for the
 in-browser demo, render the benchmark table from ``benchmark.json``, write
-``og.jpg``, ``robots.txt`` and ``sitemap.xml``, then verify the result (no
+``og.jpg``, ``robots.txt``, ``sitemap.xml`` and the Cloudflare ``_headers`` file, then verify the result (no
 unreplaced tokens, no em or en dashes, every local reference resolves).
 
 Every input is checked up front and the build fails with a list of whatever is
@@ -30,7 +30,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 DOCS = ROOT / "docs" / "week02"
-CANONICAL = "https://karthiksubramanian07.github.io/UAV-Ground-School/"
+CANONICAL = "https://uav-ground-school.pages.dev/"
 REPO = "https://github.com/KarthikSubramanian07/UAV-Ground-School"
 DESCRIPTION = (
     "UAVs@Berkeley Ground School Week 2, solved: exact HSV color segmentation with object centers, SUAS shape "
@@ -515,9 +515,31 @@ def build(out: Path, docs: Path = DOCS, today: dt.date | None = None) -> Path:
         f"  <url>\n    <loc>{CANONICAL}</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
         "</urlset>\n"
     )
-    (out / ".nojekyll").write_text("")
+    (out / "_headers").write_text(HEADERS)
     verify(out)
     return out
+
+
+# Cloudflare Pages response headers. Images keep their names across builds but
+# change rarely, so they get a day of caching; HTML, CSS and JS revalidate.
+HEADERS = """/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+/assets/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/og.jpg
+  Cache-Control: public, max-age=86400
+
+/css/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/js/*
+  Cache-Control: public, max-age=0, must-revalidate
+"""
 
 
 def main(argv: list[str] | None = None) -> int:

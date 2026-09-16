@@ -84,6 +84,7 @@ def test_required_files_exist(site: Path) -> None:
         "favicon.svg",
         "robots.txt",
         "sitemap.xml",
+        "_headers",
         "css/site.css",
         "js/hsv-segment.js",
         "js/demo.js",
@@ -151,6 +152,9 @@ def test_seo_metadata(site: Path, index_html: str) -> None:
     assert ld["@type"] == "SoftwareSourceCode" and ld["codeRepository"].startswith("https://github.com/")
     assert f"Sitemap: {canonical}sitemap.xml" in (site / "robots.txt").read_text()
     assert f"<loc>{canonical}</loc>" in (site / "sitemap.xml").read_text()
+    assert canonical == "https://uav-ground-school.pages.dev/"
+    headers = (site / "_headers").read_text()
+    assert "X-Content-Type-Options: nosniff" in headers and "/assets/*" in headers
     assert canonical in (site / "404.html").read_text()
 
 
