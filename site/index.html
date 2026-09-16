@@ -143,7 +143,7 @@
         <div class="section-head split">
           <h2 id="colors-title">Color Me Impressed, running in this tab.</h2>
           <div class="prose">
-            <p>The named mode of <code>colors.py</code>, ported to JavaScript. The HSV conversion reproduces OpenCV's 8-bit fixed point math and matches <code>cv2.cvtColor</code> on all 16,777,216 RGB colors. Twelve inclusive bands split the image, a 3x3 elliptical opening removes speckle, and 8-connected components give every object a center: the mean of its pixel coordinates.</p>
+            <p>The named mode of <code>colors.py</code>, ported to JavaScript. The HSV conversion reproduces OpenCV's 8-bit fixed point math: across all 16,777,216 RGB colors it agrees with <code>cv2.cvtColor</code> exactly on hue and value and within one step on saturation. Twelve inclusive bands split the image, a 3x3 elliptical opening removes speckle, and 8-connected components give every object a center: the mean of its pixel coordinates.</p>
             <p>Pick a test image or bring your own. Uploads are decoded and processed locally and never leave the browser.</p>
           </div>
         </div>

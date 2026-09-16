@@ -48,8 +48,9 @@
   // OpenCV RGB2HSV_b: fixed point with hsv_shift = 12 and per value division
   // tables. OpenCV's saturation table is one lower than a rounded division
   // for six values; the corrections below make this function agree with
-  // cv2.cvtColor(COLOR_BGR2HSV) on all 16,777,216 RGB colors (checked against
-  // OpenCV 4.14 and 5.0).
+  // cv2.cvtColor(COLOR_BGR2HSV) on all 16,777,216 RGB colors for the macOS
+  // arm64 wheels (OpenCV 4.14 and 5.0). Linux x86 builds round a few thousand
+  // saturations differently, by one step at most.
   const HSV_SHIFT = 12;
   const SDIV = new Int32Array(256);
   const HDIV = new Int32Array(256);
