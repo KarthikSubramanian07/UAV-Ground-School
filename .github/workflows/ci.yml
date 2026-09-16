@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
+      - run: ruff check week02 tests scripts
+      - run: ruff format --check week02 tests scripts || echo "formatting differences are advisory"
+      - name: No em or en dashes in tracked text
+        run: |
+          if git grep -nP '[\x{2013}\x{2014}]' -- . ':!*.pdf'; then
+            echo "Found an em or en dash"; exit 1
+          fi
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install
+        run: |
+          pip install opencv-python-headless numpy pytest pytest-cov
+          pip install -e . --no-deps
+      - name: Test
+        run: pytest --cov=week02 --cov-report=term-missing --cov-report=xml
+      - uses: actions/upload-artifact@v4
+        if: matrix.python-version == '3.12'
+        with:
+          name: coverage
+          path: coverage.xml
+
+  cpp:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install OpenCV C++
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libopencv-dev cmake g++
+      - name: Build
+        run: |
+          cmake -S week02/cpp -B build/cpp -DCMAKE_BUILD_TYPE=Release
+          cmake --build build/cpp -j
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Parity with the Python implementation
+        env:
+          WEEK02_CPP_BUILD: build/cpp
+        run: |
+          pip install opencv-python-headless numpy pytest
+          pip install -e . --no-deps
+          pytest tests/test_cpp_parity.py -v
+
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Build showcase site
+        run: |
+          pip install opencv-python-headless numpy
+          pip install -e . --no-deps
+          python scripts/build_site.py --out build/site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/site
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [lint, test, cpp, site]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: https://karthiksubramanian07.github.io/UAV-Ground-School/
+    steps:
+      - uses: actions/deploy-pages@v4

@@ -1,0 +1,10 @@
+white    66.0% of pixels, overall center (x=397.7, y=374.2)
+        object 1: center (x=397.7, y=373.4), area 421095 px
+red      31.0% of pixels, overall center (x=399.4, y=448.3)
+        object 1: center (x=399.4, y=448.3), area 198584 px, octagon (0.89 IoU)
+gray      1.6% of pixels, overall center (x=401.4, y=678.8)
+        object 1: center (x=401.6, y=680.1), area 9566 px, rectangle (0.84 IoU)
+green     1.1% of pixels, overall center (x=506.3, y=184.9)
+        object 1: center (x=506.3, y=184.9), area 7071 px
+brown     0.3% of pixels, overall center (x=409.8, y=210.3)
+        object 1: center (x=409.8, y=210.3), area 1791 px, rectangle (0.95 IoU)

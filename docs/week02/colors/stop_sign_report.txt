@@ -1,0 +1,16 @@
+blue     56.7% of pixels, overall center (x=449.3, y=240.6)
+        object 1: center (x=449.3, y=240.6), area 344373 px
+green    25.5% of pixels, overall center (x=449.5, y=586.0)
+        object 1: center (x=681.0, y=586.0), area 77346 px
+        object 2: center (x=217.9, y=586.0), area 77322 px
+red      13.2% of pixels, overall center (x=450.1, y=269.3)
+        object 1: center (x=449.7, y=269.2), area 79264 px, octagon (0.98 IoU)
+        object 2: center (x=476.4, y=279.9), area 533 px, rectangle (0.90 IoU)
+white     3.5% of pixels, overall center (x=450.1, y=273.1)
+        object 1: center (x=450.8, y=270.7), area 14043 px, octagon (0.98 IoU)
+        object 2: center (x=476.0, y=280.1), area 2126 px, circle (0.93 IoU)
+        object 3: center (x=362.1, y=280.5), area 1962 px
+        object 4: center (x=532.8, y=275.4), area 1857 px, quarter circle (0.81 IoU)
+        object 5: center (x=418.0, y=272.9), area 1441 px
+gray      1.0% of pixels, overall center (x=449.5, y=559.8)
+        object 1: center (x=449.5, y=559.8), area 5968 px
