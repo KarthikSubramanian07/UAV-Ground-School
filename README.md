@@ -10,7 +10,7 @@
 
 `computer-vision` `opencv` `uav` `drones` `image-stitching` `orthomosaic` `bundle-adjustment` `suas` `color-segmentation` `cpp`
 
-Live showcase, with an in browser version of the color splitter: **[karthiksubramanian07.github.io/UAV-Ground-School](https://karthiksubramanian07.github.io/UAV-Ground-School/)**
+Live showcase, with an in browser version of the color splitter: **[uav-ground-school.pages.dev](https://uav-ground-school.pages.dev/)**
 
 <p align="center">
   <img src="docs/week02/rough_path.jpg" alt="A mosaic of a simulated five pass survey flight over a voxel world, with keyframe footprints and the flight path drawn on top" width="100%">
@@ -101,7 +101,7 @@ flowchart LR
 
 * `pytest` runs unit tests for every module plus end to end accuracy checks: shapes across 13 classes, 3 sizes and 3 rotations; exact color partitioning of the whole HSV cube; bundle adjustment removing injected drift and shrugging off outliers; a full stitch held to sub pixel pose error against the simulator.
 * The C++ binaries are checked for parity with Python in CI (same colors, same centers within 1.5 px, same shapes, stitching accuracy against ground truth).
-* GitHub Actions: ruff, tests on Python 3.10 and 3.12, the C++ build against Ubuntu's OpenCV 4.6, the site build, and deployment to GitHub Pages on every push to `main`.
+* GitHub Actions: ruff, tests on Python 3.10 and 3.12, the C++ build against Ubuntu's OpenCV 4.6, and the site build. Cloudflare Pages rebuilds the site on every push to `main` and posts a preview deployment for every pull request.
 
 ## License
 
