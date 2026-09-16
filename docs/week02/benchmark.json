@@ -1,0 +1,88 @@
+[
+  {
+    "scenario": "calm",
+    "variant": "sequential chaining",
+    "keyframes": 50,
+    "loop_closures": 0,
+    "rmse_px": 1.43,
+    "max_px": 2.51,
+    "zncc": 0.941,
+    "seconds": 12.8
+  },
+  {
+    "scenario": "calm",
+    "variant": "+ loop closure and bundle adjustment",
+    "keyframes": 50,
+    "loop_closures": 152,
+    "rmse_px": 0.3,
+    "max_px": 0.7,
+    "zncc": 0.976,
+    "seconds": 18.5
+  },
+  {
+    "scenario": "calm",
+    "variant": "+ gain compensation and multi band blending",
+    "keyframes": 50,
+    "loop_closures": 152,
+    "rmse_px": 0.3,
+    "max_px": 0.7,
+    "zncc": 0.979,
+    "seconds": 20.1
+  },
+  {
+    "scenario": "calm",
+    "variant": "cv2.Stitcher SCANS (67 frames)",
+    "status": "finished",
+    "seconds": 103.9
+  },
+  {
+    "scenario": "rough",
+    "variant": "sequential chaining",
+    "keyframes": 75,
+    "loop_closures": 0,
+    "rmse_px": 56.72,
+    "max_px": 159.65,
+    "zncc": 0.486,
+    "seconds": 20.8
+  },
+  {
+    "scenario": "rough",
+    "variant": "+ loop closure and bundle adjustment",
+    "keyframes": 75,
+    "loop_closures": 199,
+    "rmse_px": 7.21,
+    "max_px": 17.56,
+    "zncc": 0.839,
+    "seconds": 27.3
+  },
+  {
+    "scenario": "rough",
+    "variant": "+ gain compensation and multi band blending",
+    "keyframes": 75,
+    "loop_closures": 199,
+    "rmse_px": 7.21,
+    "max_px": 17.56,
+    "zncc": 0.867,
+    "seconds": 25.5
+  },
+  {
+    "scenario": "rough",
+    "variant": "+ lens undistortion (full pipeline)",
+    "keyframes": 78,
+    "loop_closures": 248,
+    "rmse_px": 0.37,
+    "max_px": 0.91,
+    "zncc": 0.941,
+    "seconds": 36.1
+  },
+  {
+    "scenario": "rough",
+    "variant": "full pipeline with SIFT",
+    "keyframes": 78,
+    "loop_closures": 254,
+    "rmse_px": 0.36,
+    "max_px": 0.63,
+    "zncc": 0.947,
+    "seconds": 74.7
+  }
+]
