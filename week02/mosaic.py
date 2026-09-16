@@ -126,6 +126,14 @@ def constraint_rms(transforms: list[np.ndarray], constraints: list[Constraint]) 
     return float(np.sqrt(np.mean(np.concatenate(errors))))
 
 
+def _cost(params: np.ndarray, constraints: list[Constraint], robust: list[np.ndarray]) -> float:
+    total = 0.0
+    for c, w in zip(constraints, robust):
+        forward, backward = _frame_residuals(params, c)
+        total += float(np.sum(w * (np.abs(forward) ** 2 + np.abs(backward) ** 2)))
+    return total
+
+
 def _real_block(derivative: np.ndarray) -> np.ndarray:
     """Complex derivative d r / d x per point to the real (2m x 2) Jacobian columns."""
     u, v = derivative.real, derivative.imag
@@ -217,12 +225,16 @@ def bundle_adjust(
             candidate = params.reshape(-1).copy()
             candidate[free] += step
             candidate = candidate.reshape(n, 4)
-            _, _, new_cost = _normal_equations(candidate, sampled, robust, n)
+            new_cost = _cost(candidate, sampled, robust)
             if new_cost < cost:
                 params = candidate
                 damping = max(damping / 10, 1e-7)
                 break
             damping *= 10
+        else:
+            break  # no step reduces the cost: converged
+        if cost - new_cost < 1e-9 * cost:
+            break
         # Huber reweighting from residuals in frame pixels.
         for k, c in enumerate(sampled):
             forward, backward = _frame_residuals(params, c)
