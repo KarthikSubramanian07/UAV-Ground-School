@@ -3,22 +3,23 @@
 ``find_dots`` runs any of the detectors in :mod:`week03.blobs` on a photo and
 turns raw detections into measured dots:
 
-1. **Detect.** ``simple`` and ``contour`` work per color: the image palette is
-   learned with k-means in CIELAB and each palette color gets its own
-   similarity map (SimpleBlobDetector) or mask (contours). ``log``, ``dog`` and
-   ``doh`` search scale space on the CIELAB image directly, so they need no
-   palette. ``gray`` is the one line baseline: SimpleBlobDetector on the
-   grayscale image with default style settings.
-2. **Verify.** Each candidate is sampled on a polar grid: the inside must be
-   one uniform color, the ring just outside must be a different color, and
-   the dot must end at its radius. This is what rejects fabric texture,
-   edges, squares and stars.
-3. **Refine.** Along 48 rays from the center, the edge is located where the
-   color crosses halfway between inside and outside, and a circle is fitted
-   to those edge points with outlier rejection. This gives sub pixel centers,
-   radii that do not depend on the detector's scale sampling, and a roundness
-   score.
-4. **Filter.** By radius, by color name, by contrast.
+1. **Detect.** ``gray`` is the one line baseline: SimpleBlobDetector on the
+   grayscale image. ``simple`` learns the palette with k-means in CIELAB and
+   runs SimpleBlobDetector on a similarity map per color. ``contrast`` runs it
+   on the Delta E from a median filtered background. ``contour`` keeps round
+   regions enclosed by color edges. ``log``, ``dog`` and ``doh`` search scale
+   space on the CIELAB image directly.
+2. **Colors.** The dot color comes from each candidate's core, the local
+   background from a ring just outside.
+3. **Edge fit.** Along 48 rays from the center, the edge is where the color
+   crosses halfway between dot and background. A robust circle fit re-centers
+   the rays; an ellipse fit to the final edge points gives sub pixel centers,
+   radii that do not depend on the detector's scale sampling, a roundness
+   score and an aspect ratio.
+4. **Verify.** Inside one color, a different color just outside, and a
+   surround that is itself one color. This rejects squares, stars, fabric
+   texture and gaps of background enclosed by dots.
+5. **Filter.** By radius, color name, contrast and roundness.
 """
 
 from __future__ import annotations
@@ -291,17 +292,6 @@ def verify(lab: np.ndarray, blobs: list[Blob], settings: DotSettings) -> list[Bl
 
 
 _RAYS = np.linspace(0, 2 * math.pi, 48, endpoint=False)
-
-
-def fit_circle(points: np.ndarray) -> tuple[float, float, float]:
-    """Algebraic (Kasa) least squares circle fit."""
-    x, y = points[:, 0], points[:, 1]
-    a = np.stack([x, y, np.ones_like(x)], axis=1)
-    b = x * x + y * y
-    sol, *_ = np.linalg.lstsq(a, b, rcond=None)
-    cx, cy = sol[0] / 2, sol[1] / 2
-    r = math.sqrt(max(sol[2] + cx * cx + cy * cy, 0.0))
-    return float(cx), float(cy), float(r)
 
 
 def _batched_circle_fit(points: np.ndarray, weights: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:

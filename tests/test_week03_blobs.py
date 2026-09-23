@@ -56,6 +56,8 @@ def test_detectors_find_a_disk_center_and_radius(kind):
 
 @pytest.mark.parametrize("kind", ["log", "dog", "doh"])
 def test_polarity(kind):
+    detect = {"log": blobs.detect_log, "dog": blobs.detect_dog, "doh": blobs.detect_doh}[kind]
+    assert len(detect(disk_image(r=15), min_radius=4, max_radius=30, threshold=0.2, polarity="bright")) == 1
     dark = 1.0 - disk_image(r=15)
     assert blobs.detect_scale_space(dark, kind, min_radius=4, max_radius=30, threshold=0.2, polarity="bright") == []
     assert len(blobs.detect_scale_space(dark, kind, min_radius=4, max_radius=30, threshold=0.2, polarity="dark")) == 1

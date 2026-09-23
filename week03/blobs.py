@@ -63,13 +63,6 @@ class Blob:
         return out
 
 
-def blobs_to_array(blobs: list[Blob]) -> np.ndarray:
-    """(n, 3) array of x, y, radius."""
-    if not blobs:
-        return np.zeros((0, 3), np.float64)
-    return np.array([[b.x, b.y, b.radius] for b in blobs], np.float64)
-
-
 # ------------------------------------------------------ SimpleBlobDetector ----
 
 
@@ -286,17 +279,6 @@ def scale_space(
         effective.append(sigma)
         stack.append(maps[0])
     return np.stack(stack).astype(np.float32), np.array(effective)
-
-
-def local_maxima(stack: np.ndarray, threshold: float) -> np.ndarray:
-    """(n, 3) integer (scale, y, x) of 3x3x3 local maxima above ``threshold``."""
-    kernel = np.ones((3, 3), np.uint8)
-    spatial = np.stack([cv2.dilate(layer, kernel, borderType=cv2.BORDER_REPLICATE) for layer in stack])
-    neighborhood = spatial.copy()
-    neighborhood[1:] = np.maximum(neighborhood[1:], spatial[:-1])
-    neighborhood[:-1] = np.maximum(neighborhood[:-1], spatial[1:])
-    peaks = (stack >= neighborhood) & (stack > threshold)
-    return np.argwhere(peaks)
 
 
 def refine_peaks(stack: np.ndarray, peaks: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
