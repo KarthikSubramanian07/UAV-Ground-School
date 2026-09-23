@@ -1,0 +1,438 @@
+{
+ "image": "polka_dots_2.jpg",
+ "size": [
+  1280,
+  1280
+ ],
+ "notes": "Printed fabric with folds and shading. Every dot checked by eye against 2x overlays; fabric specks rejected. Difficult: cut by the image border.",
+ "ignore": [],
+ "dots": [
+  {
+   "x": 678.19,
+   "y": 10.84,
+   "r": 43.57,
+   "color": "pink",
+   "difficult": false
+  },
+  {
+   "x": 825.42,
+   "y": 41.03,
+   "r": 42.46,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 185.83,
+   "y": 62.84,
+   "r": 32.36,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 440.53,
+   "y": 92.81,
+   "r": 33.38,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 940.32,
+   "y": 95.16,
+   "r": 34.44,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 1090.38,
+   "y": 108.02,
+   "r": 67.67,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 197.38,
+   "y": 177.32,
+   "r": 47.39,
+   "color": "pink",
+   "difficult": false
+  },
+  {
+   "x": 551.92,
+   "y": 135.13,
+   "r": 60.44,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 398.84,
+   "y": 207.96,
+   "r": 36.02,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 769.41,
+   "y": 189.1,
+   "r": 30.28,
+   "color": "pink",
+   "difficult": false
+  },
+  {
+   "x": 21.77,
+   "y": 241.81,
+   "r": 61.65,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 682.15,
+   "y": 248.61,
+   "r": 59.61,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 910.74,
+   "y": 241.05,
+   "r": 61.87,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 301.41,
+   "y": 338.1,
+   "r": 66.68,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 518.67,
+   "y": 334.01,
+   "r": 60.55,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 1089.15,
+   "y": 339.31,
+   "r": 36.97,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 1237.84,
+   "y": 314.67,
+   "r": 62.68,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 147.5,
+   "y": 372.69,
+   "r": 37.45,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 668.89,
+   "y": 410.06,
+   "r": 35.66,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 811.91,
+   "y": 407.56,
+   "r": 31.01,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 49.27,
+   "y": 465.37,
+   "r": 61.12,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 332.88,
+   "y": 518.45,
+   "r": 44.64,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 470.36,
+   "y": 500.37,
+   "r": 71.63,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 971.72,
+   "y": 507.02,
+   "r": 69.42,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 1148.68,
+   "y": 596.37,
+   "r": 32.35,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 26.98,
+   "y": 617.18,
+   "r": 54.55,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 230.73,
+   "y": 613.49,
+   "r": 33.1,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 641.1,
+   "y": 620.94,
+   "r": 55.59,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 818.93,
+   "y": 621.01,
+   "r": 48.57,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 381.98,
+   "y": 710.88,
+   "r": 45.61,
+   "color": "pink",
+   "difficult": false
+  },
+  {
+   "x": 193.55,
+   "y": 770.75,
+   "r": 73.12,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 1018.63,
+   "y": 720.82,
+   "r": 60.77,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 321.46,
+   "y": 813.41,
+   "r": 35.45,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 532.51,
+   "y": 816.69,
+   "r": 73.5,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 807.86,
+   "y": 791.74,
+   "r": 46.44,
+   "color": "pink",
+   "difficult": false
+  },
+  {
+   "x": 697.66,
+   "y": 882.1,
+   "r": 33.84,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 1124.22,
+   "y": 865.08,
+   "r": 32.47,
+   "color": "pink",
+   "difficult": false
+  },
+  {
+   "x": 392.59,
+   "y": 915.65,
+   "r": 33.83,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 218.17,
+   "y": 975.31,
+   "r": 75.47,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 722.38,
+   "y": 1019.04,
+   "r": 39.11,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 930.43,
+   "y": 969.27,
+   "r": 70.49,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 73.81,
+   "y": 1036.27,
+   "r": 33.96,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 452.3,
+   "y": 1065.71,
+   "r": 75.31,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 303.35,
+   "y": 1134.26,
+   "r": 46.7,
+   "color": "pink",
+   "difficult": false
+  },
+  {
+   "x": 583.84,
+   "y": 1117.51,
+   "r": 35.5,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 1068.58,
+   "y": 1101.72,
+   "r": 34.42,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 1215.39,
+   "y": 1088.75,
+   "r": 73.55,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 847.3,
+   "y": 1167.09,
+   "r": 58.55,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 19.46,
+   "y": 1200.89,
+   "r": 66.13,
+   "color": "cyan",
+   "difficult": false
+  },
+  {
+   "x": 678.16,
+   "y": 1234.67,
+   "r": 37.06,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 256.49,
+   "y": 1277.58,
+   "r": 50.5,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 443.69,
+   "y": 1267.63,
+   "r": 34.31,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 1024.8,
+   "y": 1266.2,
+   "r": 62.83,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 15,
+   "y": 25,
+   "r": 45,
+   "color": "green",
+   "difficult": true,
+   "note": "cut by the image border"
+  },
+  {
+   "x": 305,
+   "y": -15,
+   "r": 58,
+   "color": "red",
+   "difficult": true,
+   "note": "cut by the image border"
+  },
+  {
+   "x": 1280.01,
+   "y": 155.25,
+   "r": 32.66,
+   "color": "green",
+   "difficult": true,
+   "note": "cut by the image border"
+  },
+  {
+   "x": 1275,
+   "y": 455,
+   "r": 35,
+   "color": "purple",
+   "difficult": true,
+   "note": "cut by the image border"
+  },
+  {
+   "x": 1262,
+   "y": 685,
+   "r": 45,
+   "color": "green",
+   "difficult": true,
+   "note": "cut by the image border"
+  },
+  {
+   "x": -5,
+   "y": 835,
+   "r": 38,
+   "color": "red",
+   "difficult": true,
+   "note": "cut by the image border"
+  },
+  {
+   "x": 557,
+   "y": 1300,
+   "r": 35,
+   "color": "cyan",
+   "difficult": true,
+   "note": "cut by the image border"
+  }
+ ]
+}
