@@ -38,6 +38,7 @@ class Experiment:
     augment: str | None = None  # offline Roboflow style recipe
     copies: int = 2
     sliced_eval: bool = False  # also score sliced inference
+    weights_from: str | None = None  # score another experiment's weights instead of training
     extra: dict = field(default_factory=dict)  # passed to Ultralytics train()
 
     @property
@@ -62,7 +63,8 @@ EXPERIMENTS: dict[str, Experiment] = {
             copies=2,
             epochs=10,
         ),
-        Experiment("hires", "Whole frames at 1280 px", imgsz=1280, batch=4),
+        # Training at 1280 px does not fit this machine (over 25 minutes per epoch, swapping), so only inference is scaled up.
+        Experiment("hires-inference", "Baseline weights, inference at 1280 px", imgsz=1280, weights_from="baseline"),
         Experiment(
             "tiles", "Train on 960x540 tiles at 640 px, equal step budget, sliced inference", tiles=True, epochs=8, sliced_eval=True
         ),
@@ -105,9 +107,11 @@ def train(exp: Experiment, data_yaml: Path, root: str | Path) -> Path:
     from ultralytics import YOLO
 
     root = Path(root)
-    weights = root / "runs" / exp.name / "weights" / "best.pt"
+    weights = root / "runs" / (exp.weights_from or exp.name) / "weights" / "best.pt"
     if weights.is_file():
         return weights
+    if exp.weights_from:
+        raise FileNotFoundError(f"{exp.name} scores the weights of {exp.weights_from}; train that first")
     model = YOLO(exp.model)
     model.train(
         data=str(data_yaml),
