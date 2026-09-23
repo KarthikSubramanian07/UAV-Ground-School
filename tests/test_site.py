@@ -128,6 +128,8 @@ def test_local_references_resolve_and_are_relative(site: Path) -> None:
             assert not ref.startswith("/"), f"{path.name}: {ref} is root absolute"
             clean = ref.split("#")[0].split("?")[0]
             target = site / "index.html" if clean in ("", "./") else base / clean
+            if not target.exists() and not target.suffix:
+                target = target.with_suffix(".html")  # clean URL, served by Cloudflare Pages
             assert target.exists(), f"{path.name}: {ref} does not resolve"
             checked += 1
     assert checked > 20
@@ -282,3 +284,45 @@ def test_js_split_colors_matches_python_exactly(tmp_path: Path, name: str) -> No
             assert tuple(a["bbox"]) == b.bbox
             assert a["touches"] == b.touches_border
             assert a["center"] == pytest.approx(b.center, abs=1e-6)
+
+
+# ------------------------------------------------------------------ week 3 ----
+
+DOCS3 = ROOT / "docs" / "week03"
+
+
+@pytest.fixture(scope="module")
+def week3_html(site: Path) -> str:
+    return (site / "week3.html").read_text(encoding="utf-8")
+
+
+def test_week3_page_and_assets(site: Path, week3_html: str) -> None:
+    for path in ("week3.html", "og-week3.jpg", "js/explorer.js"):
+        assert (site / path).is_file(), path
+    assert cv2.imread(str(site / "og-week3.jpg")).shape == (630, 1200, 3)
+    for photo in build_site.W3_PHOTOS:
+        assert (site / "assets" / "week3" / f"{photo}.webp").is_file()
+        shipped = json.loads((site / "assets" / "week3" / f"{photo}.json").read_text())
+        assert shipped == json.loads((DOCS3 / "dots" / f"{photo}.json").read_text())
+        assert set(shipped["methods"]) == {"gray", "simple", "contrast", "contour", "log", "dog", "doh"}
+    head = _Head()
+    head.feed(week3_html)
+    assert head.links["canonical"] == build_site.CANONICAL + "week3"
+    assert head.meta["og:image"] == build_site.CANONICAL + "og-week3.jpg"
+    assert json.loads("".join(head.json_ld))["url"] == build_site.CANONICAL + "week3"
+    assert f"<loc>{build_site.CANONICAL}week3</loc>" in (site / "sitemap.xml").read_text()
+    assert 'href="week3"' in (site / "index.html").read_text(encoding="utf-8")
+
+
+def test_week3_numbers_come_from_json(week3_html: str) -> None:
+    report = json.loads((DOCS3 / "dots_benchmark.json").read_text())
+    for method in report["methods"]:
+        assert f"{report['synthetic_overall'][method]['f1']:.3f}" in week3_html
+        for photo in report["real"].values():
+            assert f"{photo[method]['f1']:.3f}" in week3_html
+    pieces = json.loads((DOCS3 / "objects.json").read_text())
+    assert f"{pieces['score']['mean_mask_iou']:.3f}" in week3_html
+    results = json.loads((DOCS3 / "yolo" / "results.json").read_text())
+    for name, result in results.items():
+        assert f"<code>{name}</code>" in week3_html
+        assert f"{result['full_frame']['mAP50']:.3f}" in week3_html
