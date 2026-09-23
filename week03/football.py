@@ -11,7 +11,7 @@ Two things about this dataset shape every experiment here:
   train / valid / test split puts frames of the same clip, often a second
   apart, on both sides. A model can score well by remembering the clip.
   ``clip_split`` holds out whole clips instead.
-* **The ball is tiny.** It is about 12 px wide at 1920x1080 and 4 px after
+* **The ball is tiny.** It is about 11 px across at 1920x1080 and under 4 px after
   resizing to 640, which is why ``tile_dataset`` exists.
 """
 

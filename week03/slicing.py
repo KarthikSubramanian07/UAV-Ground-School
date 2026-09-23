@@ -1,7 +1,7 @@
 """Sliced inference (the SAHI idea) for small objects in large frames.
 
 A detector trained at 640 px sees a 1920x1080 frame shrunk three times, which
-turns a 12 px ball into 4 px. Running it on overlapping tiles at their native
+turns an 11 px ball into under 4 px. Running it on overlapping tiles at their native
 resolution, plus once on the whole frame for the large objects, then merging
 the results recovers the small objects.
 

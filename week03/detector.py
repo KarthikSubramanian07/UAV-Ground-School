@@ -68,7 +68,6 @@ EXPERIMENTS: dict[str, Experiment] = {
         Experiment(
             "tiles", "Train on 960x540 tiles at 640 px, equal step budget, sliced inference", tiles=True, epochs=8, sliced_eval=True
         ),
-        Experiment("tiles-long", "Tiles for 4x the steps, sliced inference", tiles=True, epochs=30, sliced_eval=True),
     ]
 }
 
@@ -376,18 +375,21 @@ def _notes(results: dict, leak: dict | None = None) -> tuple[list[str], str]:
         )
     if base is not None:
         notes.append(
-            f"The baseline finds players well but the ball not at all: ball AP50 {ball('baseline'):.3f}, because a 12 px ball is 4 px after resizing to 640."
+            f"The baseline finds players well but the ball not at all: ball AP50 {ball('baseline'):.3f}, because an 11 px ball is under 4 px after resizing to 640."
         )
-    if "hires" in results and base is not None:
+    if "hires-inference" in results and base is not None:
+        keeper = results["hires-inference"]["full_frame"]["classes"]["goalkeeper"]["AP50"]
         notes.append(
-            f"Training and testing at 1280 px instead of 640 moves mAP50 to {m('hires'):.3f} and ball AP50 to {ball('hires'):.3f}, at four times the compute per image."
+            f"Training at 1280 px does not fit an 8 GB M1 (over 25 minutes per epoch, swapping). Running the baseline weights at 1280 px "
+            f"instead gives mAP50 {m('hires-inference'):.3f} (ball {ball('hires-inference'):.3f}, goalkeeper {keeper:.3f}): every object is suddenly "
+            "twice the size the model learned. Resolution has to change in training and inference together, which is what tiling does."
         )
     if "offline-aug" in results and base is not None:
         notes.append(
             f"Roboflow style offline augmentation (two extra copies, the same number of training steps) gives {m('offline-aug'):.3f} mAP50. "
             "Ultralytics already augments online with mosaic, HSV jitter, flips and scaling, so the extra copies mostly repeat what it does."
         )
-    for name in ("tiles", "tiles-long"):
+    for name in ("tiles",):
         if name in results and "sliced" in results[name]:
             notes.append(
                 f"{name}: trained on 960x540 tiles, then run on overlapping tiles plus the whole frame and merged. "
