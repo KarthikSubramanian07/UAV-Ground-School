@@ -1,0 +1,297 @@
+{
+ "counts": {
+  "cone": 2,
+  "cube": 2,
+  "ring": 2
+ },
+ "seconds": 0.333,
+ "hue_clusters": [
+  3.0,
+  21.1,
+  123.0
+ ],
+ "pieces": [
+  {
+   "label": "cone",
+   "confidence": 1.0,
+   "bbox": [
+    239,
+    324,
+    197,
+    252
+   ],
+   "center": [
+    335.5,
+    465.4
+   ],
+   "area": 32615,
+   "hue": 21.1,
+   "features": {
+    "area": 32615.0,
+    "hole_ratio": 0.0,
+    "hole_centered": 1.0,
+    "rect_fill": 0.69,
+    "triangle_fill": 0.6257,
+    "triangularity": 0.729,
+    "solidity": 0.8583,
+    "elongation": 0.7333
+   },
+   "scores": {
+    "cone": 1.0,
+    "cube": 0.0,
+    "ring": 0.0
+   }
+  },
+  {
+   "label": "cone",
+   "confidence": 1.0,
+   "bbox": [
+    530,
+    416,
+    217,
+    286
+   ],
+   "center": [
+    647.5,
+    569.7
+   ],
+   "area": 37516,
+   "hue": 21.1,
+   "features": {
+    "area": 37516.0,
+    "hole_ratio": 0.0,
+    "hole_centered": 1.0,
+    "rect_fill": 0.6276,
+    "triangle_fill": 0.7282,
+    "triangularity": 0.8339,
+    "solidity": 0.8733,
+    "elongation": 0.7169
+   },
+   "scores": {
+    "cone": 1.0,
+    "cube": 0.0,
+    "ring": 0.0
+   }
+  },
+  {
+   "label": "cube",
+   "confidence": 1.0,
+   "bbox": [
+    497,
+    0,
+    183,
+    182
+   ],
+   "center": [
+    588.2,
+    93.5
+   ],
+   "area": 24536,
+   "hue": 123.0,
+   "features": {
+    "area": 24536.0,
+    "hole_ratio": 0.0,
+    "hole_centered": 1.0,
+    "rect_fill": 0.7659,
+    "triangle_fill": 0.574,
+    "triangularity": 0.6092,
+    "solidity": 0.9422,
+    "elongation": 0.8686
+   },
+   "scores": {
+    "cone": 0.0,
+    "cube": 1.0,
+    "ring": 0.0
+   }
+  },
+  {
+   "label": "cube",
+   "confidence": 0.692,
+   "bbox": [
+    475,
+    176,
+    208,
+    209
+   ],
+   "center": [
+    586.1,
+    268.6
+   ],
+   "area": 30207,
+   "hue": 123.0,
+   "features": {
+    "area": 30207.0,
+    "hole_ratio": 0.0,
+    "hole_centered": 1.0,
+    "rect_fill": 0.7215,
+    "triangle_fill": 0.6648,
+    "triangularity": 0.6953,
+    "solidity": 0.9561,
+    "elongation": 0.9886
+   },
+   "scores": {
+    "cone": 0.589,
+    "cube": 0.692,
+    "ring": 0.0
+   }
+  },
+  {
+   "label": "ring",
+   "confidence": 1.0,
+   "bbox": [
+    720,
+    0,
+    233,
+    172
+   ],
+   "center": [
+    836.6,
+    85.0
+   ],
+   "area": 32008,
+   "hue": 3.0,
+   "features": {
+    "area": 32008.0,
+    "hole_ratio": 0.3712,
+    "hole_centered": 0.0035,
+    "rect_fill": 0.7993,
+    "triangle_fill": 0.6116,
+    "triangularity": 0.6195,
+    "solidity": 0.9872,
+    "elongation": 0.7371
+   },
+   "scores": {
+    "cone": 0.0,
+    "cube": 0.0,
+    "ring": 1.0
+   }
+  },
+  {
+   "label": "ring",
+   "confidence": 1.0,
+   "bbox": [
+    798,
+    353,
+    309,
+    268
+   ],
+   "center": [
+    953.3,
+    489.0
+   ],
+   "area": 65415,
+   "hue": 3.0,
+   "features": {
+    "area": 65415.0,
+    "hole_ratio": 0.4465,
+    "hole_centered": 0.0213,
+    "rect_fill": 0.7904,
+    "triangle_fill": 0.6064,
+    "triangularity": 0.6097,
+    "solidity": 0.9945,
+    "elongation": 0.8669
+   },
+   "scores": {
+    "cone": 0.0,
+    "cube": 0.0,
+    "ring": 1.0
+   }
+  }
+ ],
+ "score": {
+  "truth_objects": 6,
+  "detections": 6,
+  "matched": 6,
+  "correct_class": 6,
+  "false_positives": 0,
+  "missed": 0,
+  "mean_mask_iou": 0.9415,
+  "mean_box_iou": 0.955,
+  "matches": [
+   {
+    "truth": "ring_bottom",
+    "label": "ring",
+    "correct": true,
+    "mask_iou": 0.974,
+    "box_iou": 0.9931
+   },
+   {
+    "truth": "cone_upright",
+    "label": "cone",
+    "correct": true,
+    "mask_iou": 0.9687,
+    "box_iou": 0.963
+   },
+   {
+    "truth": "ring_top",
+    "label": "ring",
+    "correct": true,
+    "mask_iou": 0.9382,
+    "box_iou": 0.9727
+   },
+   {
+    "truth": "cone_fallen",
+    "label": "cone",
+    "correct": true,
+    "mask_iou": 0.9319,
+    "box_iou": 0.9793
+   },
+   {
+    "truth": "cube_bottom",
+    "label": "cube",
+    "correct": true,
+    "mask_iou": 0.9253,
+    "box_iou": 0.8598
+   },
+   {
+    "truth": "cube_top",
+    "label": "cube",
+    "correct": true,
+    "mask_iou": 0.9107,
+    "box_iou": 0.9623
+   }
+  ]
+ },
+ "grabcut_score": {
+  "truth_objects": 6,
+  "detections": 6,
+  "matched": 6,
+  "correct_class": 6,
+  "false_positives": 0,
+  "missed": 0,
+  "mean_mask_iou": 0.9316,
+  "mean_box_iou": 0.9458
+ },
+ "robustness": {
+  "rotated 35 degrees": {
+   "cone": 2,
+   "cube": 2,
+   "ring": 2
+  },
+  "rotated 90 degrees": {
+   "cone": 2,
+   "cube": 2,
+   "ring": 2
+  },
+  "mirrored": {
+   "cone": 2,
+   "cube": 2,
+   "ring": 2
+  },
+  "half size": {
+   "cone": 2,
+   "cube": 2,
+   "ring": 2
+  },
+  "hue shifted 90 degrees": {
+   "cone": 2,
+   "cube": 2,
+   "ring": 2
+  },
+  "hue shifted 180 degrees": {
+   "cone": 2,
+   "cube": 2,
+   "ring": 2
+  }
+ }
+}

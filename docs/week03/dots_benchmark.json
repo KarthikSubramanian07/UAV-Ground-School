@@ -1,0 +1,928 @@
+{
+  "methods": [
+    "gray",
+    "simple",
+    "contrast",
+    "contour",
+    "log",
+    "dog",
+    "doh"
+  ],
+  "seeds": 3,
+  "synthetic": {
+    "flat": {
+      "gray": {
+        "tp": 91,
+        "fp": 0,
+        "fn": 24,
+        "precision": 1.0,
+        "recall": 0.7913,
+        "f1": 0.8835,
+        "seconds": 0.1317,
+        "center_error_px": 0.018,
+        "radius_error": 0.0099
+      },
+      "simple": {
+        "tp": 113,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.9826,
+        "f1": 0.9912,
+        "seconds": 2.6361,
+        "center_error_px": 0.02,
+        "radius_error": 0.0086
+      },
+      "contrast": {
+        "tp": 110,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.9565,
+        "f1": 0.9778,
+        "seconds": 0.1827,
+        "center_error_px": 0.02,
+        "radius_error": 0.0098
+      },
+      "contour": {
+        "tp": 110,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.9565,
+        "f1": 0.9778,
+        "seconds": 0.1794,
+        "center_error_px": 0.02,
+        "radius_error": 0.0099
+      },
+      "log": {
+        "tp": 114,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9913,
+        "f1": 0.9956,
+        "seconds": 2.3378,
+        "center_error_px": 0.02,
+        "radius_error": 0.0098
+      },
+      "dog": {
+        "tp": 113,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.9826,
+        "f1": 0.9912,
+        "seconds": 2.396,
+        "center_error_px": 0.02,
+        "radius_error": 0.0099
+      },
+      "doh": {
+        "tp": 114,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9913,
+        "f1": 0.9956,
+        "seconds": 2.4717,
+        "center_error_px": 0.02,
+        "radius_error": 0.0098
+      }
+    },
+    "fabric": {
+      "gray": {
+        "tp": 90,
+        "fp": 0,
+        "fn": 24,
+        "precision": 1.0,
+        "recall": 0.7895,
+        "f1": 0.8824,
+        "seconds": 0.2224,
+        "center_error_px": 0.04,
+        "radius_error": 0.0086
+      },
+      "simple": {
+        "tp": 91,
+        "fp": 0,
+        "fn": 23,
+        "precision": 1.0,
+        "recall": 0.7982,
+        "f1": 0.8878,
+        "seconds": 3.0499,
+        "center_error_px": 0.045,
+        "radius_error": 0.0085
+      },
+      "contrast": {
+        "tp": 110,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1.0,
+        "recall": 0.9649,
+        "f1": 0.9821,
+        "seconds": 0.2074,
+        "center_error_px": 0.046,
+        "radius_error": 0.0095
+      },
+      "contour": {
+        "tp": 108,
+        "fp": 0,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.9474,
+        "f1": 0.973,
+        "seconds": 0.1555,
+        "center_error_px": 0.044,
+        "radius_error": 0.0092
+      },
+      "log": {
+        "tp": 114,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9913,
+        "recall": 1.0,
+        "f1": 0.9956,
+        "seconds": 3.9136,
+        "center_error_px": 0.046,
+        "radius_error": 0.0097
+      },
+      "dog": {
+        "tp": 114,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9913,
+        "recall": 1.0,
+        "f1": 0.9956,
+        "seconds": 3.4047,
+        "center_error_px": 0.046,
+        "radius_error": 0.0095
+      },
+      "doh": {
+        "tp": 114,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9913,
+        "recall": 1.0,
+        "f1": 0.9956,
+        "seconds": 2.9091,
+        "center_error_px": 0.046,
+        "radius_error": 0.0093
+      }
+    },
+    "pastel": {
+      "gray": {
+        "tp": 120,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 0.1631,
+        "center_error_px": 0.019,
+        "radius_error": 0.0077
+      },
+      "simple": {
+        "tp": 120,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 2.3765,
+        "center_error_px": 0.019,
+        "radius_error": 0.0075
+      },
+      "contrast": {
+        "tp": 115,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.9583,
+        "f1": 0.9787,
+        "seconds": 0.1917,
+        "center_error_px": 0.019,
+        "radius_error": 0.008
+      },
+      "contour": {
+        "tp": 113,
+        "fp": 0,
+        "fn": 7,
+        "precision": 1.0,
+        "recall": 0.9417,
+        "f1": 0.97,
+        "seconds": 0.1943,
+        "center_error_px": 0.019,
+        "radius_error": 0.008
+      },
+      "log": {
+        "tp": 120,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 3.2324,
+        "center_error_px": 0.018,
+        "radius_error": 0.0076
+      },
+      "dog": {
+        "tp": 120,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 3.5535,
+        "center_error_px": 0.019,
+        "radius_error": 0.0077
+      },
+      "doh": {
+        "tp": 120,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 4.1434,
+        "center_error_px": 0.018,
+        "radius_error": 0.0076
+      }
+    },
+    "distractors": {
+      "gray": {
+        "tp": 66,
+        "fp": 0,
+        "fn": 22,
+        "precision": 1.0,
+        "recall": 0.75,
+        "f1": 0.8571,
+        "seconds": 0.1877,
+        "center_error_px": 0.021,
+        "radius_error": 0.01
+      },
+      "simple": {
+        "tp": 71,
+        "fp": 0,
+        "fn": 17,
+        "precision": 1.0,
+        "recall": 0.8068,
+        "f1": 0.8931,
+        "seconds": 3.4899,
+        "center_error_px": 0.019,
+        "radius_error": 0.0069
+      },
+      "contrast": {
+        "tp": 84,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1.0,
+        "recall": 0.9545,
+        "f1": 0.9767,
+        "seconds": 0.2059,
+        "center_error_px": 0.021,
+        "radius_error": 0.0098
+      },
+      "contour": {
+        "tp": 85,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.9659,
+        "f1": 0.9827,
+        "seconds": 0.1572,
+        "center_error_px": 0.021,
+        "radius_error": 0.0098
+      },
+      "log": {
+        "tp": 87,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9886,
+        "f1": 0.9943,
+        "seconds": 4.9998,
+        "center_error_px": 0.021,
+        "radius_error": 0.0089
+      },
+      "dog": {
+        "tp": 87,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9886,
+        "f1": 0.9943,
+        "seconds": 6.3047,
+        "center_error_px": 0.021,
+        "radius_error": 0.0088
+      },
+      "doh": {
+        "tp": 87,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9886,
+        "f1": 0.9943,
+        "seconds": 4.3717,
+        "center_error_px": 0.021,
+        "radius_error": 0.0088
+      }
+    },
+    "tilted": {
+      "gray": {
+        "tp": 70,
+        "fp": 0,
+        "fn": 24,
+        "precision": 1.0,
+        "recall": 0.7447,
+        "f1": 0.8537,
+        "seconds": 0.2317,
+        "center_error_px": 0.092,
+        "radius_error": 0.0108
+      },
+      "simple": {
+        "tp": 72,
+        "fp": 3,
+        "fn": 22,
+        "precision": 0.96,
+        "recall": 0.766,
+        "f1": 0.8521,
+        "seconds": 3.9671,
+        "center_error_px": 0.107,
+        "radius_error": 0.0198
+      },
+      "contrast": {
+        "tp": 93,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9894,
+        "f1": 0.9947,
+        "seconds": 0.1636,
+        "center_error_px": 0.1,
+        "radius_error": 0.0146
+      },
+      "contour": {
+        "tp": 81,
+        "fp": 0,
+        "fn": 13,
+        "precision": 1.0,
+        "recall": 0.8617,
+        "f1": 0.9257,
+        "seconds": 0.131,
+        "center_error_px": 0.095,
+        "radius_error": 0.0091
+      },
+      "log": {
+        "tp": 94,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9895,
+        "recall": 1.0,
+        "f1": 0.9947,
+        "seconds": 1.7498,
+        "center_error_px": 0.1,
+        "radius_error": 0.0108
+      },
+      "dog": {
+        "tp": 94,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9895,
+        "recall": 1.0,
+        "f1": 0.9947,
+        "seconds": 3.313,
+        "center_error_px": 0.1,
+        "radius_error": 0.0107
+      },
+      "doh": {
+        "tp": 94,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 2.9727,
+        "center_error_px": 0.099,
+        "radius_error": 0.0107
+      }
+    },
+    "tiny": {
+      "gray": {
+        "tp": 273,
+        "fp": 0,
+        "fn": 80,
+        "precision": 1.0,
+        "recall": 0.7734,
+        "f1": 0.8722,
+        "seconds": 0.4783,
+        "center_error_px": 0.022,
+        "radius_error": 0.0198
+      },
+      "simple": {
+        "tp": 272,
+        "fp": 0,
+        "fn": 81,
+        "precision": 1.0,
+        "recall": 0.7705,
+        "f1": 0.8704,
+        "seconds": 4.278,
+        "center_error_px": 0.023,
+        "radius_error": 0.0189
+      },
+      "contrast": {
+        "tp": 345,
+        "fp": 0,
+        "fn": 8,
+        "precision": 1.0,
+        "recall": 0.9773,
+        "f1": 0.9885,
+        "seconds": 1.1962,
+        "center_error_px": 0.024,
+        "radius_error": 0.022
+      },
+      "contour": {
+        "tp": 330,
+        "fp": 0,
+        "fn": 23,
+        "precision": 1.0,
+        "recall": 0.9348,
+        "f1": 0.9663,
+        "seconds": 0.753,
+        "center_error_px": 0.023,
+        "radius_error": 0.0224
+      },
+      "log": {
+        "tp": 353,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 3.9965,
+        "center_error_px": 0.024,
+        "radius_error": 0.0209
+      },
+      "dog": {
+        "tp": 353,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 3.7792,
+        "center_error_px": 0.024,
+        "radius_error": 0.0217
+      },
+      "doh": {
+        "tp": 352,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9972,
+        "f1": 0.9986,
+        "seconds": 4.225,
+        "center_error_px": 0.024,
+        "radius_error": 0.021
+      }
+    },
+    "crowded": {
+      "gray": {
+        "tp": 193,
+        "fp": 0,
+        "fn": 66,
+        "precision": 1.0,
+        "recall": 0.7452,
+        "f1": 0.854,
+        "seconds": 0.6681,
+        "center_error_px": 0.018,
+        "radius_error": 0.0082
+      },
+      "simple": {
+        "tp": 229,
+        "fp": 0,
+        "fn": 30,
+        "precision": 1.0,
+        "recall": 0.8842,
+        "f1": 0.9385,
+        "seconds": 3.4817,
+        "center_error_px": 0.019,
+        "radius_error": 0.0086
+      },
+      "contrast": {
+        "tp": 249,
+        "fp": 0,
+        "fn": 10,
+        "precision": 1.0,
+        "recall": 0.9614,
+        "f1": 0.9803,
+        "seconds": 0.3858,
+        "center_error_px": 0.019,
+        "radius_error": 0.0086
+      },
+      "contour": {
+        "tp": 235,
+        "fp": 0,
+        "fn": 24,
+        "precision": 1.0,
+        "recall": 0.9073,
+        "f1": 0.9514,
+        "seconds": 0.2688,
+        "center_error_px": 0.019,
+        "radius_error": 0.0082
+      },
+      "log": {
+        "tp": 258,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9961,
+        "f1": 0.9981,
+        "seconds": 4.1923,
+        "center_error_px": 0.02,
+        "radius_error": 0.0084
+      },
+      "dog": {
+        "tp": 258,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9961,
+        "f1": 0.9981,
+        "seconds": 3.6748,
+        "center_error_px": 0.02,
+        "radius_error": 0.0084
+      },
+      "doh": {
+        "tp": 258,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9961,
+        "f1": 0.9981,
+        "seconds": 2.7375,
+        "center_error_px": 0.02,
+        "radius_error": 0.0084
+      }
+    }
+  },
+  "synthetic_overall": {
+    "gray": {
+      "tp": 903,
+      "fp": 0,
+      "fn": 240,
+      "precision": 1.0,
+      "recall": 0.79,
+      "f1": 0.8827
+    },
+    "simple": {
+      "tp": 968,
+      "fp": 3,
+      "fn": 175,
+      "precision": 0.9969,
+      "recall": 0.8469,
+      "f1": 0.9158
+    },
+    "contrast": {
+      "tp": 1106,
+      "fp": 0,
+      "fn": 37,
+      "precision": 1.0,
+      "recall": 0.9676,
+      "f1": 0.9835
+    },
+    "contour": {
+      "tp": 1062,
+      "fp": 0,
+      "fn": 81,
+      "precision": 1.0,
+      "recall": 0.9291,
+      "f1": 0.9633
+    },
+    "log": {
+      "tp": 1140,
+      "fp": 2,
+      "fn": 3,
+      "precision": 0.9982,
+      "recall": 0.9974,
+      "f1": 0.9978
+    },
+    "dog": {
+      "tp": 1139,
+      "fp": 2,
+      "fn": 4,
+      "precision": 0.9982,
+      "recall": 0.9965,
+      "f1": 0.9974
+    },
+    "doh": {
+      "tp": 1139,
+      "fp": 1,
+      "fn": 4,
+      "precision": 0.9991,
+      "recall": 0.9965,
+      "f1": 0.9978
+    }
+  },
+  "ablation": {
+    "gray": {
+      "f1_raw": 0.8787,
+      "f1_refined": 0.8827,
+      "center_raw": 0.019,
+      "center_refined": 0.021
+    },
+    "simple": {
+      "f1_raw": 0.907,
+      "f1_refined": 0.9158,
+      "center_raw": 0.053,
+      "center_refined": 0.02
+    },
+    "contrast": {
+      "f1_raw": 0.9766,
+      "f1_refined": 0.9835,
+      "center_raw": 0.028,
+      "center_refined": 0.021
+    },
+    "contour": {
+      "f1_raw": 0.8857,
+      "f1_refined": 0.9633,
+      "center_raw": 0.697,
+      "center_refined": 0.021
+    },
+    "log": {
+      "f1_raw": 0.9048,
+      "f1_refined": 0.9978,
+      "center_raw": 0.158,
+      "center_refined": 0.021
+    },
+    "dog": {
+      "f1_raw": 0.9108,
+      "f1_refined": 0.9974,
+      "center_raw": 0.15,
+      "center_refined": 0.021
+    },
+    "doh": {
+      "f1_raw": 0.9136,
+      "f1_refined": 0.9978,
+      "center_raw": 0.158,
+      "center_refined": 0.021
+    }
+  },
+  "real": {
+    "polka_dots_1.png": {
+      "required_dots": 136,
+      "gray": {
+        "tp": 112,
+        "fp": 0,
+        "fn": 24,
+        "precision": 1.0,
+        "recall": 0.8235,
+        "f1": 0.9032,
+        "seconds": 0.4259
+      },
+      "simple": {
+        "tp": 133,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.9779,
+        "f1": 0.9888,
+        "seconds": 3.1988
+      },
+      "contrast": {
+        "tp": 131,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.9632,
+        "f1": 0.9813,
+        "seconds": 0.4474
+      },
+      "contour": {
+        "tp": 133,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.9779,
+        "f1": 0.9888,
+        "seconds": 0.4451
+      },
+      "log": {
+        "tp": 136,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 9.9927
+      },
+      "dog": {
+        "tp": 136,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 11.8169
+      },
+      "doh": {
+        "tp": 136,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 4.7615
+      }
+    },
+    "polka_dots_2.jpg": {
+      "required_dots": 53,
+      "gray": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 53,
+        "precision": 1.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "seconds": 0.2758
+      },
+      "simple": {
+        "tp": 36,
+        "fp": 0,
+        "fn": 17,
+        "precision": 1.0,
+        "recall": 0.6792,
+        "f1": 0.809,
+        "seconds": 3.7399
+      },
+      "contrast": {
+        "tp": 50,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.9434,
+        "f1": 0.9709,
+        "seconds": 0.5449
+      },
+      "contour": {
+        "tp": 45,
+        "fp": 0,
+        "fn": 8,
+        "precision": 1.0,
+        "recall": 0.8491,
+        "f1": 0.9184,
+        "seconds": 0.3457
+      },
+      "log": {
+        "tp": 51,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.9623,
+        "f1": 0.9808,
+        "seconds": 40.6532
+      },
+      "dog": {
+        "tp": 52,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9811,
+        "f1": 0.9905,
+        "seconds": 25.7822
+      },
+      "doh": {
+        "tp": 51,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.9808,
+        "recall": 0.9623,
+        "f1": 0.9714,
+        "seconds": 53.0918
+      }
+    },
+    "polka_dots_3.jpg": {
+      "required_dots": 28,
+      "gray": {
+        "tp": 24,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1.0,
+        "recall": 0.8571,
+        "f1": 0.9231,
+        "seconds": 0.3597
+      },
+      "simple": {
+        "tp": 14,
+        "fp": 0,
+        "fn": 14,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6667,
+        "seconds": 3.7399
+      },
+      "contrast": {
+        "tp": 27,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9643,
+        "f1": 0.9818,
+        "seconds": 0.3115
+      },
+      "contour": {
+        "tp": 24,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1.0,
+        "recall": 0.8571,
+        "f1": 0.9231,
+        "seconds": 0.2272
+      },
+      "log": {
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 6.5012
+      },
+      "dog": {
+        "tp": 28,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "seconds": 5.5315
+      },
+      "doh": {
+        "tp": 27,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.9643,
+        "f1": 0.9818,
+        "seconds": 4.1997
+      }
+    }
+  },
+  "real_overall": {
+    "gray": {
+      "tp": 136,
+      "fp": 0,
+      "fn": 81,
+      "precision": 1.0,
+      "recall": 0.6267,
+      "f1": 0.7705
+    },
+    "simple": {
+      "tp": 183,
+      "fp": 0,
+      "fn": 34,
+      "precision": 1.0,
+      "recall": 0.8433,
+      "f1": 0.915
+    },
+    "contrast": {
+      "tp": 208,
+      "fp": 0,
+      "fn": 9,
+      "precision": 1.0,
+      "recall": 0.9585,
+      "f1": 0.9788
+    },
+    "contour": {
+      "tp": 202,
+      "fp": 0,
+      "fn": 15,
+      "precision": 1.0,
+      "recall": 0.9309,
+      "f1": 0.9642
+    },
+    "log": {
+      "tp": 215,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1.0,
+      "recall": 0.9908,
+      "f1": 0.9954
+    },
+    "dog": {
+      "tp": 216,
+      "fp": 0,
+      "fn": 1,
+      "precision": 1.0,
+      "recall": 0.9954,
+      "f1": 0.9977
+    },
+    "doh": {
+      "tp": 214,
+      "fp": 1,
+      "fn": 3,
+      "precision": 0.9953,
+      "recall": 0.9862,
+      "f1": 0.9907
+    }
+  },
+  "seconds": 816.3672560830018
+}

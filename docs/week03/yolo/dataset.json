@@ -1,0 +1,178 @@
+{
+  "frames": {
+    "train": 298,
+    "valid": 49,
+    "test": 25
+  },
+  "boxes": {
+    "train": {
+      "ball": 258,
+      "referee": 690,
+      "player": 5955,
+      "goalkeeper": 230
+    },
+    "valid": {
+      "player": 973,
+      "referee": 117,
+      "ball": 45,
+      "goalkeeper": 39
+    },
+    "test": {
+      "referee": 56,
+      "player": 500,
+      "ball": 24,
+      "goalkeeper": 19
+    }
+  },
+  "clips": {
+    "train": [
+      "08fd33",
+      "121364",
+      "2e57b9",
+      "40cd38",
+      "42ba34",
+      "4b770a",
+      "538438",
+      "54745b",
+      "55c9d1",
+      "573e61",
+      "744b27",
+      "798b45",
+      "a9f16c",
+      "c01561",
+      "cd987c"
+    ],
+    "valid": [
+      "08fd33",
+      "121364",
+      "2e57b9",
+      "40cd38",
+      "42ba34",
+      "4b770a",
+      "538438",
+      "54745b",
+      "55c9d1",
+      "573e61",
+      "744b27",
+      "798b45",
+      "a9f16c"
+    ],
+    "test": [
+      "08fd33",
+      "40cd38",
+      "42ba34",
+      "4b770a",
+      "538438",
+      "573e61",
+      "744b27",
+      "798b45",
+      "a9f16c"
+    ]
+  },
+  "test_clips_seen_in_train": [
+    "08fd33",
+    "40cd38",
+    "42ba34",
+    "4b770a",
+    "538438",
+    "573e61",
+    "744b27",
+    "798b45",
+    "a9f16c"
+  ],
+  "median_box_size_px": {
+    "ball": 11.4,
+    "referee": 32.2,
+    "player": 35.9,
+    "goalkeeper": 33.2
+  },
+  "leak_check": {
+    "frames": 11,
+    "clips": [
+      "4b770a",
+      "798b45"
+    ],
+    "leaky": {
+      "mAP50": 0.7118,
+      "mAP50-95": 0.456,
+      "classes": {
+        "ball": {
+          "instances": 12,
+          "AP50": 0.0,
+          "AP50-95": 0.0,
+          "P": 0.0,
+          "R": 0.0
+        },
+        "goalkeeper": {
+          "instances": 8,
+          "AP50": 1.0,
+          "AP50-95": 0.6537,
+          "P": 1.0,
+          "R": 1.0
+        },
+        "player": {
+          "instances": 222,
+          "AP50": 0.9797,
+          "AP50-95": 0.6652,
+          "P": 0.9589,
+          "R": 0.9459
+        },
+        "referee": {
+          "instances": 27,
+          "AP50": 0.8676,
+          "AP50-95": 0.5053,
+          "P": 0.7931,
+          "R": 0.8519
+        }
+      }
+    },
+    "clean": {
+      "mAP50": 0.6597,
+      "mAP50-95": 0.4062,
+      "classes": {
+        "ball": {
+          "instances": 12,
+          "AP50": 0.0,
+          "AP50-95": 0.0,
+          "P": 0.0,
+          "R": 0.0
+        },
+        "goalkeeper": {
+          "instances": 8,
+          "AP50": 1.0,
+          "AP50-95": 0.5921,
+          "P": 1.0,
+          "R": 1.0
+        },
+        "player": {
+          "instances": 222,
+          "AP50": 0.9636,
+          "AP50-95": 0.6441,
+          "P": 0.9498,
+          "R": 0.9369
+        },
+        "referee": {
+          "instances": 27,
+          "AP50": 0.6752,
+          "AP50-95": 0.3884,
+          "P": 0.6176,
+          "R": 0.7778
+        }
+      }
+    }
+  },
+  "notes": [
+    "On their own test sets the same recipe scores 0.609 mAP50 on Roboflow's split and 0.588 on held out clips. Those are different frames, so the gap mixes the leak with how hard each test set is.",
+    "A controlled check scores both models on the same 11 frames: Roboflow test frames from the two held out clips, whose neighboring frames the leaky model trained on and the clean model never saw. The leaky model scores 0.712 mAP50 and the clean one 0.660 (+0.052); on referees, the class that depends most on context, 0.868 against 0.675. 11 frames is a small sample, and the leaky model also had more training frames (298 against 259), but both comparisons point the same way. Every row below the first uses held out clips.",
+    "The baseline finds players well but the ball not at all: ball AP50 0.000, because an 11 px ball is under 4 px after resizing to 640.",
+    "Training at 1280 px does not fit an 8 GB M1 (over 25 minutes per epoch, swapping). Running the baseline weights at 1280 px instead gives mAP50 0.419 (ball 0.000, goalkeeper 0.142): every object is suddenly twice the size the model learned. Resolution has to change in training and inference together, which is what tiling does.",
+    "Roboflow style offline augmentation (two extra copies, the same number of training steps) gives 0.580 mAP50. Ultralytics already augments online with mosaic, HSV jitter, flips and scaling, so the extra copies mostly repeat what it does.",
+    "tiles: trained on 960x540 tiles, then run on overlapping tiles plus the whole frame and merged. mAP50 0.820 and ball AP50 0.569, against 0.380 and 0.100 for the same weights on whole frames."
+  ],
+  "headline": "mAP50 0.588 to 0.820 on held out clips, ball AP50 0.00 to 0.57",
+  "example": {
+    "experiment": "tiles",
+    "frame": "4b770a_1_1_png.rf.755bf86f384e922cf2c71f15aaa52364.jpg",
+    "ball_recall_gain": 1.0
+  }
+}
