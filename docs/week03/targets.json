@@ -1,0 +1,146 @@
+[
+ {
+  "shape": "irregular",
+  "confidence": 0.515,
+  "bbox": [
+   131,
+   126,
+   101,
+   114
+  ],
+  "center": [
+   189.0,
+   173.3
+  ],
+  "color": "purple",
+  "area": 4491,
+  "outline": false,
+  "members": 1
+ },
+ {
+  "shape": "group of 10 dots",
+  "confidence": 0.843,
+  "bbox": [
+   160,
+   138,
+   151,
+   170
+  ],
+  "center": [
+   255.5,
+   245.2
+  ],
+  "color": "pink",
+  "area": 7294,
+  "outline": false,
+  "members": 10
+ },
+ {
+  "shape": "trapezoid",
+  "confidence": 0.827,
+  "bbox": [
+   626,
+   98,
+   198,
+   195
+  ],
+  "center": [
+   709.1,
+   209.9
+  ],
+  "color": "green",
+  "area": 17753,
+  "outline": true,
+  "members": 1
+ },
+ {
+  "shape": "irregular",
+  "confidence": 0.754,
+  "bbox": [
+   867,
+   137,
+   158,
+   151
+  ],
+  "center": [
+   924.4,
+   212.9
+  ],
+  "color": "cream",
+  "area": 12315,
+  "outline": false,
+  "members": 1
+ },
+ {
+  "shape": "rectangle",
+  "confidence": 0.982,
+  "bbox": [
+   134,
+   253,
+   452,
+   373
+  ],
+  "center": [
+   360.0,
+   438.2
+  ],
+  "color": "red",
+  "area": 75835,
+  "outline": false,
+  "members": 1
+ },
+ {
+  "shape": "pentagon",
+  "confidence": 0.949,
+  "bbox": [
+   1041,
+   372,
+   104,
+   102
+  ],
+  "center": [
+   1092.1,
+   426.0
+  ],
+  "color": "cyan",
+  "area": 7345,
+  "outline": false,
+  "members": 1
+ },
+ {
+  "shape": "6 point star",
+  "confidence": 0.8,
+  "bbox": [
+   394,
+   613,
+   192,
+   176
+  ],
+  "center": [
+   490.7,
+   700.3
+  ],
+  "color": "red",
+  "area": 17702,
+  "outline": false,
+  "members": 1
+ },
+ {
+  "shape": "ellipse",
+  "confidence": 0.97,
+  "bbox": [
+   788,
+   412,
+   246,
+   385
+  ],
+  "center": [
+   910.6,
+   603.4
+  ],
+  "color": "green",
+  "area": 50008,
+  "outline": false,
+  "members": 1
+ }
+]

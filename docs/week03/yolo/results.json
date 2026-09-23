@@ -1,0 +1,303 @@
+{
+  "notebook-split": {
+    "experiment": {
+      "name": "notebook-split",
+      "description": "Notebook recipe on Roboflow's random split (clips leak into test)",
+      "split": "original",
+      "model": "yolov8n.pt",
+      "imgsz": 640,
+      "epochs": 30,
+      "batch": 8,
+      "tiles": false,
+      "augment": null,
+      "copies": 2,
+      "sliced_eval": false,
+      "extra": {}
+    },
+    "test_frames": 25,
+    "full_frame": {
+      "mAP50": 0.6092,
+      "mAP50-95": 0.3947,
+      "classes": {
+        "ball": {
+          "instances": 24,
+          "AP50": 0.0,
+          "AP50-95": 0.0,
+          "P": 0.0,
+          "R": 0.0
+        },
+        "goalkeeper": {
+          "instances": 19,
+          "AP50": 0.8435,
+          "AP50-95": 0.5699,
+          "P": 0.8889,
+          "R": 0.8421
+        },
+        "player": {
+          "instances": 500,
+          "AP50": 0.9651,
+          "AP50-95": 0.6462,
+          "P": 0.937,
+          "R": 0.952
+        },
+        "referee": {
+          "instances": 56,
+          "AP50": 0.6284,
+          "AP50-95": 0.3626,
+          "P": 0.6727,
+          "R": 0.6607
+        }
+      },
+      "ms_per_frame": 77.1
+    },
+    "train_seconds": 2336.0
+  },
+  "baseline": {
+    "experiment": {
+      "name": "baseline",
+      "description": "Notebook recipe on the leakage free clip split",
+      "split": "clip",
+      "model": "yolov8n.pt",
+      "imgsz": 640,
+      "epochs": 30,
+      "batch": 8,
+      "tiles": false,
+      "augment": null,
+      "copies": 2,
+      "sliced_eval": false,
+      "extra": {}
+    },
+    "test_frames": 74,
+    "full_frame": {
+      "mAP50": 0.5882,
+      "mAP50-95": 0.3824,
+      "classes": {
+        "ball": {
+          "instances": 65,
+          "AP50": 0.0,
+          "AP50-95": 0.0,
+          "P": 0.0,
+          "R": 0.0
+        },
+        "goalkeeper": {
+          "instances": 48,
+          "AP50": 0.8609,
+          "AP50-95": 0.5663,
+          "P": 0.9111,
+          "R": 0.8542
+        },
+        "player": {
+          "instances": 1484,
+          "AP50": 0.962,
+          "AP50-95": 0.6423,
+          "P": 0.9344,
+          "R": 0.9306
+        },
+        "referee": {
+          "instances": 164,
+          "AP50": 0.5298,
+          "AP50-95": 0.321,
+          "P": 0.578,
+          "R": 0.6098
+        }
+      },
+      "ms_per_frame": 59.7
+    },
+    "train_seconds": 1396.6
+  },
+  "offline-aug": {
+    "experiment": {
+      "name": "offline-aug",
+      "description": "Plus Roboflow style offline augmentation (2 extra copies), equal step budget",
+      "split": "clip",
+      "model": "yolov8n.pt",
+      "imgsz": 640,
+      "epochs": 10,
+      "batch": 8,
+      "tiles": false,
+      "augment": "broadcast",
+      "copies": 2,
+      "sliced_eval": false,
+      "extra": {}
+    },
+    "test_frames": 74,
+    "full_frame": {
+      "mAP50": 0.5796,
+      "mAP50-95": 0.3472,
+      "classes": {
+        "ball": {
+          "instances": 65,
+          "AP50": 0.0,
+          "AP50-95": 0.0,
+          "P": 0.0,
+          "R": 0.0
+        },
+        "goalkeeper": {
+          "instances": 48,
+          "AP50": 0.7756,
+          "AP50-95": 0.4402,
+          "P": 0.8605,
+          "R": 0.7708
+        },
+        "player": {
+          "instances": 1484,
+          "AP50": 0.9437,
+          "AP50-95": 0.6052,
+          "P": 0.9551,
+          "R": 0.9023
+        },
+        "referee": {
+          "instances": 164,
+          "AP50": 0.5988,
+          "AP50-95": 0.3436,
+          "P": 0.5885,
+          "R": 0.689
+        }
+      },
+      "ms_per_frame": 55.7
+    },
+    "train_seconds": 1235.8
+  },
+  "hires-inference": {
+    "experiment": {
+      "name": "hires-inference",
+      "description": "Baseline weights, inference at 1280 px",
+      "split": "clip",
+      "model": "yolov8n.pt",
+      "imgsz": 1280,
+      "epochs": 30,
+      "batch": 8,
+      "tiles": false,
+      "augment": null,
+      "copies": 2,
+      "sliced_eval": false,
+      "weights_from": "baseline",
+      "extra": {}
+    },
+    "test_frames": 74,
+    "full_frame": {
+      "mAP50": 0.4188,
+      "mAP50-95": 0.2684,
+      "classes": {
+        "ball": {
+          "instances": 65,
+          "AP50": 0.0,
+          "AP50-95": 0.0,
+          "P": 0.0,
+          "R": 0.0
+        },
+        "goalkeeper": {
+          "instances": 48,
+          "AP50": 0.142,
+          "AP50-95": 0.0695,
+          "P": 0.4444,
+          "R": 0.1667
+        },
+        "player": {
+          "instances": 1484,
+          "AP50": 0.9433,
+          "AP50-95": 0.7065,
+          "P": 0.8734,
+          "R": 0.9205
+        },
+        "referee": {
+          "instances": 164,
+          "AP50": 0.5897,
+          "AP50-95": 0.2976,
+          "P": 0.5515,
+          "R": 0.6524
+        }
+      },
+      "ms_per_frame": 129.7
+    },
+    "train_seconds": 7.3
+  },
+  "tiles": {
+    "experiment": {
+      "name": "tiles",
+      "description": "Train on 960x540 tiles at 640 px, equal step budget, sliced inference",
+      "split": "clip",
+      "model": "yolov8n.pt",
+      "imgsz": 640,
+      "epochs": 8,
+      "batch": 8,
+      "tiles": true,
+      "augment": null,
+      "copies": 2,
+      "sliced_eval": true,
+      "extra": {}
+    },
+    "test_frames": 74,
+    "full_frame": {
+      "mAP50": 0.3799,
+      "mAP50-95": 0.2152,
+      "classes": {
+        "ball": {
+          "instances": 65,
+          "AP50": 0.0997,
+          "AP50-95": 0.0263,
+          "P": 0.4783,
+          "R": 0.1692
+        },
+        "goalkeeper": {
+          "instances": 48,
+          "AP50": 0.2165,
+          "AP50-95": 0.1024,
+          "P": 0.6667,
+          "R": 0.2083
+        },
+        "player": {
+          "instances": 1484,
+          "AP50": 0.8959,
+          "AP50-95": 0.5574,
+          "P": 0.8973,
+          "R": 0.8895
+        },
+        "referee": {
+          "instances": 164,
+          "AP50": 0.3078,
+          "AP50-95": 0.1746,
+          "P": 0.5926,
+          "R": 0.2927
+        }
+      },
+      "ms_per_frame": 46.8
+    },
+    "sliced": {
+      "mAP50": 0.8197,
+      "mAP50-95": 0.567,
+      "classes": {
+        "ball": {
+          "instances": 65,
+          "AP50": 0.5693,
+          "AP50-95": 0.2392,
+          "P": 0.825,
+          "R": 0.5077
+        },
+        "goalkeeper": {
+          "instances": 48,
+          "AP50": 0.9447,
+          "AP50-95": 0.7157,
+          "P": 0.8889,
+          "R": 1.0
+        },
+        "player": {
+          "instances": 1484,
+          "AP50": 0.9654,
+          "AP50-95": 0.768,
+          "P": 0.9453,
+          "R": 0.9313
+        },
+        "referee": {
+          "instances": 164,
+          "AP50": 0.7995,
+          "AP50-95": 0.545,
+          "P": 0.7803,
+          "R": 0.8232
+        }
+      },
+      "ms_per_frame": 248.3
+    },
+    "train_seconds": 1460.6
+  }
+}

@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UAV Ground School Week 3: blob detection, classical object detection and YOLOv8</title>
+  <meta name="description" content="{{W3_DESCRIPTION}}">
+  <meta name="author" content="Karthik Subramanian">
+  <meta name="theme-color" content="#15191c">
+  <link rel="canonical" href="{{CANONICAL}}week3">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="UAV Ground School">
+  <meta property="og:title" content="Week 3: finding what stands out">
+  <meta property="og:description" content="{{W3_DESCRIPTION}}">
+  <meta property="og:url" content="{{CANONICAL}}week3">
+  <meta property="og:image" content="{{CANONICAL}}og-week3.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Polka dots on fabric, each one circled by the blob detector">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Week 3: finding what stands out">
+  <meta name="twitter:description" content="{{W3_DESCRIPTION}}">
+  <meta name="twitter:image" content="{{CANONICAL}}og-week3.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500&amp;family=Schibsted+Grotesk:wght@400;500;600&amp;family=Young+Serif&amp;display=swap">
+  <link rel="stylesheet" href="css/site.css">
+  {{PRELOAD:w3_hero}}
+
+  <script>
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("motion");
+  </script>
+  <script type="application/ld+json">{{W3_JSON_LD}}</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="wordmark" href="./" aria-label="UAV Ground School, home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#232a2e"/><path d="M14 20h36v12H14v12h36" fill="none" stroke="#f08a3c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="44" r="5.5" fill="#f08a3c"/></svg>
+        UAV Ground School
+      </a>
+      <nav class="site-nav" aria-label="Sections">
+        <ul>
+          <li><a href="#explorer">Explorer</a></li>
+          <li><a href="#pieces">Game pieces</a></li>
+          <li><a href="#yolo">YOLO</a></li>
+          <li><a href="#cpp">C++</a></li>
+          <li class="keep"><a href="./">Week 2</a></li>
+          <li class="keep"><a class="gh" href="https://github.com/KarthikSubramanian07/UAV-Ground-School">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero night" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="kicker">Week 3, skill booster 2</p>
+          <h1 id="hero-title">Finding what <em>stands out.</em></h1>
+          <p class="lede">Blob detection with OpenCV, taken all the way: SimpleBlobDetector, Laplacian and Difference of Gaussians and Determinant of Hessian written from scratch, a classical detector for cones, cubes and rings, and a YOLOv8 study that finds the dataset's test split leaks. Every number below is measured against ground truth.</p>
+          <div class="actions">
+            <a class="button" href="https://github.com/KarthikSubramanian07/UAV-Ground-School/tree/main/week03">
+              <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+              Week 3 source
+            </a>
+            <a class="text-link" href="#explorer">Compare the detectors</a>
+          </div>
+        </div>
+        <dl class="spec">
+          <dt>dots</dt><dd>{{STAT:w3_best_f1}} F1 on the three photos ({{STAT:w3_required}} hand checked dots), {{STAT:w3_center_err}} px median center error on synthetic truth</dd>
+          <dt>pieces</dt><dd>{{STAT:w3_pieces}}, mean mask IoU {{STAT:w3_mask_iou}} against SAM annotations</dd>
+          <dt>yolo</dt><dd>{{STAT:w3_yolo_headline}}</dd>
+          <dt>stack</dt><dd>Python, OpenCV, NumPy, Ultralytics, C++17</dd>
+        </dl>
+      </div>
+
+      <figure class="hero-figure">
+        <div class="frame">
+          <img {{IMG:w3_hero}} sizes="100vw" style="--ratio: {{RATIO:w3_hero}}" fetchpriority="high" decoding="async" alt="The three polka dot photos with every detected dot outlined: a flat digital pattern, dots printed on folded orange fabric, and two cards of dots in front of blurred ones">
+          <span class="scanline" aria-hidden="true"></span>
+        </div>
+        <figcaption>
+          <span>Laplacian of Gaussian in CIELAB, then an ellipse fit to each dot's color edge.</span>
+          <span class="mono">{{STAT:w3_log_found}} dots, {{STAT:w3_log_fp}} false positives</span>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="section" id="brief" aria-labelledby="brief-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="brief-title">Two options, two challenges. All of it.</h2>
+          <p class="lede">The Week 3 skill booster is object detection: OpenCV blob detection or training a YOLOv8 model. Here is each task as given, and what the repo ships for it.</p>
+        </div>
+        <ol class="brief">
+          <li>
+            <span class="tag">Option 1</span>
+            <div>
+              <h3>OpenCV blob detection</h3>
+              <blockquote><p>Use SimpleBlobDetector to detect the polka dots in the three images. Try to filter blobs by size or color.</p></blockquote>
+            </div>
+            <ul class="shipped">
+              <li><span><strong>Hand checked ground truth</strong> for every dot in all three photos, so detectors are scored, not eyeballed.</span></li>
+              <li><span>SimpleBlobDetector three ways: on grayscale, per learned palette color, and on a background contrast map. Filters by radius, color name, circularity, convexity and inertia.</span></li>
+              <li><span><strong>Sub pixel edge fit</strong> for every dot, which also rejects squares, stars and gaps between dots.</span></li>
+            </ul>
+          </li>
+          <li>
+            <span class="tag">Challenge 1</span>
+            <div>
+              <h3>LoG, DoG, DoH, contours</h3>
+              <blockquote><p>Detect objects using other methods.</p></blockquote>
+            </div>
+            <ul class="shipped">
+              <li><span><strong>Scale space detectors from scratch</strong> in CIELAB, with an image pyramid, a streamed search and SIFT style sub pixel refinement. Checked against scikit-image.</span></li>
+              <li><span>Contour filtering on color edges.</span></li>
+              <li><span>A synthetic benchmark with exact truth: fabric, pastels, distractor shapes, perspective, tiny and crowded dots.</span></li>
+            </ul>
+          </li>
+          <li>
+            <span class="tag">Challenge 2</span>
+            <div>
+              <h3>Cones, cubes and rings</h3>
+              <blockquote><p>Detect and classify the cones, cubes and rings in the objects file, with accurate contours or bounding boxes.</p></blockquote>
+            </div>
+            <ul class="shipped">
+              <li><span><strong>Classical, no training:</strong> saturation seeds, hue clustering, hysteresis growth, a convexity defect cut between touching cubes.</span></li>
+              <li><span>Classified by <strong>geometry, not color</strong>: holes, convexity and triangularity. Survives rotation, mirroring, scaling and hue shifts.</span></li>
+              <li><span>Scored against SAM 2 masks, the annotation trick from the lecture.</span></li>
+            </ul>
+          </li>
+          <li>
+            <span class="tag">Option 2</span>
+            <div>
+              <h3>YOLOv8</h3>
+              <blockquote><p>Train your own YOLOv8 model, explore Roboflow's preprocessing and augmentation, and see if you can improve performance.</p></blockquote>
+            </div>
+            <ul class="shipped">
+              <li><span>The notebook's football dataset without a Roboflow key, and <strong>a leak in its split</strong>: every test clip also appears in training.</span></li>
+              <li><span>Roboflow's tile preprocessing and augmentation catalogue, reimplemented with boxes that follow the pixels.</span></li>
+              <li><span><strong>Sliced inference</strong> for the 11 pixel ball, and one COCO style scorer for every experiment.</span></li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="explorer" aria-labelledby="explorer-title" style="padding-top: 0">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="explorer-title">Seven detectors, three photos.</h2>
+          <div class="prose">
+            <p>Every detection below is precomputed by <code>python -m week03 docs</code> and scored against the hand checked annotations. Rings are found dots, red rings are false positives and dashed circles are dots the method missed. Hover or tap a dot for its measurements.</p>
+            <p>Dots cut in half by the frame are optional, and on the third photo the out of focus cards behind are not scored either way.</p>
+          </div>
+        </div>
+
+        <div class="demo explorer" id="explorer-app">
+          <div class="toolbar">
+            <div role="group" aria-label="Photo" id="photo-picker">
+              <button class="chip" type="button" data-photo="polka_dots_1" aria-pressed="true"><img src="assets/week3/polka_dots_1-thumb.webp" alt="" width="64" height="64">Flat print</button>
+              <button class="chip" type="button" data-photo="polka_dots_2" aria-pressed="false"><img src="assets/week3/polka_dots_2-thumb.webp" alt="" width="64" height="64">Fabric</button>
+              <button class="chip" type="button" data-photo="polka_dots_3" aria-pressed="false"><img src="assets/week3/polka_dots_3-thumb.webp" alt="" width="64" height="64">Cards</button>
+            </div>
+          </div>
+          <div class="method-picker" role="group" aria-label="Detector" id="method-picker">
+            <button type="button" data-method="gray" aria-pressed="false">Gray SBD</button>
+            <button type="button" data-method="simple" aria-pressed="false">Palette SBD</button>
+            <button type="button" data-method="contrast" aria-pressed="false">Contrast SBD</button>
+            <button type="button" data-method="contour" aria-pressed="false">Contours</button>
+            <button type="button" data-method="log" aria-pressed="true">LoG</button>
+            <button type="button" data-method="dog" aria-pressed="false">DoG</button>
+            <button type="button" data-method="doh" aria-pressed="false">DoH</button>
+          </div>
+
+          <div class="bench">
+            <div>
+              <div class="stage explorer-stage" id="explorer-stage">
+                <img id="explorer-image" src="assets/week3/polka_dots_1.webp" alt="The selected polka dot photo" width="720" height="720">
+                <svg class="rings" id="explorer-rings" role="img" aria-label="Detections drawn over the photo"></svg>
+                <div class="tip" id="explorer-tip" hidden></div>
+              </div>
+              <p class="legend">
+                <span><i class="key tp"></i>found</span>
+                <span><i class="key fp"></i>false positive</span>
+                <span><i class="key miss"></i>missed</span>
+                <span><i class="key ign"></i>not scored</span>
+              </p>
+            </div>
+            <div class="results">
+              <h3 id="explorer-title-method">Laplacian of Gaussian</h3>
+              <p class="hint" id="explorer-blurb"></p>
+              <dl class="scorecard" id="explorer-score">
+                <div><dt>F1</dt><dd id="s-f1">0</dd></div>
+                <div><dt>Precision</dt><dd id="s-p">0</dd></div>
+                <div><dt>Recall</dt><dd id="s-r">0</dd></div>
+                <div><dt>Time</dt><dd id="s-t">0</dd></div>
+              </dl>
+              <h3 class="sub">Dots by color</h3>
+              <ul class="color-counts" id="explorer-colors"></ul>
+            </div>
+          </div>
+          <noscript><p class="note">The explorer needs JavaScript. The same results are in <code>docs/week03/dots</code> on GitHub.</p></noscript>
+        </div>
+      </div>
+    </section>
+
+    <section class="section night" id="method" aria-labelledby="method-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="method-title">How a blob detector sees.</h2>
+          <div class="prose muted">
+            <p>A dot of radius r answers loudest to a Laplacian of Gaussian of width r divided by the square root of two. Sweep the width and every dot lights up at its own scale, so one search finds both where each dot is and how big.</p>
+            <p>Run on CIELAB instead of gray, the response is measured in Delta E, the unit of visible color difference. A cyan dot on orange fabric has almost the same brightness as the cloth; in color it is obvious.</p>
+          </div>
+        </div>
+        <figure class="plate wide-plate">
+          <img {{IMG:w3_scale_space}} sizes="(min-width: 1300px) 1250px, 100vw" loading="lazy" decoding="async" alt="The flat polka dot pattern and its Laplacian of Gaussian response at four widths: small yellow dots glow at the finest scale, the large green dots at the coarsest">
+          <figcaption>The flat print and its LoG response magnitude at four widths.</figcaption>
+        </figure>
+
+        <div>
+          <h3>From candidate to measured dot</h3>
+          <ol class="pipeline">
+            <li>
+              <h4>Detect</h4>
+              <p>3x3x3 maxima of the response stack, searched on the color magnitude and on each signed channel, three scale slices at a time.</p>
+              <code>blobs.detect_scale_space</code>
+            </li>
+            <li>
+              <h4>Refine</h4>
+              <p>A quadratic fit through the 27 neighbors moves each peak to sub pixel position and fractional scale, as SIFT does.</p>
+              <code>offset = -H&#8315;&#185; g</code>
+            </li>
+            <li>
+              <h4>Drop sidelobes</h4>
+              <p>A disk's Laplacian is ringed by weaker, opposite sign response. A peak that is the negative of a much stronger neighbor is its echo.</p>
+              <code>cosine &lt; -0.7</code>
+            </li>
+            <li>
+              <h4>Fit the edge</h4>
+              <p>Along 48 rays, find where the color crosses halfway from dot to background. A robust circle, then an ellipse, fits those points.</p>
+              <code>Kasa fit + cv2.fitEllipse</code>
+            </li>
+            <li>
+              <h4>Verify</h4>
+              <p>Uniform inside, a different color just outside, and a surround that is itself one color. That rejects squares, stars and gaps.</p>
+              <code>fill, leak, surround</code>
+            </li>
+            <li>
+              <h4>Filter</h4>
+              <p>By radius, by color name, by contrast, by roundness. The same knobs SimpleBlobDetector has, measured after the fit.</p>
+              <code>--colors red --min-radius 10</code>
+            </li>
+          </ol>
+        </div>
+
+        <div class="block">
+          <div class="block-head">
+            <h3>Two bugs the benchmark caught.</h3>
+            <p>Both looked fine on the photos and were only visible against exact truth.</p>
+          </div>
+          <div class="callouts">
+            <div class="callout night-callout">
+              <p><b>Every method was 0.53 px off.</b> Identical error for seven different detectors meant the truth was wrong, not the detectors. The scene renderer drew dots on a 4x supersampled canvas without the half pixel shift between grids. After the fix, clean dots are located to {{STAT:w3_center_err}} px.</p>
+            </div>
+            <div class="callout night-callout">
+              <p><b>Pale pink dots vanished.</b> Suppressing sidelobes by distance and strength alone deleted faint dots beside black ones. A sidelobe is its parent's response with the sign flipped in the same channels; pink next to black lives mostly in the a channel, which black cannot produce. Checking direction, not just size, brought them back.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="benchmark" aria-labelledby="benchmark-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="benchmark-title">Benchmark</h2>
+          <p class="lede">F1 on the three photos, then on {{STAT:w3_scenes}} synthetic scenes where the true center and radius of every dot is known. Generated by <code>python -m week03 benchmark</code>.</p>
+        </div>
+        <div class="table-scroll">
+          <table class="benchmark-table w3-table">
+            <caption>F1 combines precision and recall; 1.000 means every dot found and nothing else.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Detector</th>
+                {{W3_REAL_HEAD}}
+                <th scope="col" class="num">Synthetic F1</th>
+                <th scope="col" class="num">Center error</th>
+                <th scope="col" class="num">Radius error</th>
+              </tr>
+            </thead>
+            <tbody>
+{{W3_BENCH_ROWS}}
+            </tbody>
+          </table>
+        </div>
+        <dl class="metrics">
+          <div><dt>SimpleBlobDetector</dt><dd>On grayscale it cannot see a dot as bright as its background: zero of 53 on the fabric. Given a color contrast map it gets {{STAT:w3_contrast_f1}}.</dd></div>
+          <div><dt>Scale space</dt><dd>LoG, DoG and DoH agree within a dot or two everywhere. DoH is near zero on straight edges, which helps next to card borders.</dd></div>
+          <div><dt>Errors</dt><dd>Median over matched dots on synthetic scenes. The photo annotations come from the same edge fit, so only precision and recall are scored there.</dd></div>
+        </dl>
+        <figure class="plate">
+          <img {{IMG:w3_synthetic}} sizes="(min-width: 1300px) 1250px, 100vw" loading="lazy" decoding="async" alt="Seven synthetic test scenes with the detections drawn on them: flat print, fabric, pastel dots on cards, distractor shapes, a tilted wall, tiny dots and a crowded fabric">
+          <figcaption>One scene per synthetic preset with the LoG detections. Squares, stars, crosses and thin ellipses in the distractor scene are left alone.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section night" id="pieces" aria-labelledby="pieces-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="pieces-title">Cones, cubes and rings, without a neural network.</h2>
+          <div class="prose muted">
+            <p>No training data, so the detector has to reason. Game pieces are saturated plastic on gray tile, the pieces touch, and the shaded side of a cube is barely colored at all.</p>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head">
+            <h3>Drag to compare with the SAM masks.</h3>
+            <p>{{STAT:w3_pieces_sentence}}</p>
+          </div>
+          <div class="compare" id="compare-pieces" style="--ratio: {{RATIO:w3_objects}}">
+            <img {{IMG:w3_objects_truth}} sizes="(min-width: 1300px) 1250px, 100vw" loading="lazy" decoding="async" alt="Ground truth: six masks made with SAM 2 from hand drawn boxes">
+            <img class="after" {{IMG:w3_objects}} sizes="(min-width: 1300px) 1250px, 100vw" loading="lazy" decoding="async" alt="Detections: two cones, two cubes and two rings, each outlined and labeled">
+            <span class="tag left">SAM 2 truth</span>
+            <span class="tag right">Classical detector</span>
+            <span class="divider" aria-hidden="true"></span>
+            <span class="knob" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l-4 5 4 5M13 5l4 5-4 5"/></svg></span>
+            <input type="range" min="0" max="100" value="50" step="1" aria-label="Comparison position: left shows the SAM annotation, right shows the detector" aria-valuetext="50% detector" data-right="detector">
+          </div>
+        </div>
+
+        <div class="pieces-grid">
+          <div>
+            <h3>Geometry decides the class</h3>
+            <ul class="rules">
+              <li><b>Ring</b><span>A large hole near the middle.</span></li>
+              <li><b>Cube</b><span>A convex polyhedron has a convex silhouette: solidity near 1.</span></li>
+              <li><b>Cone</b><span>Concave where the body meets the base flange, and a convex hull close to a triangle, standing or lying down.</span></li>
+            </ul>
+            <p class="small muted">Touching cubes: two thick centers in the distance transform, two notches where the silhouettes meet. The cut runs between the notches. A single cone has one thick center, so it is never cut.</p>
+          </div>
+          <div class="table-scroll">
+            <table class="pieces-table">
+              <thead><tr><th scope="col">Piece</th><th scope="col" class="num">Solidity</th><th scope="col" class="num">Hole</th><th scope="col" class="num">Triangularity</th><th scope="col" class="num">Mask IoU</th></tr></thead>
+              <tbody>
+{{W3_PIECE_ROWS}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head">
+            <h3>Rotate it, mirror it, recolor it.</h3>
+            <p>Nothing in the classifier knows that cones are yellow or where the camera is. The same image rotated, mirrored, halved and hue shifted until the cones turn blue still reads {{STAT:w3_robust}}.</p>
+          </div>
+          <figure class="plate">
+            <img {{IMG:w3_robustness}} sizes="(min-width: 1300px) 1250px, 100vw" loading="lazy" decoding="async" alt="Six altered copies of the game piece photo, rotated, mirrored, shrunk and recolored, each with the same six pieces correctly labeled">
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="block-head">
+            <h3>Bonus: the shapes file.</h3>
+            <p>The Week 3 folder also had painted targets. Segmented by Delta E from the local background, then classified with the Week 2 SUAS template matcher plus ellipses, n pointed stars and dot groups.</p>
+          </div>
+          <figure class="plate">
+            <img {{IMG:w3_targets}} sizes="(min-width: 1300px) 1250px, 100vw" loading="lazy" decoding="async" alt="Painted shapes on a cracked gray texture, each boxed and labeled: red rectangle, cyan pentagon, green ellipse, red six point star, green arch outline, a group of ten dots">
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="yolo" aria-labelledby="yolo-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="yolo-title">YOLOv8, and a leak in the data.</h2>
+          <div class="prose">
+            <p>The notebook trains on Roboflow's football players dataset: {{STAT:w3_frames}} broadcast frames at 1920x1080 with players, goalkeepers, referees and the ball. File names start with a clip id, and the random split puts frames of every test clip into training too, often a second apart.</p>
+            <p>So every model is scored twice here: on Roboflow's split, and on a clean split that holds out whole clips.</p>
+          </div>
+        </div>
+
+        <div class="yolo-stats">
+          <div><b>{{STAT:w3_leak}}</b><span>test clips also in training (Roboflow split)</span></div>
+          <div><b>{{STAT:w3_ball_px}} px</b><span>median ball size at 1920x1080</span></div>
+          <div><b>{{STAT:w3_ball_share}}</b><span>of all boxes are the ball</span></div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="benchmark-table yolo-table">
+            <caption>YOLOv8n on an 8 GB Apple M1. AP50 at IoU 0.5; mAP50-95 averages ten IoU thresholds. Scored by one COCO style evaluator, so sliced and whole frame inference compare directly.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Experiment</th>
+                <th scope="col">Test split</th>
+                <th scope="col">Inference</th>
+                <th scope="col" class="num">mAP50</th>
+                <th scope="col" class="num">mAP50-95</th>
+                <th scope="col" class="num">Ball</th>
+                <th scope="col" class="num">Goalkeeper</th>
+                <th scope="col" class="num">Player</th>
+                <th scope="col" class="num">Referee</th>
+              </tr>
+            </thead>
+            <tbody>
+{{W3_YOLO_ROWS}}
+            </tbody>
+          </table>
+        </div>
+        <div class="prose yolo-notes">
+{{W3_YOLO_NOTES}}
+        </div>
+
+        <div class="block">
+          <div class="block-head">
+            <h3>Drag to slice.</h3>
+            <p>The same model on a held out frame: whole frame at 640 px on the left, sliced into overlapping 960x540 tiles plus the whole frame on the right.</p>
+          </div>
+          <div class="compare" id="compare-yolo" style="--ratio: {{RATIO:w3_yolo_whole}}">
+            <img {{IMG:w3_yolo_whole}} sizes="(min-width: 1300px) 1250px, 100vw" loading="lazy" decoding="async" alt="Detections of the model on a whole broadcast frame">
+            <img class="after" {{IMG:w3_yolo_sliced}} sizes="(min-width: 1300px) 1250px, 100vw" loading="lazy" decoding="async" alt="Detections of the same model with sliced inference on the same frame">
+            <span class="tag left">Whole frame</span>
+            <span class="tag right">Sliced</span>
+            <span class="divider" aria-hidden="true"></span>
+            <span class="knob" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l-4 5 4 5M13 5l4 5-4 5"/></svg></span>
+            <input type="range" min="0" max="100" value="50" step="1" aria-label="Comparison position: left shows whole frame inference, right shows sliced inference" aria-valuetext="50% sliced" data-right="sliced">
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-head">
+            <h3>Roboflow's options, rebuilt.</h3>
+            <p>Roboflow's "Generate version" step is reimplemented in <code>week03/augment.py</code> so it can be tried without an account. Geometric augmentations warp every box's corners and drop boxes that leave the frame, as Roboflow does.</p>
+          </div>
+          <ul class="aug-list">
+            <li><b>Preprocess</b><span>Tile (2x2 at 960x540), resize, auto orient</span></li>
+            <li><b>Geometry</b><span>Flip, 90 degree turns, crop and zoom, rotation, shear</span></li>
+            <li><b>Photometric</b><span>Hue, saturation, brightness, exposure, grayscale</span></li>
+            <li><b>Degrade</b><span>Blur, salt and pepper noise, cutout</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cpp" aria-labelledby="cpp-title" style="padding-top: 0">
+      <div class="wrap cpp-grid">
+        <div class="prose">
+          <h2 id="cpp-title" style="font-size: var(--step-3)">Again, in C++17.</h2>
+          <p class="lede" style="margin-top: 1.25rem">The dot detectors and the game piece classifier are ported to OpenCV's C++ API, and CI checks them against the Python implementation.</p>
+          <ul>
+            <li><code>polka_dots</code>: scale space LoG, DoG and DoH in CIELAB, sidelobe suppression, the edge fit and verification, and SimpleBlobDetector on grayscale or contrast.</li>
+            <li><code>game_pieces</code>: seeds, hue clustering, hysteresis, the convexity defect split and the geometric classifier.</li>
+          </ul>
+        </div>
+        <div>
+          <figure class="terminal">
+            <header><span>C++17</span><span>week03/cpp</span></header>
+            <pre><code><span class="p">$ </span>cmake -S week03/cpp -B build/cpp3 -DCMAKE_BUILD_TYPE=Release
+<span class="p">$ </span>cmake --build build/cpp3 -j
+<span class="p">$ </span>./build/cpp3/polka_dots docs/week03/photos/polka_dots_2.jpg --out dots.png
+<span class="p">$ </span>./build/cpp3/game_pieces docs/week03/photos/objects.jpg --out pieces.png</code></pre>
+          </figure>
+          <figure class="terminal">
+            <header><span>Python</span><span>python -m week03</span></header>
+            <pre><code><span class="p">$ </span>python -m week03 dots docs/week03/photos/polka_dots_2.jpg --method log
+<span class="p">$ </span>python -m week03 compare docs/week03/photos/polka_dots_3.jpg --out sheet.jpg
+<span class="p">$ </span>python -m week03 objects docs/week03/photos/objects.jpg
+<span class="p">$ </span>python -m week03 benchmark docs/week03
+<span class="p">$ </span>python -m week03 yolo train baseline tiles</code></pre>
+          </figure>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer night">
+    <div class="wrap">
+      <p class="big">Built for UAVs@Berkeley Software Ground School 2026.</p>
+      <div>
+        <h2>Project</h2>
+        <ul>
+          <li><a href="https://github.com/KarthikSubramanian07/UAV-Ground-School">Repository</a></li>
+          <li><a href="https://github.com/KarthikSubramanian07/UAV-Ground-School/tree/main/week03">Week 3 source</a></li>
+          <li><a href="https://github.com/KarthikSubramanian07/UAV-Ground-School/blob/main/docs/week03/dots_benchmark.md">dots_benchmark.md</a></li>
+          <li><a href="https://github.com/KarthikSubramanian07/UAV-Ground-School/blob/main/docs/week03/yolo/results.md">YOLO results</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Weeks</h2>
+        <ul>
+          <li><a href="./">Week 2: color and stitching</a></li>
+          <li><a href="week3">Week 3: object detection</a></li>
+        </ul>
+      </div>
+      <p class="fine"><span>Karthik Subramanian. MIT License. Football dataset: Roboflow Universe, CC BY 4.0.</span><span class="mono">Built {{BUILD_DATE}}</span></p>
+    </div>
+  </footer>
+
+  <script src="js/explorer.js" defer></script>
+  <script src="js/site.js" defer></script>
+</body>
+</html>

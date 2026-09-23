@@ -1,0 +1,300 @@
+{
+ "image": "polka_dots_3.jpg",
+ "size": [
+  640,
+  800
+ ],
+ "notes": "Two sharp cards in front of defocused ones. Every sharp dot checked by eye; the defocused cards are ignore regions (detections there are neither rewarded nor penalized). Detections on the plain wall count as false positives.",
+ "ignore": [
+  [
+   [
+    0,
+    0
+   ],
+   [
+    640,
+    0
+   ],
+   [
+    640,
+    330
+   ],
+   [
+    560,
+    325
+   ],
+   [
+    535,
+    245
+   ],
+   [
+    438,
+    240
+   ],
+   [
+    438,
+    195
+   ],
+   [
+    340,
+    195
+   ],
+   [
+    340,
+    160
+   ],
+   [
+    180,
+    160
+   ],
+   [
+    180,
+    205
+   ],
+   [
+    100,
+    210
+   ],
+   [
+    95,
+    245
+   ],
+   [
+    65,
+    265
+   ],
+   [
+    65,
+    300
+   ],
+   [
+    40,
+    310
+   ],
+   [
+    30,
+    480
+   ],
+   [
+    0,
+    490
+   ]
+  ],
+  [
+   [
+    0,
+    695
+   ],
+   [
+    640,
+    695
+   ],
+   [
+    640,
+    800
+   ],
+   [
+    0,
+    800
+   ]
+  ]
+ ],
+ "dots": [
+  {
+   "x": 256.7,
+   "y": 283.29,
+   "r": 4.28,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 132.29,
+   "y": 333.45,
+   "r": 25.19,
+   "color": "light blue",
+   "difficult": false
+  },
+  {
+   "x": 227.61,
+   "y": 334.68,
+   "r": 40.11,
+   "color": "orange",
+   "difficult": false
+  },
+  {
+   "x": 291.96,
+   "y": 320.44,
+   "r": 11.18,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 471.46,
+   "y": 310.52,
+   "r": 4.36,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 507.05,
+   "y": 347.4,
+   "r": 11.31,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 154.17,
+   "y": 399.02,
+   "r": 21.28,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 268.96,
+   "y": 394.24,
+   "r": 16.9,
+   "color": "orange",
+   "difficult": false
+  },
+  {
+   "x": 346.42,
+   "y": 361.66,
+   "r": 24.99,
+   "color": "light blue",
+   "difficult": false
+  },
+  {
+   "x": 442.08,
+   "y": 362.11,
+   "r": 40.27,
+   "color": "orange",
+   "difficult": false
+  },
+  {
+   "x": 208.97,
+   "y": 445.42,
+   "r": 16.01,
+   "color": "purple",
+   "difficult": false
+  },
+  {
+   "x": 250.75,
+   "y": 467.24,
+   "r": 8.5,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 368.15,
+   "y": 426.71,
+   "r": 21.25,
+   "color": "blue",
+   "difficult": false
+  },
+  {
+   "x": 423.15,
+   "y": 472.66,
+   "r": 16.06,
+   "color": "purple",
+   "difficult": false
+  },
+  {
+   "x": 483.76,
+   "y": 421.22,
+   "r": 17.04,
+   "color": "orange",
+   "difficult": false
+  },
+  {
+   "x": 174.07,
+   "y": 535.51,
+   "r": 31.98,
+   "color": "black",
+   "difficult": false
+  },
+  {
+   "x": 282.99,
+   "y": 510.63,
+   "r": 16.33,
+   "color": "gray",
+   "difficult": false
+  },
+  {
+   "x": 363.69,
+   "y": 506.08,
+   "r": 24.54,
+   "color": "pink",
+   "difficult": false
+  },
+  {
+   "x": 465.3,
+   "y": 494.27,
+   "r": 8.53,
+   "color": "red",
+   "difficult": false
+  },
+  {
+   "x": 498.02,
+   "y": 537.44,
+   "r": 16.46,
+   "color": "gray",
+   "difficult": false
+  },
+  {
+   "x": 222.24,
+   "y": 547.12,
+   "r": 6.36,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 274.53,
+   "y": 561.82,
+   "r": 16.6,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 388.01,
+   "y": 562.49,
+   "r": 32.04,
+   "color": "black",
+   "difficult": false
+  },
+  {
+   "x": 436.54,
+   "y": 574.0,
+   "r": 6.36,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 489.26,
+   "y": 588.66,
+   "r": 16.69,
+   "color": "black",
+   "difficult": false
+  },
+  {
+   "x": 562.17,
+   "y": 618.57,
+   "r": 8.18,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 583.86,
+   "y": 618.41,
+   "r": 8.11,
+   "color": "green",
+   "difficult": false
+  },
+  {
+   "x": 149.65,
+   "y": 478.89,
+   "r": 24.51,
+   "color": "pink",
+   "difficult": false
+  }
+ ]
+}

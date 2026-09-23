@@ -22,11 +22,11 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install ruff
-      - run: ruff check week02 tests scripts
-      - run: ruff format --check week02 tests scripts || echo "formatting differences are advisory"
+      - run: ruff check week02 week03 tests scripts
+      - run: ruff format --check week02 week03 tests scripts || echo "formatting differences are advisory"
       - name: No em or en dashes in tracked text
         run: |
-          if git grep -nP '[\x{2013}\x{2014}]' -- . ':!*.pdf'; then
+          if git grep -nIP '[\x{2013}\x{2014}]' -- . ':!*.pdf'; then
             echo "Found an em or en dash"; exit 1
           fi
 
@@ -44,10 +44,10 @@ jobs:
           cache: pip
       - name: Install
         run: |
-          pip install opencv-python-headless numpy pytest pytest-cov
+          pip install opencv-python-headless numpy pytest pytest-cov scikit-image
           pip install -e . --no-deps
       - name: Test
-        run: pytest --cov=week02 --cov-report=term-missing --cov-report=xml
+        run: pytest --cov=week02 --cov=week03 --cov-report=term-missing --cov-report=xml
       - uses: actions/upload-artifact@v4
         if: matrix.python-version == '3.12'
         with:
@@ -64,6 +64,8 @@ jobs:
         run: |
           cmake -S week02/cpp -B build/cpp -DCMAKE_BUILD_TYPE=Release
           cmake --build build/cpp -j
+          cmake -S week03/cpp -B build/cpp3 -DCMAKE_BUILD_TYPE=Release
+          cmake --build build/cpp3 -j
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -71,10 +73,11 @@ jobs:
       - name: Parity with the Python implementation
         env:
           WEEK02_CPP_BUILD: build/cpp
+          WEEK03_CPP_BUILD: build/cpp3
         run: |
           pip install opencv-python-headless numpy pytest
           pip install -e . --no-deps
-          pytest tests/test_cpp_parity.py -v
+          pytest tests/test_cpp_parity.py tests/test_week03_cpp_parity.py -v
 
   site:
     runs-on: ubuntu-latest

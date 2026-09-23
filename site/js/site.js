@@ -9,7 +9,7 @@
     const update = () => {
       const value = Number(input.value);
       compare.style.setProperty("--pos", `${value}%`);
-      input.setAttribute("aria-valuetext", `${100 - value}% full pipeline`);
+      input.setAttribute("aria-valuetext", `${100 - value}% ${input.dataset.right || "full pipeline"}`);
     };
     input.addEventListener("input", update);
     update();
