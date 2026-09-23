@@ -26,7 +26,7 @@ jobs:
       - run: ruff format --check week02 week03 tests scripts || echo "formatting differences are advisory"
       - name: No em or en dashes in tracked text
         run: |
-          if git grep -nP '[\x{2013}\x{2014}]' -- . ':!*.pdf'; then
+          if git grep -nIP '[\x{2013}\x{2014}]' -- . ':!*.pdf'; then
             echo "Found an em or en dash"; exit 1
           fi
 
