@@ -1,0 +1,470 @@
+[
+ {
+  "level": "ok",
+  "rule": "physical layer",
+  "where": "telemetry",
+  "message": "MAVLink 2 over uart"
+ },
+ {
+  "level": "ok",
+  "rule": "physical layer",
+  "where": "companion_dds",
+  "message": "DDS XRCE (ROS 2) over uart"
+ },
+ {
+  "level": "ok",
+  "rule": "physical layer",
+  "where": "companion_mavlink",
+  "message": "MAVLink 2 over uart"
+ },
+ {
+  "level": "ok",
+  "rule": "physical layer",
+  "where": "gimbal",
+  "message": "SIYI gimbal serial over uart"
+ },
+ {
+  "level": "ok",
+  "rule": "physical layer",
+  "where": "rc",
+  "message": "CRSF (ExpressLRS) over uart"
+ },
+ {
+  "level": "ok",
+  "rule": "physical layer",
+  "where": "can",
+  "message": "DroneCAN over can"
+ },
+ {
+  "level": "ok",
+  "rule": "physical layer",
+  "where": "lidar",
+  "message": "I2C over i2c"
+ },
+ {
+  "level": "ok",
+  "rule": "physical layer",
+  "where": "video",
+  "message": "Ethernet over ethernet"
+ },
+ {
+  "level": "ok",
+  "rule": "physical layer",
+  "where": "motors",
+  "message": "DShot300 over pwm"
+ },
+ {
+  "level": "ok",
+  "rule": "one device per UART",
+  "where": "all",
+  "message": "21 ports, none double booked"
+ },
+ {
+  "level": "ok",
+  "rule": "device protocol",
+  "where": "telemetry",
+  "message": "radio.HEADER speaks mavlink2"
+ },
+ {
+  "level": "ok",
+  "rule": "device protocol",
+  "where": "companion_dds",
+  "message": "companion.HEADER_UART1 speaks dds_xrce"
+ },
+ {
+  "level": "ok",
+  "rule": "device protocol",
+  "where": "companion_mavlink",
+  "message": "companion.USB_A speaks mavlink2"
+ },
+ {
+  "level": "ok",
+  "rule": "device protocol",
+  "where": "gimbal",
+  "message": "camera.UART speaks siyi"
+ },
+ {
+  "level": "ok",
+  "rule": "device protocol",
+  "where": "rc",
+  "message": "rx.UART speaks crsf"
+ },
+ {
+  "level": "ok",
+  "rule": "device protocol",
+  "where": "can",
+  "message": "gnss.CAN speaks dronecan"
+ },
+ {
+  "level": "ok",
+  "rule": "device protocol",
+  "where": "lidar",
+  "message": "lidar.MAIN speaks i2c"
+ },
+ {
+  "level": "ok",
+  "rule": "device protocol",
+  "where": "video",
+  "message": "companion.ETH speaks ethernet"
+ },
+ {
+  "level": "ok",
+  "rule": "device protocol",
+  "where": "motors",
+  "message": "esc.SIGNAL speaks dshot300"
+ },
+ {
+  "level": "ok",
+  "rule": "baud rate",
+  "where": "telemetry",
+  "message": "57600 baud on both ends"
+ },
+ {
+  "level": "ok",
+  "rule": "baud rate",
+  "where": "companion_dds",
+  "message": "921600 baud on both ends"
+ },
+ {
+  "level": "ok",
+  "rule": "baud rate",
+  "where": "gimbal",
+  "message": "115200 baud on both ends"
+ },
+ {
+  "level": "ok",
+  "rule": "baud rate",
+  "where": "rc",
+  "message": "420000 baud on both ends"
+ },
+ {
+  "level": "ok",
+  "rule": "receive DMA",
+  "where": "rc",
+  "message": "fc.GPS2 receives with DMA"
+ },
+ {
+  "level": "ok",
+  "rule": "logic level",
+  "where": "telemetry",
+  "message": "3.3 V to 3.3 V"
+ },
+ {
+  "level": "ok",
+  "rule": "logic level",
+  "where": "companion_dds",
+  "message": "3.3 V to 3.3 V"
+ },
+ {
+  "level": "warning",
+  "rule": "logic level",
+  "where": "gimbal",
+  "message": "3.3 V to 3.3 V (device level is an estimate)"
+ },
+ {
+  "level": "ok",
+  "rule": "logic level",
+  "where": "rc",
+  "message": "3.3 V to 3.3 V"
+ },
+ {
+  "level": "ok",
+  "rule": "logic level",
+  "where": "can",
+  "message": "CAN is differential; transceivers set the levels"
+ },
+ {
+  "level": "ok",
+  "rule": "logic level",
+  "where": "lidar",
+  "message": "3.3 V to 3.3 V"
+ },
+ {
+  "level": "ok",
+  "rule": "pins",
+  "where": "telemetry",
+  "message": "5 wires, TX and RX crossed"
+ },
+ {
+  "level": "warning",
+  "rule": "connectors",
+  "where": "telemetry",
+  "message": "custom cable: JST-GH-6 to 2x8-0.1in-header-16"
+ },
+ {
+  "level": "ok",
+  "rule": "pins",
+  "where": "companion_dds",
+  "message": "5 wires, TX and RX crossed"
+ },
+ {
+  "level": "warning",
+  "rule": "connectors",
+  "where": "companion_dds",
+  "message": "custom cable: JST-GH-6 to 40-pin-2.54mm-header (pins 8,10,11,36,6)"
+ },
+ {
+  "level": "ok",
+  "rule": "pins",
+  "where": "gimbal",
+  "message": "3 wires, TX and RX crossed"
+ },
+ {
+  "level": "warning",
+  "rule": "connectors",
+  "where": "gimbal",
+  "message": "custom cable: JST-GH-8 to unspecified (vendor cable)"
+ },
+ {
+  "level": "ok",
+  "rule": "pins",
+  "where": "rc",
+  "message": "4 wires, TX and RX crossed"
+ },
+ {
+  "level": "warning",
+  "rule": "connectors",
+  "where": "rc",
+  "message": "custom cable: JST-GH-6 to solder-pads"
+ },
+ {
+  "level": "ok",
+  "rule": "pins",
+  "where": "can",
+  "message": "4 wires"
+ },
+ {
+  "level": "ok",
+  "rule": "pins",
+  "where": "lidar",
+  "message": "4 wires"
+ },
+ {
+  "level": "warning",
+  "rule": "connectors",
+  "where": "lidar",
+  "message": "custom cable: JST-GH-4 to GH1.25-4P on sensor; Molex 51021-0400 (1.25 mm) on the 10 cm cable end"
+ },
+ {
+  "level": "ok",
+  "rule": "I2C address",
+  "where": "fc.I2C2",
+  "message": "0x10 unique on fc.I2C2 (the internal compass at 0x0C is on a separate internal bus)"
+ },
+ {
+  "level": "ok",
+  "rule": "CAN termination",
+  "where": "fc.CAN1",
+  "message": "terminated at the autopilot and at gnss.CAN"
+ },
+ {
+  "level": "ok",
+  "rule": "CAN node ids",
+  "where": "fc.CAN1",
+  "message": "the autopilot runs DroneCAN dynamic node allocation; no fixed ids to clash"
+ },
+ {
+  "level": "ok",
+  "rule": "CAN bus load",
+  "where": "fc.CAN1",
+  "message": "3.0 percent at 1000 kbit/s (worst case stuffing)"
+ },
+ {
+  "level": "warning",
+  "rule": "firmware features",
+  "where": "companion_dds",
+  "message": "dds_xrce needs AP_DDS, which the stable ArduCopter 4.7.1 build for this board leaves out: build custom firmware (custom.ardupilot.org) with it"
+ },
+ {
+  "level": "ok",
+  "rule": "firmware features",
+  "where": "all",
+  "message": "every other protocol is in the stable build"
+ },
+ {
+  "level": "ok",
+  "rule": "MAVLink channels",
+  "where": "fc",
+  "message": "SERIAL0 (USB_GH) is MAV1; SERIAL1 (TELEM1) is MAV2; SERIAL5 (ADSB_INTERNAL) is MAV3"
+ },
+ {
+  "level": "ok",
+  "rule": "bandwidth",
+  "where": "telemetry",
+  "message": "2973 B/s of 5760 B/s (52 percent at 57600 8N1)"
+ },
+ {
+  "level": "ok",
+  "rule": "bandwidth",
+  "where": "rc",
+  "message": "CRSF at 150 Hz uses 4500 B/s of 42000 B/s (11 percent)"
+ },
+ {
+  "level": "warning",
+  "rule": "supply voltage",
+  "where": "rc",
+  "message": "rx.UART wants 5 to 5 V; the Cube's 5 V rail spans 4.9 to 5.5 V"
+ },
+ {
+  "level": "ok",
+  "rule": "supply voltage",
+  "where": "can",
+  "message": "4.9 to 5.5 V inside 4.75 to 5.5 V"
+ },
+ {
+  "level": "warning",
+  "rule": "supply voltage",
+  "where": "lidar",
+  "message": "lidar.MAIN wants 4.9 to 5.1 V; the Cube's 5 V rail spans 4.9 to 5.5 V"
+ },
+ {
+  "level": "ok",
+  "rule": "5 V budget",
+  "where": "fc shared",
+  "message": "0.41 A typical, 0.55 A peak of 1.0 A (1.5 A peak)"
+ },
+ {
+  "level": "ok",
+  "rule": "radio power",
+  "where": "telemetry",
+  "message": "radio powered by bec5, ground shared"
+ },
+ {
+  "level": "warning",
+  "rule": "supply voltage",
+  "where": "pdb",
+  "message": "esc.POWER: 13.2 to 16.8 V against 7.4 to 16.8 V, only 0.00 V margin"
+ },
+ {
+  "level": "warning",
+  "rule": "supply voltage",
+  "where": "fc_power",
+  "message": "fc.POWER1: 5.1 to 5.3 V against 4.1 to 5.7 V, only 0.40 V margin"
+ },
+ {
+  "level": "ok",
+  "rule": "supply voltage",
+  "where": "bec12_in",
+  "message": "bec12.VIN: 13.2 to 16.8 V inside 9 to 55 V"
+ },
+ {
+  "level": "ok",
+  "rule": "supply voltage",
+  "where": "bec5_in",
+  "message": "bec5.VIN: 13.2 to 16.8 V inside 9 to 55 V"
+ },
+ {
+  "level": "ok",
+  "rule": "supply voltage",
+  "where": "jetson_power",
+  "message": "companion.DC_IN: 11.09 to 12.12 V inside 9 to 20 V"
+ },
+ {
+  "level": "ok",
+  "rule": "supply voltage",
+  "where": "camera_power",
+  "message": "camera.POWER: 13.2 to 16.8 V inside 11 to 25.2 V"
+ },
+ {
+  "level": "warning",
+  "rule": "supply voltage",
+  "where": "radio_power",
+  "message": "radio.HEADER: 5.15 to 5.25 V against 5.0 to 5.5 V, only 0.15 V margin"
+ },
+ {
+  "level": "ok",
+  "rule": "regulator load",
+  "where": "bec12.VOUT",
+  "message": "2.25 A peak of 5 A continuous"
+ },
+ {
+  "level": "ok",
+  "rule": "regulator load",
+  "where": "bec5.VOUT",
+  "message": "1.00 A peak of 5 A continuous"
+ },
+ {
+  "level": "ok",
+  "rule": "regulator load",
+  "where": "pm.FC_POWER",
+  "message": "1.10 A for the Cube and its peripherals from the PM02 5.2 V / 3 A max"
+ },
+ {
+  "level": "ok",
+  "rule": "DShot rate",
+  "where": "motors",
+  "message": "DShot300 on AUX1, AUX2, AUX3, AUX4 (FMU timers, no IOMCU firmware needed)"
+ },
+ {
+  "level": "ok",
+  "rule": "thrust to weight",
+  "where": "airframe",
+  "message": "2.61 at 1.99 kg (2.0 or more leaves control authority in wind)"
+ },
+ {
+  "level": "ok",
+  "rule": "hover throttle",
+  "where": "airframe",
+  "message": "60 percent throttle to hover"
+ },
+ {
+  "level": "warning",
+  "rule": "ESC current",
+  "where": "esc",
+  "message": "19.4 A per motor at full throttle on a 20 A ESC"
+ },
+ {
+  "level": "ok",
+  "rule": "battery C rating",
+  "where": "battery",
+  "message": "85 A at full throttle of 250 A continuous"
+ },
+ {
+  "level": "warning",
+  "rule": "power module rating",
+  "where": "pm",
+  "message": "85 A at full throttle, 22 A at hover; PM02 V3 is 60 A continuous, 100 A burst"
+ },
+ {
+  "level": "warning",
+  "rule": "connector rating",
+  "where": "battery.MAIN",
+  "message": "XT60 with 12 AWG is rated 30 A continuous (Holybro): 22 A at hover, 85 A in full throttle bursts"
+ },
+ {
+  "level": "ok",
+  "rule": "flight time",
+  "where": "battery",
+  "message": "11.0 min hover to 20 percent charge"
+ },
+ {
+  "level": "ok",
+  "rule": "radio range",
+  "where": "elrs",
+  "message": "12.3 km free space with a 10 dB fade margin"
+ },
+ {
+  "level": "ok",
+  "rule": "radio range",
+  "where": "sik",
+  "message": "93.1 km free space with a 10 dB fade margin"
+ },
+ {
+  "level": "ok",
+  "rule": "band overlap",
+  "where": "wifi",
+  "message": "Jetson WiFi on 5 GHz keeps 2.4 GHz clear for ExpressLRS"
+ },
+ {
+  "level": "warning",
+  "rule": "known issues",
+  "where": "companion",
+  "message": "open NVIDIA report: UART1 TX does not drive on JetPack 7 (L4T R39.2); stay on JetPack 6 until fixed"
+ },
+ {
+  "level": "warning",
+  "rule": "known issues",
+  "where": "lidar",
+  "message": "TFmini-S ships in UART mode: send the I2C mode command once before wiring it to I2C"
+ }
+]

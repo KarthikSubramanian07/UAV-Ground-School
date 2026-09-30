@@ -1,0 +1,354 @@
+{
+ "telemetry": {
+  "config": "57600 8N1",
+  "capacity_bytes_per_s": 5760.0,
+  "bytes_per_s": 2973.0,
+  "utilisation": 0.5161,
+  "by_stream": {
+   "HEARTBEAT": 21.0,
+   "RAW_SENS": 133.0,
+   "EXT_STAT": 468.0,
+   "RC_CHAN": 103.0,
+   "POSITION": 240.0,
+   "EXTRA1": 304.0,
+   "EXTRA2": 64.0,
+   "EXTRA3": 764.0,
+   "ADSB": 100.0
+  },
+  "extra": [
+   [
+    "RTCM corrections (uplink)",
+    776
+   ]
+  ],
+  "rows": [
+   {
+    "stream": "HEARTBEAT",
+    "message": "HEARTBEAT",
+    "hz": 1.0,
+    "bytes": 21
+   },
+   {
+    "stream": "RAW_SENS",
+    "message": "RAW_IMU",
+    "hz": 1,
+    "bytes": 41
+   },
+   {
+    "stream": "RAW_SENS",
+    "message": "SCALED_IMU2",
+    "hz": 1,
+    "bytes": 36
+   },
+   {
+    "stream": "RAW_SENS",
+    "message": "SCALED_PRESSURE",
+    "hz": 1,
+    "bytes": 28
+   },
+   {
+    "stream": "RAW_SENS",
+    "message": "SCALED_PRESSURE2",
+    "hz": 1,
+    "bytes": 28
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "SYS_STATUS",
+    "hz": 2,
+    "bytes": 55
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "POWER_STATUS",
+    "hz": 2,
+    "bytes": 18
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "MEMINFO",
+    "hz": 2,
+    "bytes": 20
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "MISSION_CURRENT",
+    "hz": 2,
+    "bytes": 18
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "GPS_RAW_INT",
+    "hz": 2,
+    "bytes": 64
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "NAV_CONTROLLER_OUTPUT",
+    "hz": 2,
+    "bytes": 38
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "FENCE_STATUS",
+    "hz": 2,
+    "bytes": 21
+   },
+   {
+    "stream": "RC_CHAN",
+    "message": "SERVO_OUTPUT_RAW",
+    "hz": 1,
+    "bytes": 49
+   },
+   {
+    "stream": "RC_CHAN",
+    "message": "RC_CHANNELS",
+    "hz": 1,
+    "bytes": 54
+   },
+   {
+    "stream": "POSITION",
+    "message": "GLOBAL_POSITION_INT",
+    "hz": 3,
+    "bytes": 40
+   },
+   {
+    "stream": "POSITION",
+    "message": "LOCAL_POSITION_NED",
+    "hz": 3,
+    "bytes": 40
+   },
+   {
+    "stream": "EXTRA1",
+    "message": "ATTITUDE",
+    "hz": 4,
+    "bytes": 40
+   },
+   {
+    "stream": "EXTRA1",
+    "message": "AHRS2",
+    "hz": 4,
+    "bytes": 36
+   },
+   {
+    "stream": "EXTRA2",
+    "message": "VFR_HUD",
+    "hz": 2,
+    "bytes": 32
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "AHRS",
+    "hz": 2,
+    "bytes": 40
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "WIND",
+    "hz": 2,
+    "bytes": 24
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "DISTANCE_SENSOR",
+    "hz": 2,
+    "bytes": 51
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "SYSTEM_TIME",
+    "hz": 2,
+    "bytes": 24
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "TERRAIN_REPORT",
+    "hz": 2,
+    "bytes": 34
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "BATTERY_STATUS",
+    "hz": 2,
+    "bytes": 66
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "GIMBAL_DEVICE_ATTITUDE_STATUS",
+    "hz": 2,
+    "bytes": 61
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "EKF_STATUS_REPORT",
+    "hz": 2,
+    "bytes": 38
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "VIBRATION",
+    "hz": 2,
+    "bytes": 44
+   },
+   {
+    "stream": "ADSB",
+    "message": "ADSB_VEHICLE",
+    "hz": 2,
+    "bytes": 50
+   }
+  ]
+ },
+ "companion_mavlink": {
+  "config": "12000000 8N1",
+  "capacity_bytes_per_s": 1200000.0,
+  "bytes_per_s": 3701.0,
+  "utilisation": 0.0031,
+  "by_stream": {
+   "HEARTBEAT": 21.0,
+   "EXT_STAT": 468.0,
+   "POSITION": 800.0,
+   "EXTRA1": 1520.0,
+   "EXTRA2": 128.0,
+   "EXTRA3": 764.0
+  },
+  "extra": [],
+  "rows": [
+   {
+    "stream": "HEARTBEAT",
+    "message": "HEARTBEAT",
+    "hz": 1.0,
+    "bytes": 21
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "SYS_STATUS",
+    "hz": 2,
+    "bytes": 55
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "POWER_STATUS",
+    "hz": 2,
+    "bytes": 18
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "MEMINFO",
+    "hz": 2,
+    "bytes": 20
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "MISSION_CURRENT",
+    "hz": 2,
+    "bytes": 18
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "GPS_RAW_INT",
+    "hz": 2,
+    "bytes": 64
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "NAV_CONTROLLER_OUTPUT",
+    "hz": 2,
+    "bytes": 38
+   },
+   {
+    "stream": "EXT_STAT",
+    "message": "FENCE_STATUS",
+    "hz": 2,
+    "bytes": 21
+   },
+   {
+    "stream": "POSITION",
+    "message": "GLOBAL_POSITION_INT",
+    "hz": 10,
+    "bytes": 40
+   },
+   {
+    "stream": "POSITION",
+    "message": "LOCAL_POSITION_NED",
+    "hz": 10,
+    "bytes": 40
+   },
+   {
+    "stream": "EXTRA1",
+    "message": "ATTITUDE",
+    "hz": 20,
+    "bytes": 40
+   },
+   {
+    "stream": "EXTRA1",
+    "message": "AHRS2",
+    "hz": 20,
+    "bytes": 36
+   },
+   {
+    "stream": "EXTRA2",
+    "message": "VFR_HUD",
+    "hz": 4,
+    "bytes": 32
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "AHRS",
+    "hz": 2,
+    "bytes": 40
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "WIND",
+    "hz": 2,
+    "bytes": 24
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "DISTANCE_SENSOR",
+    "hz": 2,
+    "bytes": 51
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "SYSTEM_TIME",
+    "hz": 2,
+    "bytes": 24
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "TERRAIN_REPORT",
+    "hz": 2,
+    "bytes": 34
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "BATTERY_STATUS",
+    "hz": 2,
+    "bytes": 66
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "GIMBAL_DEVICE_ATTITUDE_STATUS",
+    "hz": 2,
+    "bytes": 61
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "EKF_STATUS_REPORT",
+    "hz": 2,
+    "bytes": 38
+   },
+   {
+    "stream": "EXTRA3",
+    "message": "VIBRATION",
+    "hz": 2,
+    "bytes": 44
+   }
+  ]
+ },
+ "rtcm": {
+  "base_bytes_per_s": 643,
+  "over_mavlink_bytes_per_s": 776
+ }
+}

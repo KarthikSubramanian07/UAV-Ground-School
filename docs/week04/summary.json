@@ -1,0 +1,29 @@
+{
+ "errors": 0,
+ "warnings": 17,
+ "passed": 61,
+ "parameters": 75,
+ "mavlink_messages": 299,
+ "mass_kg": 1.99,
+ "hover_minutes": 11.0,
+ "thrust_to_weight": 2.61,
+ "telemetry_utilisation": 0.5161,
+ "links": 9,
+ "protocols": [
+  "crsf",
+  "dds_xrce",
+  "dronecan",
+  "dshot300",
+  "ethernet",
+  "i2c",
+  "mavlink2",
+  "siyi"
+ ],
+ "sitl": {
+  "params_accepted": 72,
+  "params_sent": 75,
+  "link_predicted": 2375.0,
+  "link_measured": 2140.0,
+  "signatures_verified": 36
+ }
+}

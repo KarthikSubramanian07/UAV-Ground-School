@@ -1,0 +1,270 @@
+[
+ {
+  "link": "telemetry",
+  "a": "fc.TELEM1",
+  "b": "radio.HEADER",
+  "a_connector": "JST-GH-6",
+  "b_connector": "2x8-0.1in-header-16",
+  "custom": true,
+  "wires": [
+   {
+    "a_pin": 2,
+    "a_signal": "TX",
+    "b_pin": 7,
+    "b_signal": "RX",
+    "role": "TX to RX",
+    "note": ""
+   },
+   {
+    "a_pin": 3,
+    "a_signal": "RX",
+    "b_pin": 9,
+    "b_signal": "TX",
+    "role": "RX to TX",
+    "note": ""
+   },
+   {
+    "a_pin": 5,
+    "a_signal": "RTS",
+    "b_pin": 3,
+    "b_signal": "CTS",
+    "role": "RTS to CTS",
+    "note": ""
+   },
+   {
+    "a_pin": 4,
+    "a_signal": "CTS",
+    "b_pin": 11,
+    "b_signal": "RTS",
+    "role": "CTS to RTS",
+    "note": ""
+   },
+   {
+    "a_pin": 6,
+    "a_signal": "GND",
+    "b_pin": 1,
+    "b_signal": "GND",
+    "role": "GND to GND",
+    "note": ""
+   }
+  ],
+  "notes": [
+   "leave the 5V pins unconnected: radio is powered by bec5, sharing ground only"
+  ]
+ },
+ {
+  "link": "companion_dds",
+  "a": "fc.TELEM2",
+  "b": "companion.HEADER_UART1",
+  "a_connector": "JST-GH-6",
+  "b_connector": "40-pin-2.54mm-header (pins 8,10,11,36,6)",
+  "custom": true,
+  "wires": [
+   {
+    "a_pin": 2,
+    "a_signal": "TX",
+    "b_pin": 10,
+    "b_signal": "UART1_RXD (pin 10)",
+    "role": "TX to RX",
+    "note": ""
+   },
+   {
+    "a_pin": 3,
+    "a_signal": "RX",
+    "b_pin": 8,
+    "b_signal": "UART1_TXD (pin 8)",
+    "role": "RX to TX",
+    "note": ""
+   },
+   {
+    "a_pin": 5,
+    "a_signal": "RTS",
+    "b_pin": 36,
+    "b_signal": "UART1_CTS* (pin 36)",
+    "role": "RTS to CTS",
+    "note": ""
+   },
+   {
+    "a_pin": 4,
+    "a_signal": "CTS",
+    "b_pin": 11,
+    "b_signal": "UART1_RTS* (pin 11)",
+    "role": "CTS to RTS",
+    "note": ""
+   },
+   {
+    "a_pin": 6,
+    "a_signal": "GND",
+    "b_pin": 6,
+    "b_signal": "GND (pin 6)",
+    "role": "GND to GND",
+    "note": ""
+   }
+  ],
+  "notes": []
+ },
+ {
+  "link": "gimbal",
+  "a": "fc.GPS1",
+  "b": "camera.UART",
+  "a_connector": "JST-GH-8",
+  "b_connector": null,
+  "custom": true,
+  "wires": [
+   {
+    "a_pin": 2,
+    "a_signal": "TX",
+    "b_pin": 2,
+    "b_signal": "RX",
+    "role": "TX to RX",
+    "note": ""
+   },
+   {
+    "a_pin": 3,
+    "a_signal": "RX",
+    "b_pin": 1,
+    "b_signal": "TX",
+    "role": "RX to TX",
+    "note": ""
+   },
+   {
+    "a_pin": 8,
+    "a_signal": "GND",
+    "b_pin": 3,
+    "b_signal": "GND",
+    "role": "GND to GND",
+    "note": ""
+   }
+  ],
+  "notes": []
+ },
+ {
+  "link": "rc",
+  "a": "fc.GPS2",
+  "b": "rx.UART",
+  "a_connector": "JST-GH-6",
+  "b_connector": "solder-pads",
+  "custom": true,
+  "wires": [
+   {
+    "a_pin": 2,
+    "a_signal": "TX",
+    "b_pin": 4,
+    "b_signal": "RX",
+    "role": "TX to RX",
+    "note": ""
+   },
+   {
+    "a_pin": 3,
+    "a_signal": "RX",
+    "b_pin": 3,
+    "b_signal": "TX",
+    "role": "RX to TX",
+    "note": ""
+   },
+   {
+    "a_pin": 6,
+    "a_signal": "GND",
+    "b_pin": 2,
+    "b_signal": "GND",
+    "role": "GND to GND",
+    "note": ""
+   },
+   {
+    "a_pin": 1,
+    "a_signal": "5V",
+    "b_pin": 1,
+    "b_signal": "5V",
+    "role": "5V",
+    "note": "device powered by the flight controller"
+   }
+  ],
+  "notes": []
+ },
+ {
+  "link": "can",
+  "a": "fc.CAN1",
+  "b": "gnss.CAN",
+  "a_connector": "JST-GH-4",
+  "b_connector": "JST-GH-4",
+  "custom": false,
+  "wires": [
+   {
+    "a_pin": 2,
+    "a_signal": "CAN_H",
+    "b_pin": 2,
+    "b_signal": "CAN_H",
+    "role": "CAN_H to CAN_H",
+    "note": ""
+   },
+   {
+    "a_pin": 3,
+    "a_signal": "CAN_L",
+    "b_pin": 3,
+    "b_signal": "CAN_L",
+    "role": "CAN_L to CAN_L",
+    "note": ""
+   },
+   {
+    "a_pin": 4,
+    "a_signal": "GND",
+    "b_pin": 4,
+    "b_signal": "GND",
+    "role": "GND to GND",
+    "note": ""
+   },
+   {
+    "a_pin": 1,
+    "a_signal": "5V",
+    "b_pin": 1,
+    "b_signal": "5V",
+    "role": "5V",
+    "note": "device powered by the flight controller"
+   }
+  ],
+  "notes": []
+ },
+ {
+  "link": "lidar",
+  "a": "fc.I2C2",
+  "b": "lidar.MAIN",
+  "a_connector": "JST-GH-4",
+  "b_connector": "GH1.25-4P on sensor; Molex 51021-0400 (1.25 mm) on the 10 cm cable end",
+  "custom": true,
+  "wires": [
+   {
+    "a_pin": 2,
+    "a_signal": "SCL",
+    "b_pin": 4,
+    "b_signal": "TXD/SCL",
+    "role": "SCL to SCL",
+    "note": ""
+   },
+   {
+    "a_pin": 3,
+    "a_signal": "SDA",
+    "b_pin": 3,
+    "b_signal": "RXD/SDA",
+    "role": "SDA to SDA",
+    "note": ""
+   },
+   {
+    "a_pin": 4,
+    "a_signal": "GND",
+    "b_pin": 1,
+    "b_signal": "GND",
+    "role": "GND to GND",
+    "note": ""
+   },
+   {
+    "a_pin": 1,
+    "a_signal": "5V",
+    "b_pin": 2,
+    "b_signal": "5V",
+    "role": "5V",
+    "note": "device powered by the flight controller"
+   }
+  ],
+  "notes": []
+ }
+]
