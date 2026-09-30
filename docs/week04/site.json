@@ -1,0 +1,1172 @@
+{
+ "links": {
+  "telemetry": {
+   "label": "MAVLink 2 57600",
+   "protocol": "MAVLink 2",
+   "from": "fc.TELEM1",
+   "to": "radio.HEADER",
+   "purpose": "MAVLink to the ground station, and RTK corrections up to the drone",
+   "powered_by": "bec5",
+   "wires": [
+    [
+     2,
+     "TX",
+     7,
+     "RX"
+    ],
+    [
+     3,
+     "RX",
+     9,
+     "TX"
+    ],
+    [
+     5,
+     "RTS",
+     3,
+     "CTS"
+    ],
+    [
+     4,
+     "CTS",
+     11,
+     "RTS"
+    ],
+    [
+     6,
+     "GND",
+     1,
+     "GND"
+    ]
+   ],
+   "connectors": [
+    "JST-GH-6",
+    "2x8-0.1in-header-16"
+   ],
+   "notes": [
+    "leave the 5V pins unconnected: radio is powered by bec5, sharing ground only"
+   ],
+   "findings": [
+    [
+     "ok",
+     "physical layer",
+     "MAVLink 2 over uart"
+    ],
+    [
+     "ok",
+     "device protocol",
+     "radio.HEADER speaks mavlink2"
+    ],
+    [
+     "ok",
+     "baud rate",
+     "57600 baud on both ends"
+    ],
+    [
+     "ok",
+     "logic level",
+     "3.3 V to 3.3 V"
+    ],
+    [
+     "ok",
+     "pins",
+     "5 wires, TX and RX crossed"
+    ],
+    [
+     "warning",
+     "connectors",
+     "custom cable: JST-GH-6 to 2x8-0.1in-header-16"
+    ],
+    [
+     "ok",
+     "bandwidth",
+     "2973 B/s of 5760 B/s (52 percent at 57600 8N1)"
+    ],
+    [
+     "ok",
+     "radio power",
+     "radio powered by bec5, ground shared"
+    ]
+   ]
+  },
+  "companion_dds": {
+   "label": "DDS 921600",
+   "protocol": "DDS XRCE (ROS 2)",
+   "from": "fc.TELEM2",
+   "to": "companion.HEADER_UART1",
+   "purpose": "ROS 2 topics between the autopilot and the Jetson (DDS, the in drone half of the hybrid model)",
+   "powered_by": "self",
+   "wires": [
+    [
+     2,
+     "TX",
+     10,
+     "UART1_RXD (pin 10)"
+    ],
+    [
+     3,
+     "RX",
+     8,
+     "UART1_TXD (pin 8)"
+    ],
+    [
+     5,
+     "RTS",
+     36,
+     "UART1_CTS* (pin 36)"
+    ],
+    [
+     4,
+     "CTS",
+     11,
+     "UART1_RTS* (pin 11)"
+    ],
+    [
+     6,
+     "GND",
+     6,
+     "GND (pin 6)"
+    ]
+   ],
+   "connectors": [
+    "JST-GH-6",
+    "40-pin-2.54mm-header (pins 8,10,11,36,6)"
+   ],
+   "notes": [],
+   "findings": [
+    [
+     "ok",
+     "physical layer",
+     "DDS XRCE (ROS 2) over uart"
+    ],
+    [
+     "ok",
+     "device protocol",
+     "companion.HEADER_UART1 speaks dds_xrce"
+    ],
+    [
+     "ok",
+     "baud rate",
+     "921600 baud on both ends"
+    ],
+    [
+     "ok",
+     "logic level",
+     "3.3 V to 3.3 V"
+    ],
+    [
+     "ok",
+     "pins",
+     "5 wires, TX and RX crossed"
+    ],
+    [
+     "warning",
+     "connectors",
+     "custom cable: JST-GH-6 to 40-pin-2.54mm-header (pins 8,10,11,36,6)"
+    ],
+    [
+     "warning",
+     "firmware features",
+     "dds_xrce needs AP_DDS, which the stable ArduCopter 4.7.1 build for this board leaves out: build custom firmware (custom.ardupilot.org) with it"
+    ]
+   ]
+  },
+  "companion_mavlink": {
+   "label": "MAVLink 2 USB",
+   "protocol": "MAVLink 2",
+   "from": "fc.USB_GH",
+   "to": "companion.USB_A",
+   "purpose": "MAVLink for mission logic and a UDP bridge to the ground over WiFi",
+   "powered_by": "self",
+   "wires": [],
+   "connectors": [],
+   "notes": [],
+   "findings": [
+    [
+     "ok",
+     "physical layer",
+     "MAVLink 2 over uart"
+    ],
+    [
+     "ok",
+     "device protocol",
+     "companion.USB_A speaks mavlink2"
+    ]
+   ]
+  },
+  "gimbal": {
+   "label": "SIYI 115200",
+   "protocol": "SIYI gimbal serial",
+   "from": "fc.GPS1",
+   "to": "camera.UART",
+   "purpose": "Gimbal angles and camera triggers from the autopilot",
+   "powered_by": "self",
+   "wires": [
+    [
+     2,
+     "TX",
+     2,
+     "RX"
+    ],
+    [
+     3,
+     "RX",
+     1,
+     "TX"
+    ],
+    [
+     8,
+     "GND",
+     3,
+     "GND"
+    ]
+   ],
+   "connectors": [
+    "JST-GH-8",
+    "vendor cable"
+   ],
+   "notes": [],
+   "findings": [
+    [
+     "ok",
+     "physical layer",
+     "SIYI gimbal serial over uart"
+    ],
+    [
+     "ok",
+     "device protocol",
+     "camera.UART speaks siyi"
+    ],
+    [
+     "ok",
+     "baud rate",
+     "115200 baud on both ends"
+    ],
+    [
+     "warning",
+     "logic level",
+     "3.3 V to 3.3 V (device level is an estimate)"
+    ],
+    [
+     "ok",
+     "pins",
+     "3 wires, TX and RX crossed"
+    ],
+    [
+     "warning",
+     "connectors",
+     "custom cable: JST-GH-8 to unspecified (vendor cable)"
+    ]
+   ]
+  },
+  "rc": {
+   "label": "CRSF 420000",
+   "protocol": "CRSF (ExpressLRS)",
+   "from": "fc.GPS2",
+   "to": "rx.UART",
+   "purpose": "Pilot sticks in, link statistics and telemetry out",
+   "powered_by": "fc",
+   "wires": [
+    [
+     2,
+     "TX",
+     4,
+     "RX"
+    ],
+    [
+     3,
+     "RX",
+     3,
+     "TX"
+    ],
+    [
+     6,
+     "GND",
+     2,
+     "GND"
+    ],
+    [
+     1,
+     "5V",
+     1,
+     "5V"
+    ]
+   ],
+   "connectors": [
+    "JST-GH-6",
+    "solder-pads"
+   ],
+   "notes": [],
+   "findings": [
+    [
+     "ok",
+     "physical layer",
+     "CRSF (ExpressLRS) over uart"
+    ],
+    [
+     "ok",
+     "device protocol",
+     "rx.UART speaks crsf"
+    ],
+    [
+     "ok",
+     "baud rate",
+     "420000 baud on both ends"
+    ],
+    [
+     "ok",
+     "receive DMA",
+     "fc.GPS2 receives with DMA"
+    ],
+    [
+     "ok",
+     "logic level",
+     "3.3 V to 3.3 V"
+    ],
+    [
+     "ok",
+     "pins",
+     "4 wires, TX and RX crossed"
+    ],
+    [
+     "warning",
+     "connectors",
+     "custom cable: JST-GH-6 to solder-pads"
+    ],
+    [
+     "ok",
+     "bandwidth",
+     "CRSF at 150 Hz uses 4500 B/s of 42000 B/s (11 percent)"
+    ],
+    [
+     "warning",
+     "supply voltage",
+     "rx.UART wants 5 to 5 V; the Cube's 5 V rail spans 4.9 to 5.5 V"
+    ]
+   ]
+  },
+  "can": {
+   "label": "DroneCAN 1000k",
+   "protocol": "DroneCAN",
+   "from": "fc.CAN1",
+   "to": "gnss.CAN",
+   "purpose": "RTK position, compass, barometer, LED and buzzer on one bus",
+   "powered_by": "fc",
+   "wires": [
+    [
+     2,
+     "CAN_H",
+     2,
+     "CAN_H"
+    ],
+    [
+     3,
+     "CAN_L",
+     3,
+     "CAN_L"
+    ],
+    [
+     4,
+     "GND",
+     4,
+     "GND"
+    ],
+    [
+     1,
+     "5V",
+     1,
+     "5V"
+    ]
+   ],
+   "connectors": [
+    "JST-GH-4",
+    "JST-GH-4"
+   ],
+   "notes": [],
+   "findings": [
+    [
+     "ok",
+     "physical layer",
+     "DroneCAN over can"
+    ],
+    [
+     "ok",
+     "device protocol",
+     "gnss.CAN speaks dronecan"
+    ],
+    [
+     "ok",
+     "logic level",
+     "CAN is differential; transceivers set the levels"
+    ],
+    [
+     "ok",
+     "pins",
+     "4 wires"
+    ],
+    [
+     "ok",
+     "supply voltage",
+     "4.9 to 5.5 V inside 4.75 to 5.5 V"
+    ]
+   ]
+  },
+  "lidar": {
+   "label": "I2C 0x10",
+   "protocol": "I2C",
+   "from": "fc.I2C2",
+   "to": "lidar.MAIN",
+   "purpose": "Height above ground for landing and terrain following",
+   "powered_by": "fc",
+   "wires": [
+    [
+     2,
+     "SCL",
+     4,
+     "TXD/SCL"
+    ],
+    [
+     3,
+     "SDA",
+     3,
+     "RXD/SDA"
+    ],
+    [
+     4,
+     "GND",
+     1,
+     "GND"
+    ],
+    [
+     1,
+     "5V",
+     2,
+     "5V"
+    ]
+   ],
+   "connectors": [
+    "JST-GH-4",
+    "GH1.25-4P on sensor; Molex 51021-0400 (1.25 mm) on the 10 cm cable end"
+   ],
+   "notes": [],
+   "findings": [
+    [
+     "ok",
+     "physical layer",
+     "I2C over i2c"
+    ],
+    [
+     "ok",
+     "device protocol",
+     "lidar.MAIN speaks i2c"
+    ],
+    [
+     "ok",
+     "logic level",
+     "3.3 V to 3.3 V"
+    ],
+    [
+     "ok",
+     "pins",
+     "4 wires"
+    ],
+    [
+     "warning",
+     "connectors",
+     "custom cable: JST-GH-4 to GH1.25-4P on sensor; Molex 51021-0400 (1.25 mm) on the 10 cm cable end"
+    ],
+    [
+     "warning",
+     "supply voltage",
+     "lidar.MAIN wants 4.9 to 5.1 V; the Cube's 5 V rail spans 4.9 to 5.5 V"
+    ],
+    [
+     "warning",
+     "known issues",
+     "TFmini-S ships in UART mode: send the I2C mode command once before wiring it to I2C"
+    ]
+   ]
+  },
+  "video": {
+   "label": "Ethernet RTSP",
+   "protocol": "Ethernet",
+   "from": "camera.ETH",
+   "to": "companion.ETH",
+   "purpose": "RTSP video to the Jetson for detection",
+   "powered_by": null,
+   "wires": [],
+   "connectors": [],
+   "notes": [],
+   "findings": [
+    [
+     "ok",
+     "physical layer",
+     "Ethernet over ethernet"
+    ],
+    [
+     "ok",
+     "device protocol",
+     "companion.ETH speaks ethernet"
+    ]
+   ]
+  },
+  "motors": {
+   "label": "DShot300",
+   "protocol": "DShot300",
+   "from": "fc.AUX1, fc.AUX2, fc.AUX3, fc.AUX4",
+   "to": "esc.SIGNAL",
+   "purpose": "Motor commands",
+   "powered_by": null,
+   "wires": [],
+   "connectors": [],
+   "notes": [],
+   "findings": [
+    [
+     "ok",
+     "physical layer",
+     "DShot300 over pwm"
+    ],
+    [
+     "ok",
+     "device protocol",
+     "esc.SIGNAL speaks dshot300"
+    ],
+    [
+     "ok",
+     "DShot rate",
+     "DShot300 on AUX1, AUX2, AUX3, AUX4 (FMU timers, no IOMCU firmware needed)"
+    ]
+   ]
+  },
+  "power:main": {
+   "label": "power",
+   "protocol": "Power",
+   "from": "battery.MAIN",
+   "to": "pm.BATT_IN",
+   "purpose": "power feed",
+   "findings": [
+    [
+     "warning",
+     "connector rating",
+     "XT60 with 12 AWG is rated 30 A continuous (Holybro): 22 A at hover, 85 A in full throttle bursts"
+    ]
+   ],
+   "wires": []
+  },
+  "power:pdb": {
+   "label": "power",
+   "protocol": "Power",
+   "from": "pm.BATT_OUT",
+   "to": "esc.POWER",
+   "purpose": "power feed",
+   "findings": [
+    [
+     "warning",
+     "supply voltage",
+     "esc.POWER: 13.2 to 16.8 V against 7.4 to 16.8 V, only 0.00 V margin"
+    ]
+   ],
+   "wires": []
+  },
+  "power:fc_power": {
+   "label": "power",
+   "protocol": "Power",
+   "from": "pm.FC_POWER",
+   "to": "fc.POWER1",
+   "purpose": "power feed",
+   "findings": [
+    [
+     "warning",
+     "supply voltage",
+     "fc.POWER1: 5.1 to 5.3 V against 4.1 to 5.7 V, only 0.40 V margin"
+    ],
+    [
+     "ok",
+     "regulator load",
+     "1.10 A for the Cube and its peripherals from the PM02 5.2 V / 3 A max"
+    ]
+   ],
+   "wires": []
+  },
+  "power:bec12_in": {
+   "label": "power",
+   "protocol": "Power",
+   "from": "pm.BATT_OUT",
+   "to": "bec12.VIN",
+   "purpose": "power feed",
+   "findings": [
+    [
+     "ok",
+     "supply voltage",
+     "bec12.VIN: 13.2 to 16.8 V inside 9 to 55 V"
+    ]
+   ],
+   "wires": []
+  },
+  "power:bec5_in": {
+   "label": "power",
+   "protocol": "Power",
+   "from": "pm.BATT_OUT",
+   "to": "bec5.VIN",
+   "purpose": "power feed",
+   "findings": [
+    [
+     "ok",
+     "supply voltage",
+     "bec5.VIN: 13.2 to 16.8 V inside 9 to 55 V"
+    ]
+   ],
+   "wires": []
+  },
+  "power:jetson_power": {
+   "label": "power",
+   "protocol": "Power",
+   "from": "bec12.VOUT",
+   "to": "companion.DC_IN",
+   "purpose": "power feed",
+   "findings": [
+    [
+     "ok",
+     "supply voltage",
+     "companion.DC_IN: 11.09 to 12.12 V inside 9 to 20 V"
+    ],
+    [
+     "ok",
+     "regulator load",
+     "2.25 A peak of 5 A continuous"
+    ]
+   ],
+   "wires": []
+  },
+  "power:camera_power": {
+   "label": "power",
+   "protocol": "Power",
+   "from": "pm.BATT_OUT",
+   "to": "camera.POWER",
+   "purpose": "power feed",
+   "findings": [
+    [
+     "ok",
+     "supply voltage",
+     "camera.POWER: 13.2 to 16.8 V inside 11 to 25.2 V"
+    ]
+   ],
+   "wires": []
+  },
+  "power:radio_power": {
+   "label": "power",
+   "protocol": "Power",
+   "from": "bec5.VOUT",
+   "to": "radio.HEADER",
+   "purpose": "power feed",
+   "findings": [
+    [
+     "warning",
+     "supply voltage",
+     "radio.HEADER: 5.15 to 5.25 V against 5.0 to 5.5 V, only 0.15 V margin"
+    ],
+    [
+     "ok",
+     "regulator load",
+     "1.00 A peak of 5 A continuous"
+    ]
+   ],
+   "wires": []
+  }
+ },
+ "parts": {
+  "fc": {
+   "name": "CubePilot Cube Orange+ Standard Set (ADS-B IN carrier board)",
+   "vendor": "CubePilot",
+   "role": "flight controller",
+   "count": 1,
+   "price_usd": 451.0,
+   "mass_g": 75,
+   "supply": {
+    "min_v": 4.1,
+    "max_v": 5.7,
+    "typical_a": null,
+    "peak_a": 2.5
+   },
+   "logic_v": 3.3,
+   "url": "https://irlock.com/products/cube-orange-plus-standard-set",
+   "estimates": {
+    "mass_g": "Only the 33 g cube module is published; the 94.5 x 44.3 mm carrier board is estimated at 42 g.",
+    "rail_5v_range": "CubePilot says peripherals see up to 5.5 V after filtering; 4.9 V lower bound assumes a 5.2 V brick minus the ideal diode drop."
+   },
+   "notes": "mass_g is null: only the cube module mass (33 g, Airbot Systems vendor page) is published; no source gives the ADS-B carrier board mass (RMRC only lists a 0.55 lb shipping weight for the whole boxed set). Price is IR-LOCK list price (RMRC lists 450.99). Supply range: PX4 docs and IR-LOCK say 4.1 to 5.7 V / 2.5 A; CubePilot operating-conditions page says 4.1 to 5.5 V. The ArduPilot hwdef README still says STM32H743 in its feature list, but hwdef.dat declares STM32H757 and CubePilot confirms H757. Connector pin logic: ArduPilot documents 3.3 V signals; CubePilot interface spec writes '3.3 V - 5.0 V TTL', which is best read as 5 V tolerant inputs, not 5 V outputs. The standard set includes a CubePilot Power Brick Mini (Molex CLIK-Mate cable), which is plug-compatible with POWER1 and already matches the firmware default battery scaling.",
+   "ports": [
+    "TELEM1",
+    "TELEM2",
+    "GPS1",
+    "GPS2",
+    "CAN1",
+    "CAN2",
+    "I2C2",
+    "POWER1",
+    "POWER2",
+    "USB_GH",
+    "CONS",
+    "SBUS_OUT",
+    "SPKT",
+    "ADC",
+    "RCIN",
+    "ADSB_INTERNAL",
+    "MAIN1",
+    "MAIN2",
+    "MAIN3",
+    "MAIN4",
+    "MAIN5",
+    "MAIN6",
+    "MAIN7",
+    "MAIN8"
+   ],
+   "findings": [
+    [
+     "ok",
+     "I2C address",
+     "0x10 unique on fc.I2C2 (the internal compass at 0x0C is on a separate internal bus)"
+    ],
+    [
+     "ok",
+     "CAN termination",
+     "terminated at the autopilot and at gnss.CAN"
+    ],
+    [
+     "ok",
+     "CAN node ids",
+     "the autopilot runs DroneCAN dynamic node allocation; no fixed ids to clash"
+    ],
+    [
+     "ok",
+     "CAN bus load",
+     "3.0 percent at 1000 kbit/s (worst case stuffing)"
+    ],
+    [
+     "ok",
+     "MAVLink channels",
+     "SERIAL0 (USB_GH) is MAV1; SERIAL1 (TELEM1) is MAV2; SERIAL5 (ADSB_INTERNAL) is MAV3"
+    ]
+   ]
+  },
+  "frame": {
+   "name": "Holybro X500 V2 ARF kit (frame)",
+   "vendor": "Holybro",
+   "role": "frame",
+   "count": 1,
+   "price_usd": 329.0,
+   "mass_g": 610,
+   "supply": null,
+   "logic_v": null,
+   "url": "https://holybro.com/products/x500-v2-kits",
+   "estimates": {
+    "mass_g": "Holybro lists \"Weight: 610g\" for the X500 V2 frame kit without saying what it includes; this design reads it as the bare frame (plates, arms, landing gear, PDB) and adds motors, ESCs and props separately."
+   },
+   "notes": "610 g is Holybro's 'Weight' line in the X500 V2 frame kit mechanical spec; it is not stated whether motors/ESCs are included in that figure. Holybro publishes two different payload figures (1 kg with battery on the docs page, 1.5 kg without battery on the store page). No recommended takeoff weight is published.",
+   "ports": [],
+   "findings": []
+  },
+  "motor": {
+   "name": "Holybro 2216 KV920 motor",
+   "vendor": "Holybro",
+   "role": "motor",
+   "count": 4,
+   "price_usd": 19.99,
+   "mass_g": 60,
+   "supply": null,
+   "logic_v": null,
+   "url": "https://holybro.com/products/spare-parts-x500-v2-kit",
+   "estimates": {
+    "mass_g": "Unpublished; 2216 size motors near 900 KV weigh 55 to 70 g.",
+    "resistance_ohm": "Unpublished; typical winding resistance for a 2216 at 900 KV.",
+    "no_load_a": "Unpublished; typical no load current at 10 V for this size.",
+    "poles": "Unpublished; 2216 outrunners are almost always 12N14P."
+   },
+   "notes": "No official thrust table, motor mass, or max current is published by Holybro for the 2216 KV920 (Holybro docs search returned nothing; the Tyto Robotics database entry exists but its data could not be retrieved). Older X500 V1 used KV880 motors; do not mix up the two.",
+   "ports": [
+    "POWER"
+   ],
+   "findings": []
+  },
+  "esc": {
+   "name": "Holybro X500 V2 BLHeli S ESC 20A",
+   "vendor": "Holybro",
+   "role": "esc",
+   "count": 4,
+   "price_usd": 13.99,
+   "mass_g": 10,
+   "supply": {
+    "min_v": 7.4,
+    "max_v": 16.8,
+    "typical_a": null,
+    "peak_a": 20
+   },
+   "logic_v": null,
+   "url": "https://holybro.com/products/spare-parts-x500-v2-kit",
+   "estimates": {
+    "mass_g": "Unpublished; bare 20 A BLHeli_S ESCs weigh 5 to 12 g with wires.",
+    "supply": "Holybro only says \"compatible with 4S\"; the range assumes 2S to 4S, the BLHeli_S norm.",
+    "efficiency": "Typical BLHeli_S efficiency at hover current."
+   },
+   "notes": "Holybro only states 'BLHeli S ESC 20A ... Compatible with 4S Battery'. Burst current, cell range, mass, MCU and firmware target are not published. The protocol list is from the BLHeli_S firmware manual (rev16.x), not from Holybro.",
+   "ports": [
+    "SIGNAL",
+    "POWER"
+   ],
+   "findings": [
+    [
+     "warning",
+     "ESC current",
+     "19.4 A per motor at full throttle on a 20 A ESC"
+    ]
+   ]
+  },
+  "prop": {
+   "name": "Holybro 1045 propeller (X500 V2)",
+   "vendor": "Holybro",
+   "role": "propeller",
+   "count": 4,
+   "price_usd": 11.59,
+   "mass_g": 13,
+   "supply": null,
+   "logic_v": null,
+   "url": "https://holybro.com/products/spare-parts-x500-v2-kit",
+   "estimates": {
+    "mass_g": "Unpublished; plastic 10x4.5 multirotor props weigh 11 to 15 g.",
+    "ct": "Static thrust coefficient of 10x4.5 multirotor props in the UIUC propeller database (0.10 to 0.12).",
+    "cp": "Static power coefficient of 10x4.5 multirotor props in the UIUC propeller database (0.04 to 0.05)."
+   },
+   "notes": "1045 is read as 10 x 4.5 in by the usual naming convention; Holybro gives no material or mass.",
+   "ports": [],
+   "findings": []
+  },
+  "battery": {
+   "name": "OVONIC 14.8V 5000mAh 4S 50C LiPo (XT60 & TRX plug)",
+   "vendor": "OVONIC",
+   "role": "battery",
+   "count": 1,
+   "price_usd": 45.99,
+   "mass_g": 448,
+   "supply": {
+    "min_v": null,
+    "max_v": 16.8,
+    "typical_a": null,
+    "peak_a": 500
+   },
+   "logic_v": null,
+   "url": "https://us.ovonicshop.com/products/ovonic-50c-14-8v-5000mah-4s1p-xt60-and-trx-lipo-battery",
+   "estimates": {},
+   "notes": "Substituted for a generic 'common 4S 5000 mAh' pick because it ships with an XT60 plug that matches the X500 V2 PDB; Gens Ace 4S 5000 packs found on official Gens Ace stores were EC5/Deans only. max_v 16.8 is the standard 4.2 V/cell full charge, not a vendor-stated figure; energy_wh is 14.8 V x 5 Ah.",
+   "ports": [
+    "MAIN",
+    "BALANCE"
+   ],
+   "findings": [
+    [
+     "ok",
+     "battery C rating",
+     "85 A at full throttle of 250 A continuous"
+    ],
+    [
+     "warning",
+     "connector rating",
+     "XT60 with 12 AWG is rated 30 A continuous (Holybro): 22 A at hover, 85 A in full throttle bursts"
+    ],
+    [
+     "ok",
+     "flight time",
+     "11.0 min hover to 20 percent charge"
+    ]
+   ]
+  },
+  "pm": {
+   "name": "Holybro PM02 V3 (12S) analog power module",
+   "vendor": "Holybro",
+   "role": "power module",
+   "count": 1,
+   "price_usd": 18.99,
+   "mass_g": 20,
+   "supply": {
+    "min_v": 7.0,
+    "max_v": 50.4,
+    "typical_a": 0.02,
+    "peak_a": null
+   },
+   "logic_v": 3.3,
+   "url": "https://holybro.com/products/pm02-v3-12s-power-module",
+   "estimates": {
+    "supply": "Holybro gives 2S to 12S; converted at 3.5 and 4.2 V per cell."
+   },
+   "notes": "Kept as requested (the X500 V2 kit ships without a power module; Holybro recommends PM02D, PM03D or PM02 V3). The CubePilot Power Brick Mini bundled in the Cube standard set is a zero-cost alternative (30 A continuous / 100 A burst per IR-LOCK, up to 8S) that already matches the firmware default scaling. supply.min_v/max_v left null because Holybro gives a cell count (2S-12S) rather than volts.",
+   "ports": [
+    "BATT_IN",
+    "BATT_OUT",
+    "FC_POWER"
+   ],
+   "findings": [
+    [
+     "ok",
+     "regulator load",
+     "1.10 A for the Cube and its peripherals from the PM02 5.2 V / 3 A max"
+    ],
+    [
+     "warning",
+     "power module rating",
+     "85 A at full throttle, 22 A at hover; PM02 V3 is 60 A continuous, 100 A burst"
+    ]
+   ]
+  },
+  "bec12": {
+   "name": "Mateksys BEC12S-PRO (set to 12 V)",
+   "vendor": "Mateksys",
+   "role": "regulator",
+   "count": 1,
+   "price_usd": 31.74,
+   "mass_g": 5,
+   "supply": {
+    "min_v": 9,
+    "max_v": 55,
+    "typical_a": null,
+    "peak_a": null
+   },
+   "logic_v": null,
+   "url": "http://www.mateksys.com/?portfolio=bec12s-pro",
+   "estimates": {},
+   "notes": "Compatibility caveat for the checker: a 4S pack sags below 14 V late in the flight, at which point the 12 V output is no longer regulated and tracks input minus dropout. It stays well inside the Jetson 9 to 20 V window, so the Jetson keeps running. A second BEC12S-PRO left at its 5.2 V default is a clean way to power the RFD900x off the autopilot (RFD900x needs 5.0 to 5.5 V). Note the Jetson accepts 9 to 20 V directly, so a 4S pack (about 12 to 16.8 V) is inside its range even without a regulator; the regulator is there to isolate motor noise and transients.",
+   "ports": [
+    "VIN",
+    "VOUT"
+   ],
+   "findings": [
+    [
+     "ok",
+     "regulator load",
+     "2.25 A peak of 5 A continuous"
+    ]
+   ]
+  },
+  "bec5": {
+   "name": "Mateksys BEC12S-PRO (set to 12 V)",
+   "vendor": "Mateksys",
+   "role": "regulator",
+   "count": 1,
+   "price_usd": 31.74,
+   "mass_g": 5,
+   "supply": {
+    "min_v": 9,
+    "max_v": 55,
+    "typical_a": null,
+    "peak_a": null
+   },
+   "logic_v": null,
+   "url": "http://www.mateksys.com/?portfolio=bec12s-pro",
+   "estimates": {},
+   "notes": "Compatibility caveat for the checker: a 4S pack sags below 14 V late in the flight, at which point the 12 V output is no longer regulated and tracks input minus dropout. It stays well inside the Jetson 9 to 20 V window, so the Jetson keeps running. A second BEC12S-PRO left at its 5.2 V default is a clean way to power the RFD900x off the autopilot (RFD900x needs 5.0 to 5.5 V). Note the Jetson accepts 9 to 20 V directly, so a 4S pack (about 12 to 16.8 V) is inside its range even without a regulator; the regulator is there to isolate motor noise and transients.",
+   "ports": [
+    "VIN",
+    "VOUT"
+   ],
+   "findings": [
+    [
+     "ok",
+     "regulator load",
+     "1.00 A peak of 5 A continuous"
+    ]
+   ]
+  },
+  "gnss": {
+   "name": "CubePilot Here4 Multiband RTK GNSS",
+   "vendor": "CubePilot",
+   "role": "gnss",
+   "count": 1,
+   "price_usd": 255.0,
+   "mass_g": 60,
+   "supply": {
+    "min_v": 4.75,
+    "max_v": 5.5,
+    "typical_a": 0.15,
+    "peak_a": 0.2
+   },
+   "logic_v": null,
+   "url": "https://docs.cubepilot.org/here-4/here-4-manual",
+   "estimates": {
+    "supply": "Unpublished; 150 mA is the figure CubePilot staff give for earlier Here units, and the range is the Cube 5 V peripheral rail it is designed for.",
+    "terminated": "Here4 ships as the end node of a CubePilot CAN bus; the Cube side is terminated on the carrier."
+   },
+   "notes": "Supply voltage and current are NOT published for Here4 (manual, IR-LOCK and RMRC pages all silent; a CubePilot forum thread only cites 150 mA for older Here units and 130 mA for the bare F9P during acquisition). It is powered from the 5 V CAN pin. The Here4 factory default of CAN_NODE is not documented; DNA is the normal behaviour. CubePilot SB_0000010 requires a Here4 bootloader update before flight on affected units.",
+   "ports": [
+    "CAN",
+    "UART"
+   ],
+   "findings": []
+  },
+  "companion": {
+   "name": "NVIDIA Jetson Orin Nano Super Developer Kit (8GB)",
+   "vendor": "NVIDIA",
+   "role": "companion",
+   "count": 1,
+   "price_usd": 399.0,
+   "mass_g": 175,
+   "supply": {
+    "min_v": 9,
+    "max_v": 20,
+    "typical_a": null,
+    "peak_a": null,
+    "typical_w": 15,
+    "peak_w": 25
+   },
+   "logic_v": 3.3,
+   "url": "https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/nano-super-developer-kit/",
+   "estimates": {},
+   "notes": "Mass 175 g is from the carrier board spec ('The Developer Kit Weighs 0.175kg'). Current draw is not published as amps; at 25 W from a 12 V regulator that is roughly 2.1 A (derived, not vendor data). Price 399 USD is NVIDIA's list after the July 2026 increase (per CNX Software and Hardware Busters); street prices vary widely.",
+   "ports": [
+    "DC_IN",
+    "HEADER_UART1",
+    "HEADER_5V",
+    "ETH",
+    "USB_A",
+    "USB_C"
+   ],
+   "findings": [
+    [
+     "warning",
+     "known issues",
+     "open NVIDIA report: UART1 TX does not drive on JetPack 7 (L4T R39.2); stay on JetPack 6 until fixed"
+    ]
+   ]
+  },
+  "camera": {
+   "name": "SIYI A8 mini gimbal camera",
+   "vendor": "SIYI",
+   "role": "camera",
+   "count": 1,
+   "price_usd": 257.4,
+   "mass_g": 95,
+   "supply": {
+    "min_v": 11,
+    "max_v": 25.2,
+    "typical_a": null,
+    "peak_a": null,
+    "typical_w": 5,
+    "peak_w": 12
+   },
+   "logic_v": 3.3,
+   "url": "https://shop.siyi.biz/products/siyi-a8-mini-gimbal-camera",
+   "estimates": {
+    "logic_v": "SIYI only says \"TTL\"; ArduPilot wires it straight to 3.3 V autopilot UARTs."
+   },
+   "notes": "UART logic level is not stated by SIYI ('TTL serial port' only), so logic_v is null; ArduPilot's wiring diagram connects it directly to autopilot UARTs. Connector types and pin order for the gimbal-side ports are not published in text form (only in cable drawings); SIYI supplies ready-made cables. Current in amps is derived only from watts: about 0.34 A average and 0.81 A peak at 14.8 V (derived).",
+   "ports": [
+    "POWER",
+    "ETH",
+    "UART",
+    "SBUS"
+   ],
+   "findings": []
+  },
+  "rx": {
+   "name": "RadioMaster RP3 V2 ExpressLRS 2.4GHz Nano receiver",
+   "vendor": "RadioMaster",
+   "role": "rc receiver",
+   "count": 1,
+   "price_usd": 22.99,
+   "mass_g": 4.6,
+   "supply": {
+    "min_v": 5,
+    "max_v": 5,
+    "typical_a": 0.12,
+    "peak_a": 0.15
+   },
+   "logic_v": 3.3,
+   "url": "https://radiomasterrc.com/products/rp3-expresslrs-2-4ghz-nano-receiver",
+   "estimates": {
+    "typical_a": "Unpublished; ESP8285 plus SX1281 at 100 mW telemetry."
+   },
+   "notes": "Current draw is not published. UART logic level is not stated by RadioMaster; 3.3 V is inferred from the ESP8285 MCU (a 3.3 V part), flagged as logic_v_verified=false. The 5 V supply is a nominal 'DC 5V'; no tolerance band is published.",
+   "ports": [
+    "UART"
+   ],
+   "findings": []
+  },
+  "radio": {
+   "name": "RFDesign RFD900x-US telemetry modem",
+   "vendor": "RFDesign",
+   "role": "telemetry radio",
+   "count": 1,
+   "price_usd": 120.9,
+   "mass_g": 14,
+   "supply": {
+    "min_v": 5.0,
+    "max_v": 5.5,
+    "typical_a": 0.06,
+    "peak_a": 1.0
+   },
+   "logic_v": 3.3,
+   "url": "https://www.readymaderc.com/products/details/rfdesign-rfd-900x-modem-us-fcc",
+   "estimates": {},
+   "notes": "Can a Cube TELEM 5 V pin supply it? No. Datasheet peak is 1 A at 30 dBm; TELEM1 has a 1.5 A private limit, but CubePilot explicitly says never to power radios from carrier board connectors, TELEM2 sits in the shared 1 A group, and the whole peripheral budget is 2.5 A. Mass: datasheet says 14 g, RMRC lists 18 g. Supply: datasheet says +5 V min / +5.5 V max / +6 V absolute max, while RMRC says 3.5 V min; the datasheet is used. AIR_SPEED default is written '64/200' in the manual (footnoted), so 64 kbps is the usual SiK default but check the unit.",
+   "ports": [
+    "HEADER"
+   ],
+   "findings": []
+  },
+  "lidar": {
+   "name": "Benewake TFmini-S LiDAR (I2C mode)",
+   "vendor": "Benewake",
+   "role": "rangefinder",
+   "count": 1,
+   "price_usd": null,
+   "mass_g": 5,
+   "supply": {
+    "min_v": 4.9,
+    "max_v": 5.1,
+    "typical_a": 0.14,
+    "peak_a": 0.2
+   },
+   "logic_v": 3.3,
+   "url": "https://en.benewake.com/TFminiS/index.html",
+   "estimates": {},
+   "notes": "Chosen over the LightWare LW20/C because it is 5 g, cheap and supported in the stable build. LW20/C alternative for reference: RNGFND1_TYPE=7 (LightWareI2C), RNGFND1_ADDR=102 (0x66) per ArduPilot wiki. Supply is 5 V +/- 0.1 V per datasheet, so the Cube 5 V peripheral rail (up to 5.5 V after filtering per CubePilot) is nominally outside that tight band; in practice it is widely used this way, but the checker should flag it as a warning, not an error. Price not verified (retailer pages blocked or sold out). Ships in UART mode: send the \"switch to I2C\" command from the user manual once before wiring it to the I2C port.",
+   "ports": [
+    "MAIN"
+   ],
+   "findings": [
+    [
+     "ok",
+     "physical layer",
+     "I2C over i2c"
+    ],
+    [
+     "ok",
+     "device protocol",
+     "lidar.MAIN speaks i2c"
+    ],
+    [
+     "ok",
+     "logic level",
+     "3.3 V to 3.3 V"
+    ],
+    [
+     "ok",
+     "pins",
+     "4 wires"
+    ],
+    [
+     "warning",
+     "connectors",
+     "custom cable: JST-GH-4 to GH1.25-4P on sensor; Molex 51021-0400 (1.25 mm) on the 10 cm cable end"
+    ],
+    [
+     "warning",
+     "supply voltage",
+     "lidar.MAIN wants 4.9 to 5.1 V; the Cube's 5 V rail spans 4.9 to 5.5 V"
+    ],
+    [
+     "warning",
+     "known issues",
+     "TFmini-S ships in UART mode: send the I2C mode command once before wiring it to I2C"
+    ]
+   ]
+  }
+ }
+}

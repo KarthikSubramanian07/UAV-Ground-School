@@ -1976,3 +1976,669 @@ th.num {
 .section:not(.night) .block-head p {
   color: var(--ink-2);
 }
+
+/* ------------------------------------------------------------ week 4 -- */
+
+.w4 .section-head h2 em {
+  font-style: normal;
+  color: var(--signal);
+}
+
+.chip.plain {
+  padding: 0.4rem 1rem;
+}
+
+.night .chip {
+  background: transparent;
+  color: var(--night-ink);
+  border-color: var(--night-line);
+}
+
+.night .chip:hover {
+  border-color: var(--night-ink-2);
+}
+
+.night .chip[aria-pressed="true"] {
+  background: var(--night-ink);
+  color: var(--night);
+  border-color: var(--night-ink);
+}
+
+/* wiring explorer */
+
+.w4 .hero {
+  padding-bottom: clamp(3rem, 2rem + 4vw, 6rem);
+}
+
+.wiring-section {
+  padding-top: clamp(1rem, 0.5rem + 2vw, 3rem);
+  border-top: 1px solid var(--night-line);
+}
+
+.wiring-panel p.note {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--steel-bright);
+}
+
+.overview {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.overview button {
+  appearance: none;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font: inherit;
+  font-size: var(--step--1);
+  text-align: left;
+  color: var(--night-ink);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--night-line);
+  padding: 0.45rem 0;
+  cursor: pointer;
+}
+
+.overview button:hover span:first-child {
+  color: var(--signal);
+}
+
+.overview .mono {
+  color: var(--night-ink-2);
+  font-size: 0.7rem;
+}
+
+.wiring-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1100px) {
+  .wiring-grid {
+    grid-template-columns: minmax(0, 2.4fr) minmax(19rem, 1fr);
+    align-items: start;
+  }
+}
+
+.wiring-canvas {
+  border: 1px solid var(--night-line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #12191d;
+}
+
+.wiring-canvas svg {
+  width: 100%;
+  height: auto;
+}
+
+.wiring [data-link],
+.wiring [data-part] {
+  cursor: pointer;
+  transition: opacity 0.2s var(--ease-out), stroke-width 0.2s var(--ease-out);
+  outline: none;
+}
+
+.wiring.focus [data-link]:not(.on),
+.wiring.focus .card:not(.on) {
+  opacity: 0.28;
+}
+
+.wiring.focus .card.fc {
+  opacity: 1;
+}
+
+.wiring .wire.on {
+  stroke-width: 4.5;
+}
+
+.wiring .card.on rect {
+  stroke: var(--signal);
+  stroke-width: 2;
+}
+
+.wiring [data-link]:focus-visible,
+.wiring [data-part]:focus-visible {
+  opacity: 1;
+  stroke: var(--signal);
+}
+
+.wiring-panel {
+  border: 1px solid var(--night-line);
+  border-radius: var(--radius);
+  background: var(--night-2);
+  padding: 1.4rem 1.4rem 1.2rem;
+  font-size: var(--step--1);
+  min-height: 22rem;
+}
+
+.wiring-panel h3 {
+  font-size: var(--step-1);
+  margin: 0.2rem 0 0.6rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.wiring-panel p {
+  color: var(--night-ink-2);
+  margin: 0.4rem 0;
+}
+
+.wiring-panel .note {
+  color: var(--steel-bright);
+}
+
+.wiring-panel table.pins {
+  margin: 0.8rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.wiring-panel table.pins td,
+.wiring-panel table.pins th {
+  border-color: var(--night-line);
+  padding: 0.35rem 0.5rem 0.35rem 0;
+  color: var(--night-ink);
+}
+
+.wiring-panel table.pins th {
+  color: var(--night-ink-2);
+}
+
+.wiring-panel td.arrow {
+  color: var(--signal);
+}
+
+.wiring-panel a {
+  color: var(--signal);
+}
+
+.findings {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.finding {
+  display: grid;
+  grid-template-columns: 4.2rem 1fr;
+  gap: 0.6rem;
+  line-height: 1.45;
+}
+
+.finding b {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-top: 0.15rem;
+}
+
+.finding.ok b {
+  color: oklch(0.78 0.12 150);
+}
+
+.finding.warning b {
+  color: var(--signal);
+}
+
+.finding.error b {
+  color: oklch(0.68 0.19 25);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.3rem 1rem;
+  margin: 0.8rem 0;
+}
+
+.facts dt {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-2);
+  padding-top: 0.15rem;
+}
+
+.night .facts dt {
+  color: var(--night-ink-2);
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.estimates {
+  padding-left: 1rem;
+  color: var(--night-ink-2);
+}
+
+.estimates b {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.7rem;
+  margin-right: 0.4rem;
+  color: var(--night-ink);
+}
+
+.wiring-panel summary {
+  cursor: pointer;
+  color: var(--night-ink);
+  margin-top: 0.6rem;
+}
+
+/* logic analyser */
+
+.scope-screen {
+  margin-top: 1.2rem;
+  border: 1px solid var(--night-line);
+  border-radius: var(--radius);
+  background: #0e1417;
+  padding: 1.1rem 1.2rem 0.8rem;
+}
+
+.scope-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: var(--step--1);
+  color: var(--night-ink-2);
+  margin: 0 0 0.6rem;
+}
+
+#scope-plot {
+  width: 100%;
+  height: auto;
+}
+
+#scope-plot .wave {
+  fill: none;
+  stroke: oklch(0.82 0.15 150);
+  stroke-width: 1.6;
+}
+
+#scope-plot .wave.sda {
+  stroke: var(--steel-bright);
+}
+
+#scope-plot .stuff {
+  fill: var(--signal-soft);
+  stroke: var(--signal);
+  stroke-width: 0.8;
+}
+
+#scope-plot .bracket {
+  fill: none;
+  stroke: var(--night-ink-2);
+  stroke-width: 1;
+}
+
+#scope-plot .field,
+#scope-plot .lane,
+#scope-plot .bit {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--night-ink-2);
+}
+
+#scope-plot .bit {
+  font-size: 7px;
+}
+
+#scope-plot .byte {
+  fill: var(--night-2);
+  stroke: var(--night-line);
+}
+
+#scope-plot .hex {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--night-ink);
+}
+
+/* RTK journey */
+
+.journey {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.journey > *,
+.wiring-grid > *,
+.pid-grid > * {
+  min-width: 0;
+}
+
+@media (min-width: 980px) {
+  .journey {
+    grid-template-columns: minmax(16rem, 1fr) minmax(0, 2fr);
+    align-items: start;
+  }
+}
+
+.journey-hops {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+  position: relative;
+}
+
+.journey-hops button {
+  appearance: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  text-align: left;
+  font: inherit;
+  font-size: var(--step--1);
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.7rem 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.journey-hops button:hover {
+  border-color: var(--ink-2);
+}
+
+.journey-hops button[aria-current="true"] {
+  border-color: var(--signal);
+  background: var(--signal-soft);
+}
+
+.journey-hops .n {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  flex: none;
+}
+
+.journey-detail {
+  border-top: 2px solid var(--ink);
+  padding-top: 1rem;
+}
+
+.journey-detail h3 {
+  font-size: var(--step-2);
+}
+
+.hexdump,
+.bits {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.6;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.bits {
+  color: var(--steel);
+}
+
+.small {
+  font-size: var(--step--1);
+}
+
+/* firmware */
+
+.firmware-stats {
+  margin-top: 0;
+  border-top: 0;
+  padding-top: 0;
+}
+
+.firmware-table {
+  margin-top: 2.5rem;
+}
+
+.firmware-table table th,
+.firmware-table table td {
+  border-color: var(--night-line);
+  color: var(--night-ink);
+}
+
+.firmware-table caption,
+.firmware-table th {
+  color: var(--night-ink-2);
+}
+
+.firmware-table tr.cond td {
+  color: var(--night-ink-2);
+}
+
+.note-line {
+  margin-top: 1.5rem;
+  font-size: var(--step--1);
+  color: var(--night-ink-2);
+  max-width: 70ch;
+}
+
+.parts-table td:first-child {
+  min-width: 16rem;
+}
+
+/* PID playground */
+
+.pid-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.2rem;
+}
+
+@media (min-width: 980px) {
+  .pid-grid {
+    grid-template-columns: minmax(0, 2.2fr) minmax(15rem, 1fr);
+    align-items: start;
+  }
+}
+
+#pid-plot,
+.sitl-plot {
+  width: 100%;
+  height: auto;
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+
+#pid-plot .grid,
+.sitl-plot .grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+#pid-plot .target,
+.sitl-plot .target {
+  stroke: var(--ink);
+  stroke-dasharray: 2 3;
+}
+
+#pid-plot .dist {
+  stroke: var(--ink-2);
+  stroke-dasharray: 4 4;
+}
+
+#pid-plot .tick,
+.sitl-plot .tick {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--ink-2);
+}
+
+#pid-plot .trace,
+.sitl-plot .trace {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 2.2;
+}
+
+#pid-plot .ghost {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 1.2;
+  stroke-dasharray: 3 3;
+}
+
+.sitl-plot .sitl {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+}
+
+.sitl-block {
+  margin-top: 3.5rem;
+}
+
+.sitl-plot {
+  background: var(--night);
+}
+
+.sitl-plot .grid {
+  stroke: var(--night-line);
+}
+
+.sitl-plot .target {
+  stroke: var(--night-ink-2);
+}
+
+.sitl-plot .tick {
+  fill: var(--night-ink-2);
+}
+
+.sitl-plot .sitl {
+  stroke: var(--night-ink);
+}
+
+.pid-controls {
+  display: grid;
+  gap: 1rem;
+  font-size: var(--step--1);
+}
+
+.pid-controls label {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr;
+  grid-template-areas: "name value" "slider slider";
+  gap: 0.2rem 0.6rem;
+  font-weight: 600;
+}
+
+.pid-controls output {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.78rem;
+  justify-self: end;
+}
+
+.pid-controls input {
+  grid-area: slider;
+  width: 100%;
+  accent-color: var(--signal);
+}
+
+.pid-readout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.3rem 1rem;
+  margin: 0.5rem 0 0;
+  border-top: 1px solid var(--line);
+  padding-top: 0.9rem;
+}
+
+.pid-readout dt {
+  color: var(--ink-2);
+}
+
+.pid-readout dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-align: right;
+}
+
+.unstable-note {
+  display: none;
+  color: oklch(0.55 0.19 25);
+  font-weight: 600;
+}
+
+.pid.unstable .unstable-note {
+  display: block;
+}
+
+.pid.unstable #pid-plot .trace {
+  stroke: oklch(0.6 0.2 25);
+}
+
+/* check report */
+
+.check-table td {
+  vertical-align: top;
+}
+
+.check-table td.mono {
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+}
+
+.pill.ok {
+  color: oklch(0.5 0.12 150);
+}
+
+.pill.warning {
+  color: var(--signal-ink);
+}
+
+.pill.error {
+  color: oklch(0.55 0.19 25);
+}
+
+@media (max-width: 760px) {
+  .wiring-canvas {
+    overflow-x: auto;
+  }
+
+  .wiring-canvas svg {
+    min-width: 720px;
+  }
+}

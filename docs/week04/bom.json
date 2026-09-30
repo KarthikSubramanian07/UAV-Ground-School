@@ -1,0 +1,200 @@
+{
+ "rows": [
+  {
+   "part": "fc",
+   "name": "CubePilot Cube Orange+ Standard Set (ADS-B IN carrier board)",
+   "role": "flight_controller",
+   "count": 1,
+   "unit_usd": 451.0,
+   "included_in": null,
+   "mass_g": 75,
+   "estimated": [
+    "mass_g",
+    "rail_5v_range"
+   ],
+   "url": "https://irlock.com/products/cube-orange-plus-standard-set"
+  },
+  {
+   "part": "frame",
+   "name": "Holybro X500 V2 ARF kit (frame)",
+   "role": "frame",
+   "count": 1,
+   "unit_usd": 329.0,
+   "included_in": null,
+   "mass_g": 610,
+   "estimated": [
+    "mass_g"
+   ],
+   "url": "https://holybro.com/products/x500-v2-kits"
+  },
+  {
+   "part": "motor",
+   "name": "Holybro 2216 KV920 motor",
+   "role": "motor",
+   "count": 4,
+   "unit_usd": 0.0,
+   "included_in": "frame",
+   "mass_g": 60,
+   "estimated": [
+    "mass_g",
+    "no_load_a",
+    "poles",
+    "resistance_ohm"
+   ],
+   "url": "https://holybro.com/products/spare-parts-x500-v2-kit"
+  },
+  {
+   "part": "esc",
+   "name": "Holybro X500 V2 BLHeli S ESC 20A",
+   "role": "esc",
+   "count": 4,
+   "unit_usd": 0.0,
+   "included_in": "frame",
+   "mass_g": 10,
+   "estimated": [
+    "efficiency",
+    "mass_g",
+    "supply"
+   ],
+   "url": "https://holybro.com/products/spare-parts-x500-v2-kit"
+  },
+  {
+   "part": "prop",
+   "name": "Holybro 1045 propeller (X500 V2)",
+   "role": "propeller",
+   "count": 4,
+   "unit_usd": 0.0,
+   "included_in": "frame",
+   "mass_g": 13,
+   "estimated": [
+    "cp",
+    "ct",
+    "mass_g"
+   ],
+   "url": "https://holybro.com/products/spare-parts-x500-v2-kit"
+  },
+  {
+   "part": "battery",
+   "name": "OVONIC 14.8V 5000mAh 4S 50C LiPo (XT60 & TRX plug)",
+   "role": "battery",
+   "count": 1,
+   "unit_usd": 45.99,
+   "included_in": null,
+   "mass_g": 448,
+   "estimated": [],
+   "url": "https://us.ovonicshop.com/products/ovonic-50c-14-8v-5000mah-4s1p-xt60-and-trx-lipo-battery"
+  },
+  {
+   "part": "pm",
+   "name": "Holybro PM02 V3 (12S) analog power module",
+   "role": "power_module",
+   "count": 1,
+   "unit_usd": 18.99,
+   "included_in": null,
+   "mass_g": 20,
+   "estimated": [
+    "supply"
+   ],
+   "url": "https://holybro.com/products/pm02-v3-12s-power-module"
+  },
+  {
+   "part": "bec12",
+   "name": "Mateksys BEC12S-PRO, set to 12 V",
+   "role": "regulator",
+   "count": 1,
+   "unit_usd": 31.74,
+   "included_in": null,
+   "mass_g": 5,
+   "estimated": [],
+   "url": "http://www.mateksys.com/?portfolio=bec12s-pro"
+  },
+  {
+   "part": "bec5",
+   "name": "Mateksys BEC12S-PRO, set to 5.2 V",
+   "role": "regulator",
+   "count": 1,
+   "unit_usd": 31.74,
+   "included_in": null,
+   "mass_g": 5,
+   "estimated": [],
+   "url": "http://www.mateksys.com/?portfolio=bec12s-pro"
+  },
+  {
+   "part": "gnss",
+   "name": "CubePilot Here4 Multiband RTK GNSS",
+   "role": "gnss",
+   "count": 1,
+   "unit_usd": 255.0,
+   "included_in": null,
+   "mass_g": 60,
+   "estimated": [
+    "supply",
+    "terminated"
+   ],
+   "url": "https://docs.cubepilot.org/here-4/here-4-manual"
+  },
+  {
+   "part": "companion",
+   "name": "NVIDIA Jetson Orin Nano Super Developer Kit (8GB)",
+   "role": "companion",
+   "count": 1,
+   "unit_usd": 399.0,
+   "included_in": null,
+   "mass_g": 175,
+   "estimated": [],
+   "url": "https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/nano-super-developer-kit/"
+  },
+  {
+   "part": "camera",
+   "name": "SIYI A8 mini gimbal camera",
+   "role": "camera",
+   "count": 1,
+   "unit_usd": 257.4,
+   "included_in": null,
+   "mass_g": 95,
+   "estimated": [
+    "logic_v"
+   ],
+   "url": "https://shop.siyi.biz/products/siyi-a8-mini-gimbal-camera"
+  },
+  {
+   "part": "rx",
+   "name": "RadioMaster RP3 V2 ExpressLRS 2.4GHz Nano receiver",
+   "role": "rc_receiver",
+   "count": 1,
+   "unit_usd": 22.99,
+   "included_in": null,
+   "mass_g": 4.6,
+   "estimated": [
+    "typical_a"
+   ],
+   "url": "https://radiomasterrc.com/products/rp3-expresslrs-2-4ghz-nano-receiver"
+  },
+  {
+   "part": "radio",
+   "name": "RFDesign RFD900x-US telemetry modem",
+   "role": "telemetry_radio",
+   "count": 1,
+   "unit_usd": 120.9,
+   "included_in": null,
+   "mass_g": 14,
+   "estimated": [],
+   "url": "https://www.readymaderc.com/products/details/rfdesign-rfd-900x-modem-us-fcc"
+  },
+  {
+   "part": "lidar",
+   "name": "Benewake TFmini-S LiDAR (I2C mode)",
+   "role": "rangefinder",
+   "count": 1,
+   "unit_usd": null,
+   "included_in": null,
+   "mass_g": 5,
+   "estimated": [],
+   "url": "https://en.benewake.com/TFminiS/index.html"
+  }
+ ],
+ "total_usd": 1963.75,
+ "unpriced": [
+  "lidar"
+ ]
+}

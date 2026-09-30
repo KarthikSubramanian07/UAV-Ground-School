@@ -1,0 +1,135 @@
+{
+ "mass_kg": 1.994,
+ "max_thrust_n": 51.1,
+ "thrust_to_weight": 2.61,
+ "hover_throttle": 0.601,
+ "hover_current_a": 19.84,
+ "avionics_w": 27.9,
+ "full_throttle_current_a": 85.5,
+ "motor_full_throttle_a": 19.4,
+ "hover_minutes": 11.0,
+ "reference_minutes": 18.0,
+ "inertia_kg_m2": [
+  0.0148,
+  0.0148,
+  0.0278
+ ],
+ "mass_items": [
+  {
+   "item": "Cube Orange+",
+   "grams": 75,
+   "estimated": true
+  },
+  {
+   "item": "X500 V2 frame",
+   "grams": 610,
+   "estimated": true
+  },
+  {
+   "item": "4 x 2216 KV920",
+   "grams": 240,
+   "estimated": true
+  },
+  {
+   "item": "4 x ESC 20A",
+   "grams": 40,
+   "estimated": true
+  },
+  {
+   "item": "4 x 1045 prop",
+   "grams": 52,
+   "estimated": true
+  },
+  {
+   "item": "4S 5000 mAh",
+   "grams": 448,
+   "estimated": false
+  },
+  {
+   "item": "PM02 V3",
+   "grams": 20,
+   "estimated": false
+  },
+  {
+   "item": "BEC 12 V",
+   "grams": 5,
+   "estimated": false
+  },
+  {
+   "item": "BEC 5.2 V",
+   "grams": 5,
+   "estimated": false
+  },
+  {
+   "item": "Here4 RTK",
+   "grams": 60,
+   "estimated": false
+  },
+  {
+   "item": "Jetson Orin Nano",
+   "grams": 175,
+   "estimated": false
+  },
+  {
+   "item": "SIYI A8 mini",
+   "grams": 95,
+   "estimated": false
+  },
+  {
+   "item": "ELRS RP3",
+   "grams": 4.6,
+   "estimated": false
+  },
+  {
+   "item": "RFD900x",
+   "grams": 14,
+   "estimated": false
+  },
+  {
+   "item": "TFmini-S",
+   "grams": 5,
+   "estimated": false
+  },
+  {
+   "item": "wiring, mounts and screws",
+   "grams": 80,
+   "estimated": true
+  },
+  {
+   "item": "Jetson mount and fan duct",
+   "grams": 40,
+   "estimated": true
+  },
+  {
+   "item": "gimbal mount",
+   "grams": 25,
+   "estimated": true
+  }
+ ],
+ "calibration": {
+  "cp_estimate": 0.042,
+  "cp_fitted": 0.0402,
+  "resistance_estimate_ohm": 0.11,
+  "resistance_fitted_ohm": 0.346,
+  "fit_error": 7.509453053599921e-22,
+  "reference_mass_kg": 1.532,
+  "reference_minutes": 18.0,
+  "thrust_at_70_n": 6.21,
+  "target_thrust_at_70_n": 6.21
+ },
+ "sitl_frame": {
+  "mass": 1.994,
+  "diagonal_size": 0.5,
+  "refVoltage": 14.8,
+  "maxVoltage": 16.8,
+  "battCapacityAh": 5.0,
+  "hoverThrOut": 0.601,
+  "disc_area": 0.2027,
+  "moment_inertia": [
+   0.01481,
+   0.01481,
+   0.02784
+  ],
+  "num_motors": 4
+ }
+}

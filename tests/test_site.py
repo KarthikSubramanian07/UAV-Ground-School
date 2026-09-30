@@ -326,3 +326,52 @@ def test_week3_numbers_come_from_json(week3_html: str) -> None:
     for name, result in results.items():
         assert f"<code>{name}</code>" in week3_html
         assert f"{result['full_frame']['mAP50']:.3f}" in week3_html
+
+
+# ---------------------------------------------------------------- week 4 ----
+
+DOCS4 = ROOT / "docs" / "week04"
+
+
+@pytest.fixture(scope="module")
+def week4_html(site: Path) -> str:
+    return (site / "week4.html").read_text(encoding="utf-8")
+
+
+def test_week4_page_and_assets(site: Path, week4_html: str) -> None:
+    for path in ("week4.html", "og-week4.jpg", "js/week4.js", "js/pid.js"):
+        assert (site / path).is_file(), path
+    assert cv2.imread(str(site / "og-week4.jpg")).shape == (630, 1200, 3)
+    for name in ("site", "check", "scope", "journey", "pid"):
+        shipped = json.loads((site / "assets" / "week4" / f"{name}.json").read_text())
+        assert shipped == json.loads((DOCS4 / f"{name}.json").read_text())
+    head = _Head()
+    head.feed(week4_html)
+    assert head.links["canonical"] == build_site.CANONICAL + "week4"
+    assert head.meta["og:image"] == build_site.CANONICAL + "og-week4.jpg"
+    assert json.loads("".join(head.json_ld))["url"] == build_site.CANONICAL + "week4"
+    assert f"<loc>{build_site.CANONICAL}week4</loc>" in (site / "sitemap.xml").read_text()
+    assert 'href="week4"' in (site / "index.html").read_text(encoding="utf-8")
+    assert 'href="week4"' in (site / "week3.html").read_text(encoding="utf-8")
+
+
+def test_week4_diagram_is_inline_and_interactive(week4_html: str) -> None:
+    svg = (DOCS4 / "wiring.svg").read_text()
+    assert svg in week4_html
+    site_data = json.loads((DOCS4 / "site.json").read_text())
+    for link_id in re.findall(r'data-link="([^"]+)"', svg):
+        assert link_id in site_data["links"], link_id
+    for part in re.findall(r'data-part="([^"]+)"', svg):
+        assert part in site_data["parts"], part
+
+
+def test_week4_numbers_come_from_json(week4_html: str) -> None:
+    summary = json.loads((DOCS4 / "summary.json").read_text())
+    sitl = json.loads((DOCS4 / "sitl.json").read_text())
+    assert f"{summary['errors']} errors, {summary['warnings']} warnings, {summary['passed']} checks passed" in week4_html
+    assert f"{sitl['params']['accepted']} of {sitl['params']['sent']}" in week4_html
+    assert f"{summary['mass_kg']:.2f} kg" in week4_html
+    for row in sitl["link_budget"]["rows"]:
+        assert f"<td class=\"mono\">{row['message']}</td>" in week4_html
+    bom = json.loads((DOCS4 / "bom.json").read_text())
+    assert f"${bom['total_usd']:,.2f}" in week4_html
