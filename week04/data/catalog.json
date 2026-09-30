@@ -1,0 +1,1893 @@
+{
+ "_about": "Parts for the week 4 design. Every figure comes from the source URLs listed per part; anything not published is marked in that part's \"estimates\" with the reasoning.",
+ "researched": "2026-09-30",
+ "firmware": "ArduCopter 4.7.1",
+ "components": [
+  {
+   "id": "cube_orange_plus_adsb",
+   "name": "CubePilot Cube Orange+ Standard Set (ADS-B IN carrier board)",
+   "vendor": "CubePilot",
+   "role": "flight_controller",
+   "url": "https://irlock.com/products/cube-orange-plus-standard-set",
+   "price_usd": 451.0,
+   "mass_g": 75,
+   "supply": {
+    "min_v": 4.1,
+    "max_v": 5.7,
+    "typical_a": null,
+    "peak_a": 2.5
+   },
+   "logic_v": 3.3,
+   "ports": [
+    {
+     "id": "TELEM1",
+     "connector": "JST-GH-6",
+     "kind": "uart",
+     "serial_index": 1,
+     "signals": [
+      "5V",
+      "TX",
+      "RX",
+      "CTS",
+      "RTS",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": 5,
+     "supply_out_max_a": 1.5,
+     "notes": "USART2, hardware flow control (BRD_SER1_RTSCTS). ArduPilot lists signal level +3.3V; CubePilot interface spec lists '3.3 V - 5.0 V TTL'. CubePilot power architecture: TELEM1 has a private 1.5 A current limit and says 'Never power the telemetry from this port under any circumstances'; CubePilot critical notice: 'NEVER power radio devices off the Carrier board connectors'. Default SERIAL1_PROTOCOL is MAVLink.",
+     "supply_group": "telem1",
+     "flow_control": true,
+     "rx_dma": true
+    },
+    {
+     "id": "TELEM2",
+     "connector": "JST-GH-6",
+     "kind": "uart",
+     "serial_index": 2,
+     "signals": [
+      "5V",
+      "TX",
+      "RX",
+      "CTS",
+      "RTS",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": 5,
+     "supply_out_max_a": 1.0,
+     "notes": "USART3, hardware flow control (BRD_SER2_RTSCTS). 5 V pin is in the shared peripheral group: CubePilot says 'All other peripherals share a 1A current limit and a single power switch. The peak power drawn from this port should not exceed 1.5A.' supply_out_max_a is that shared group limit, not a per-port limit.",
+     "supply_group": "shared",
+     "flow_control": true,
+     "rx_dma": true
+    },
+    {
+     "id": "GPS1",
+     "connector": "JST-GH-8",
+     "kind": "uart",
+     "serial_index": 3,
+     "signals": [
+      "5V",
+      "TX",
+      "RX",
+      "SCL",
+      "SDA",
+      "SAFETY_BUTTON",
+      "SAFETY_LED",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": 5,
+     "supply_out_max_a": 1.0,
+     "notes": "UART4. hwdef marks UART4_RX as NODMA (PA1 UART4_RX UART4 NODMA), so avoid it for high-rate RC input like CRSF/ELRS. Also carries the external safety switch button and LED (pins 6 and 7). I2C bus on this connector is documented inconsistently: CubePilot interface spec and ArduPilot hwdef README say I2C1, the ArduPilot wiki table says I2C2. 5 V is in the shared 1 A peripheral group.",
+     "supply_group": "shared",
+     "rx_dma": false
+    },
+    {
+     "id": "GPS2",
+     "connector": "JST-GH-6",
+     "kind": "uart",
+     "serial_index": 4,
+     "signals": [
+      "5V",
+      "TX",
+      "RX",
+      "SCL",
+      "SDA",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": 5,
+     "supply_out_max_a": 1.0,
+     "notes": "UART8. hwdef marks UART8_TX as NODMA but RX has DMA, so this is the better port for CRSF/ELRS RC input. I2C bus labelled I2C2 by CubePilot and the hwdef README, I2C1 by the ArduPilot wiki table. 5 V is in the shared 1 A peripheral group.",
+     "supply_group": "shared",
+     "rx_dma": true
+    },
+    {
+     "id": "CAN1",
+     "connector": "JST-GH-4",
+     "kind": "can",
+     "serial_index": null,
+     "signals": [
+      "5V",
+      "CAN_H",
+      "CAN_L",
+      "GND"
+     ],
+     "logic_v": null,
+     "supply_out_v": 5,
+     "supply_out_max_a": 1.0,
+     "notes": "FMU CAN1 (PD0/PD1). CAN FD capable up to 8 Mbit/s (hwdef CANFD_SUPPORTED 8). Enable with CAN_P1_DRIVER=1 and CAN_D1_PROTOCOL=1 (DroneCAN). 5 V is in the shared peripheral group.",
+     "supply_group": "shared"
+    },
+    {
+     "id": "CAN2",
+     "connector": "JST-GH-4",
+     "kind": "can",
+     "serial_index": null,
+     "signals": [
+      "5V",
+      "CAN_H",
+      "CAN_L",
+      "GND"
+     ],
+     "logic_v": null,
+     "supply_out_v": 5,
+     "supply_out_max_a": 1.0,
+     "notes": "FMU CAN2 (PB6/PB12). Enable with CAN_P2_DRIVER. ADS-B carrier board fixes the CAN1/CAN2 silkscreen labelling of the original carrier (CubePilot).",
+     "supply_group": "shared"
+    },
+    {
+     "id": "I2C2",
+     "connector": "JST-GH-4",
+     "kind": "i2c",
+     "serial_index": null,
+     "signals": [
+      "5V",
+      "SCL",
+      "SDA",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": 5,
+     "supply_out_max_a": 1.0,
+     "notes": "Standalone I2C port, 3.3 V with pull-ups on the autopilot. ArduPilot I2C bus order is I2C_ORDER I2C2 I2C1 I2C4, so ArduPilot bus 0 = STM32 I2C2, bus 1 = STM32 I2C1, bus 2 = internal I2C4 (internal compass). The standard set ships an I2C expansion board. Which ArduPilot bus number this physical port maps to is not stated explicitly; ArduPilot rangefinder drivers probe all external buses, so this normally does not matter.",
+     "supply_group": "shared"
+    },
+    {
+     "id": "POWER1",
+     "connector": "Molex-CLIK-Mate-2.0-6",
+     "kind": "power_in",
+     "serial_index": null,
+     "signals": [
+      "VDD_5V_BRICK",
+      "VDD_5V_BRICK",
+      "BATT_CURRENT_SENS",
+      "BATT_VOLTAGE_SENS",
+      "GND",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Main power brick input, 4.0 to 5.7 V (CubePilot power architecture table), preferred source. Sense inputs up to 3.3 V: current on ADC pin 15 (BATT_CURR_PIN), voltage on ADC pin 14 (BATT_VOLT_PIN). Connector family per CubePilot interface spec ('Molex Clik-Mate 2 mm for both main and backup power ... on the carrier board')."
+    },
+    {
+     "id": "POWER2",
+     "connector": "Molex-CLIK-Mate-2.0-6",
+     "kind": "power_in",
+     "serial_index": null,
+     "signals": [
+      "VDD_5V_BRICK",
+      "VDD_5V_BRICK",
+      "AUX_BATT_CURRENT_SENS",
+      "AUX_BATT_VOLTAGE_SENS",
+      "GND",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Backup brick input, same pinout. Current on ADC pin 4 (BATT2_CURR_PIN), voltage on ADC pin 13 (BATT2_VOLT_PIN); defaults.parm already sets these. Power is locked out above 5.7 V."
+    },
+    {
+     "id": "USB_GH",
+     "connector": "JST-GH-6",
+     "kind": "usb",
+     "serial_index": 0,
+     "signals": [
+      "VBUS_5V",
+      "USB_D+",
+      "USB_D-",
+      "GND",
+      "BUZZER",
+      "BOOT_ERROR_LED"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "External USB/HMI connector (the carrier also has a micro USB). SERIAL0 = OTG1 USB CDC (MAVLink). BUZZER pin is at battery voltage per CubePilot ('VBAT (8.4 - 42 V)'). A second USB CDC interface (OTG2) is SERIAL6 and defaults to SLCAN. USB power alone must be kept under about 500 mA total."
+    },
+    {
+     "id": "CONS",
+     "connector": "JST-GH-3",
+     "kind": "uart",
+     "serial_index": 5,
+     "signals": [
+      "GND",
+      "RX",
+      "TX"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "UART7 = SERIAL5 per the ArduPilot hwdef README (pin 1 = GND closest to the cube). ON THE ADS-B CARRIER BOARD SERIAL5 IS WIRED TO THE BUILT-IN uAvionix ADS-B RECEIVER, so treat this UART as not available. Connector family only inferred from the README line 'Unless noted otherwise all connectors are JST GH 1.25mm pitch'. CubePilot documents a combined 6-pin 'CONS SBUSo' header (SBUS_OUT, TX, VDD_SERVO, RX, GND, GND) instead, so pin order is unverified for the ADS-B carrier.",
+     "rx_dma": true,
+     "available": false
+    },
+    {
+     "id": "SBUS_OUT",
+     "connector": "JST-GH-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "GND",
+      "V_SERVO",
+      "SBUS_OUT"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "IOMCU S.Bus output, enabled with BRD_SBUS_OUT. The 5 V pin is the servo rail. With BRD_SBUS_OUT=0 it can be an analog RSSI input (RSSI_TYPE=1, RSSI_PIN=103). Same connector-family and pin-order caveat as CONS."
+    },
+    {
+     "id": "SPKT",
+     "connector": "JST-GH-3",
+     "kind": "rc_in",
+     "serial_index": null,
+     "signals": [
+      "DSM_RX",
+      "GND",
+      "3V3"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": 3.3,
+     "supply_out_max_a": null,
+     "notes": "Spektrum satellite port on the IOMCU with a private, software-switched 3.3 V regulator for binding (Spektrum receivers draw about 25 mA per CubePilot). Pin 3 (3.3 V) is closest to the cube."
+    },
+    {
+     "id": "ADC",
+     "connector": "JST-GH-3",
+     "kind": "analog",
+     "serial_index": null,
+     "signals": [
+      "5V",
+      "ADC_IN",
+      "GND"
+     ],
+     "logic_v": null,
+     "supply_out_v": 5,
+     "supply_out_max_a": null,
+     "notes": "Analog input, 6.6 V max, ArduPilot ADC pin 8 (wiki table)."
+    },
+    {
+     "id": "RCIN",
+     "connector": "0.1in-servo-3",
+     "kind": "rc_in",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "5V_RC",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": 5,
+     "supply_out_max_a": null,
+     "notes": "End of the servo rail, handled by the IOMCU; accepts PPM, S.Bus and other protocols (PPM is lost if BRD_IO_DSHOT=1). CubePilot SB_0000004: 'DO NOT POWER anything off the RCIN power pin other than a traditional RC Receiver'; companion computers must never be powered from it. Current limit not published."
+    },
+    {
+     "id": "ADSB_INTERNAL",
+     "connector": "internal",
+     "kind": "uart",
+     "serial_index": 5,
+     "signals": [],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Built-in uAvionix 1090 MHz ADS-B IN receiver with built-in antenna, on UART7/SERIAL5. CubeOrangePlus defaults.parm: ADSB_TYPE=1, SERIAL5_PROTOCOL=1 (MAVLink1), SERIAL5_BAUD=57. CubePilot also sets the ADSB stream rate; in 4.7 the stream-rate parameters are MAVn_ADSB (the SR0_ADSB/SR1_ADSB names in CubePilot docs are pre 4.7).",
+     "rx_dma": true,
+     "available": false
+    },
+    {
+     "id": "MAIN1",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 1,
+     "dshot_capable": true,
+     "notes": "IOMCU (STM32F103) output. DShot only after BRD_IO_DSHOT=1 loads the DShot IO firmware; groups MAIN1-2, MAIN3-4, MAIN5-8 must share a protocol/rate. PPM on RCIN is lost when DShot IO firmware is loaded. BRD_PWM_VOLT_SEL=1 raises pulse amplitude to 5 V on the 8 MAIN outputs only. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "MAIN2",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 2,
+     "dshot_capable": true,
+     "notes": "IOMCU (STM32F103) output. DShot only after BRD_IO_DSHOT=1 loads the DShot IO firmware; groups MAIN1-2, MAIN3-4, MAIN5-8 must share a protocol/rate. PPM on RCIN is lost when DShot IO firmware is loaded. BRD_PWM_VOLT_SEL=1 raises pulse amplitude to 5 V on the 8 MAIN outputs only. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "MAIN3",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 3,
+     "dshot_capable": true,
+     "notes": "IOMCU (STM32F103) output. DShot only after BRD_IO_DSHOT=1 loads the DShot IO firmware; groups MAIN1-2, MAIN3-4, MAIN5-8 must share a protocol/rate. PPM on RCIN is lost when DShot IO firmware is loaded. BRD_PWM_VOLT_SEL=1 raises pulse amplitude to 5 V on the 8 MAIN outputs only. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "MAIN4",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 4,
+     "dshot_capable": true,
+     "notes": "IOMCU (STM32F103) output. DShot only after BRD_IO_DSHOT=1 loads the DShot IO firmware; groups MAIN1-2, MAIN3-4, MAIN5-8 must share a protocol/rate. PPM on RCIN is lost when DShot IO firmware is loaded. BRD_PWM_VOLT_SEL=1 raises pulse amplitude to 5 V on the 8 MAIN outputs only. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "MAIN5",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 5,
+     "dshot_capable": true,
+     "notes": "IOMCU (STM32F103) output. DShot only after BRD_IO_DSHOT=1 loads the DShot IO firmware; groups MAIN1-2, MAIN3-4, MAIN5-8 must share a protocol/rate. PPM on RCIN is lost when DShot IO firmware is loaded. BRD_PWM_VOLT_SEL=1 raises pulse amplitude to 5 V on the 8 MAIN outputs only. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "MAIN6",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 6,
+     "dshot_capable": true,
+     "notes": "IOMCU (STM32F103) output. DShot only after BRD_IO_DSHOT=1 loads the DShot IO firmware; groups MAIN1-2, MAIN3-4, MAIN5-8 must share a protocol/rate. PPM on RCIN is lost when DShot IO firmware is loaded. BRD_PWM_VOLT_SEL=1 raises pulse amplitude to 5 V on the 8 MAIN outputs only. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "MAIN7",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 7,
+     "dshot_capable": true,
+     "notes": "IOMCU (STM32F103) output. DShot only after BRD_IO_DSHOT=1 loads the DShot IO firmware; groups MAIN1-2, MAIN3-4, MAIN5-8 must share a protocol/rate. PPM on RCIN is lost when DShot IO firmware is loaded. BRD_PWM_VOLT_SEL=1 raises pulse amplitude to 5 V on the 8 MAIN outputs only. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "MAIN8",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 8,
+     "dshot_capable": true,
+     "notes": "IOMCU (STM32F103) output. DShot only after BRD_IO_DSHOT=1 loads the DShot IO firmware; groups MAIN1-2, MAIN3-4, MAIN5-8 must share a protocol/rate. PPM on RCIN is lost when DShot IO firmware is loaded. BRD_PWM_VOLT_SEL=1 raises pulse amplitude to 5 V on the 8 MAIN outputs only. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "AUX1",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 9,
+     "dshot_capable": true,
+     "notes": "FMU (STM32H757) output, SERVO9. DShot capable without extra firmware; timer groups AUX1-4 and AUX5-6 must share a protocol/rate. AUX1 cannot do bi-directional DShot (ArduPilot issue 20362). Always 3.3 V pulse amplitude. Can be a GPIO (pin 50) if BRD_PWM_COUNT is lowered. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "AUX2",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 10,
+     "dshot_capable": true,
+     "notes": "FMU (STM32H757) output, SERVO10. DShot capable without extra firmware; timer groups AUX1-4 and AUX5-6 must share a protocol/rate. AUX1 cannot do bi-directional DShot (ArduPilot issue 20362). Always 3.3 V pulse amplitude. Can be a GPIO (pin 51) if BRD_PWM_COUNT is lowered. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "AUX3",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 11,
+     "dshot_capable": true,
+     "notes": "FMU (STM32H757) output, SERVO11. DShot capable without extra firmware; timer groups AUX1-4 and AUX5-6 must share a protocol/rate. AUX1 cannot do bi-directional DShot (ArduPilot issue 20362). Always 3.3 V pulse amplitude. Can be a GPIO (pin 52) if BRD_PWM_COUNT is lowered. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "AUX4",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 12,
+     "dshot_capable": true,
+     "notes": "FMU (STM32H757) output, SERVO12. DShot capable without extra firmware; timer groups AUX1-4 and AUX5-6 must share a protocol/rate. AUX1 cannot do bi-directional DShot (ArduPilot issue 20362). Always 3.3 V pulse amplitude. Can be a GPIO (pin 53) if BRD_PWM_COUNT is lowered. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "AUX5",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 13,
+     "dshot_capable": true,
+     "notes": "FMU (STM32H757) output, SERVO13. DShot capable without extra firmware; timer groups AUX1-4 and AUX5-6 must share a protocol/rate. AUX1 cannot do bi-directional DShot (ArduPilot issue 20362). Always 3.3 V pulse amplitude. Can be a GPIO (pin 54) if BRD_PWM_COUNT is lowered. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    },
+    {
+     "id": "AUX6",
+     "connector": "0.1in-servo-3",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "V_SERVO",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "servo_output_number": 14,
+     "dshot_capable": true,
+     "notes": "FMU (STM32H757) output, SERVO14. DShot capable without extra firmware; timer groups AUX1-4 and AUX5-6 must share a protocol/rate. AUX1 cannot do bi-directional DShot (ArduPilot issue 20362). Always 3.3 V pulse amplitude. Can be a GPIO (pin 55) if BRD_PWM_COUNT is lowered. Servo rail row order per ArduPilot README: GND top row, 5 V (V_SERVO) middle row, signal bottom row; the Cube never supplies servo rail power (CubePilot power architecture), so V_SERVO must come from an external BEC if anything needs it."
+    }
+   ],
+   "specs": {
+    "mcu": "STM32H757 (hwdef MCU STM32H7xx STM32H757xx); IOMCU STM32F103 over USART6",
+    "cube_module_mass_g": 33,
+    "cube_module_dimensions_mm": [
+     38.25,
+     38.25,
+     22.3
+    ],
+    "carrier_dimensions_mm": [
+     94.5,
+     44.3,
+     17.3
+    ],
+    "carrier_mass_g": null,
+    "fmu_plus_io_power_budget_a": 0.55,
+    "peripheral_5v_total_budget_a": 2.5,
+    "telem1_private_limit_a": 1.5,
+    "other_peripherals_shared_limit_a": 1.0,
+    "other_peripherals_shared_peak_a": 1.5,
+    "brick_input_v": [
+     4.0,
+     5.7
+    ],
+    "absolute_max_v": 5.7,
+    "compliant_operation_v": [
+     4.0,
+     5.5
+    ],
+    "servo_rail_io_input_v": [
+     4.0,
+     10.5
+    ],
+    "serial_map": {
+     "SERIAL0": "USB (OTG1)",
+     "SERIAL1": "TELEM1 (USART2, RTS/CTS)",
+     "SERIAL2": "TELEM2 (USART3, RTS/CTS)",
+     "SERIAL3": "GPS1 (UART4)",
+     "SERIAL4": "GPS2 (UART8)",
+     "SERIAL5": "UART7 (CONS on standard carrier, internal ADS-B receiver on ADS-B carrier)",
+     "SERIAL6": "USB second CDC (OTG2), default SLCAN"
+    },
+    "pwm_outputs": {
+     "MAIN1-8": "IOMCU, servo outputs 1-8, DShot only with BRD_IO_DSHOT=1",
+     "AUX1-6": "FMU, servo outputs 9-14, DShot native"
+    },
+    "internal_imus": [
+     {
+      "instance": 0,
+      "part": "ICM42688 (or ICM45686 on newer boards)",
+      "bus": "SPI4",
+      "board": "isolated, heated IMU board"
+     },
+     {
+      "instance": 1,
+      "part": "ICM42688 (alternatives ICM20948 or ICM45686 per board revision)",
+      "bus": "SPI4",
+      "board": "isolated, heated IMU board"
+     },
+     {
+      "instance": 2,
+      "part": "ICM20649 (or ICM45686)",
+      "bus": "SPI1",
+      "board": "FMU base board, not isolated"
+     }
+    ],
+    "internal_barometers": [
+     {
+      "part": "MS5611",
+      "bus": "SPI4",
+      "board": "isolated IMU board"
+     },
+     {
+      "part": "MS5611",
+      "bus": "SPI1",
+      "board": "FMU"
+     }
+    ],
+    "internal_compass": {
+     "part": "AK09916",
+     "bus": "I2C (ArduPilot bus 2 = internal I2C4)",
+     "address": "0x0C",
+     "hwdef_line": "COMPASS AK09916 I2C:2:0x0C false ROTATION_ROLL_180_YAW_225"
+    },
+    "adsb_receiver": {
+     "vendor": "uAvionix",
+     "frequency_mhz": 1090,
+     "serial": "SERIAL5 (UART7)",
+     "defaults": {
+      "ADSB_TYPE": 1,
+      "SERIAL5_PROTOCOL": 1,
+      "SERIAL5_BAUD": 57
+     }
+    },
+    "default_battery_scaling_power_brick_mini": {
+     "BATT_VOLT_MULT": 12.02,
+     "BATT_AMP_PERVLT": 39.877
+    },
+    "can_fd_mbps": 8,
+    "dshot_capable_outputs": [
+     "AUX1",
+     "AUX2",
+     "AUX3",
+     "AUX4",
+     "AUX5",
+     "AUX6",
+     "MAIN1-8 with BRD_IO_DSHOT=1"
+    ],
+    "bidirectional_dshot_outputs": [
+     "AUX2",
+     "AUX3",
+     "AUX4",
+     "AUX5",
+     "AUX6"
+    ],
+    "stable_firmware": "ArduCopter V4.7.1 (firmware.ardupilot.org/Copter/stable/CubeOrangePlus, commit dated 2026-08-31)",
+    "dds_in_stable_build": false,
+    "networking_ppp_in_stable_build": true,
+    "supply_groups": {
+     "telem1": {
+      "limit_a": 1.5
+     },
+     "shared": {
+      "limit_a": 1.0,
+      "peak_a": 1.5
+     },
+     "total": {
+      "limit_a": 2.5
+     }
+    },
+    "rail_5v_range": [
+     4.9,
+     5.5
+    ]
+   },
+   "ardupilot": {
+    "params": {
+     "BRD_IO_DSHOT": 1,
+     "BRD_SAFETY_DEFLT": 0,
+     "ADSB_TYPE": 1,
+     "SERIAL5_PROTOCOL": 1,
+     "SERIAL5_BAUD": 57
+    },
+    "notes": "Stable CubeOrangePlus build (4.7.1) features.txt lists '!AP_DDS_ENABLED', so SERIALn_PROTOCOL=45 (DDS XRCE) needs a custom build (custom.ardupilot.org or waf with --enable-DDS). BRD_SAFETYENABLE no longer exists in 4.7; BRD_SAFETY_DEFLT=0 starts unsafe when no safety switch is fitted. Here4 has no safety switch."
+   },
+   "sources": [
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_HAL_ChibiOS/hwdef/CubeOrangePlus/hwdef.dat",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_HAL_ChibiOS/hwdef/CubeOrange/hwdef.inc",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_HAL_ChibiOS/hwdef/CubeOrangePlus/defaults.parm",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_HAL_ChibiOS/hwdef/CubeOrangePlus/README.md",
+    "https://docs.cubepilot.org/autopilot/the-cube/introduction/interface-specifications",
+    "https://docs.cubepilot.org/autopilot/the-cube/introduction/power-architecture",
+    "https://docs.cubepilot.org/carrier-boards/ads-b-carrier-board",
+    "https://docs.cubepilot.org/service-bulletins-and-critical-notices/critical-notices/powering-telemetry-radios-externally",
+    "https://docs.cubepilot.org/service-bulletins-and-critical-notices/safety-service-bulletins/sb_0000004-limited-power-capacity-of-the-rcin-power-rail-on-pixhawk-autopilots",
+    "https://ardupilot.org/copter/docs/common-thecubeorange-overview.html",
+    "https://ardupilot.org/copter/docs/common-dshot-escs.html",
+    "https://firmware.ardupilot.org/Copter/stable/CubeOrangePlus/features.txt",
+    "https://docs.cubepilot.org/autopilot/the-cube/introduction/the-cube-operating-conditions-and-performance",
+    "https://docs.px4.io/main/en/flight_controller/cubepilot_cube_orangeplus",
+    "https://www.airbot-systems.com/produit/cube-orange-imu-v8/?lang=en",
+    "https://www.readymaderc.com/products/details/pixhawk2-cube-orange-plus-standard-set-cube-carrier"
+   ],
+   "notes": "mass_g is null: only the cube module mass (33 g, Airbot Systems vendor page) is published; no source gives the ADS-B carrier board mass (RMRC only lists a 0.55 lb shipping weight for the whole boxed set). Price is IR-LOCK list price (RMRC lists 450.99). Supply range: PX4 docs and IR-LOCK say 4.1 to 5.7 V / 2.5 A; CubePilot operating-conditions page says 4.1 to 5.5 V. The ArduPilot hwdef README still says STM32H743 in its feature list, but hwdef.dat declares STM32H757 and CubePilot confirms H757. Connector pin logic: ArduPilot documents 3.3 V signals; CubePilot interface spec writes '3.3 V - 5.0 V TTL', which is best read as 5 V tolerant inputs, not 5 V outputs. The standard set includes a CubePilot Power Brick Mini (Molex CLIK-Mate cable), which is plug-compatible with POWER1 and already matches the firmware default battery scaling.",
+   "estimates": {
+    "mass_g": "Only the 33 g cube module is published; the 94.5 x 44.3 mm carrier board is estimated at 42 g.",
+    "rail_5v_range": "CubePilot says peripherals see up to 5.5 V after filtering; 4.9 V lower bound assumes a 5.2 V brick minus the ideal diode drop."
+   },
+   "firmware": {
+    "stable": "ArduCopter 4.7.1",
+    "missing_features": [
+     "AP_DDS"
+    ],
+    "mavlink_channels": 8
+   }
+  },
+  {
+   "id": "holybro_x500_v2_frame",
+   "name": "Holybro X500 V2 ARF kit (frame)",
+   "vendor": "Holybro",
+   "role": "frame",
+   "url": "https://holybro.com/products/x500-v2-kits",
+   "price_usd": 329.0,
+   "mass_g": 610,
+   "supply": null,
+   "logic_v": null,
+   "ports": [],
+   "specs": {
+    "wheelbase_mm": 500,
+    "motor_mount_pattern_mm": "16x16",
+    "body_plate_mm": "144x144, 2 mm carbon fiber",
+    "landing_gear_height_mm": 215,
+    "plate_spacing_mm": 28,
+    "frame_kit_only_price_usd": 135.0,
+    "arf_kit_sku": 30125,
+    "frame_kit_sku": 30120,
+    "includes": [
+     "4x Holybro 2216 KV920 motors (XT30)",
+     "4x BLHeli S ESC 20A (XT30)",
+     "6x 1045 propellers",
+     "PDB with XT60 battery plug and XT30 outputs"
+    ],
+    "power_module_included": false,
+    "recommended_power_modules": [
+     "PM02D",
+     "PM03D",
+     "PM02 V3"
+    ],
+    "recommended_battery": "4S 3000-5000mAh 20C+ XT60 (store page); 4S 2000-5000mAh (docs page)",
+    "flight_time_min": 18,
+    "flight_time_note": "hover, no payload, 5000 mAh battery",
+    "max_payload_g_docs": 1000,
+    "max_payload_docs_note": "w/ 4S 5000 mAh battery @70% throttle",
+    "max_payload_g_store": 1500,
+    "max_payload_store_note": "without battery, 70% throttle",
+    "companion_mounting": "platform board has holes for Raspberry Pi 4 and Jetson Nano; dual 10 mm x 250 mm rails for gimbals",
+    "arm_length_m": 0.25
+   },
+   "ardupilot": {
+    "params": {
+     "FRAME_CLASS": 1,
+     "FRAME_TYPE": 1
+    },
+    "notes": "Quad X."
+   },
+   "sources": [
+    "https://holybro.com/products/x500-v2-kits",
+    "https://docs.holybro.com/drone-development-kit/px4-development-kit-x500v2"
+   ],
+   "notes": "610 g is Holybro's 'Weight' line in the X500 V2 frame kit mechanical spec; it is not stated whether motors/ESCs are included in that figure. Holybro publishes two different payload figures (1 kg with battery on the docs page, 1.5 kg without battery on the store page). No recommended takeoff weight is published.",
+   "estimates": {
+    "mass_g": "Holybro lists \"Weight: 610g\" for the X500 V2 frame kit without saying what it includes; this design reads it as the bare frame (plates, arms, landing gear, PDB) and adds motors, ESCs and props separately."
+   }
+  },
+  {
+   "id": "holybro_2216_kv920",
+   "name": "Holybro 2216 KV920 motor",
+   "vendor": "Holybro",
+   "role": "motor",
+   "url": "https://holybro.com/products/spare-parts-x500-v2-kit",
+   "price_usd": 19.99,
+   "mass_g": 60,
+   "supply": null,
+   "logic_v": null,
+   "ports": [
+    {
+     "id": "POWER",
+     "connector": "XT30",
+     "kind": "power_in",
+     "serial_index": null,
+     "signals": [],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Pre-installed on the arm with the ESC; ESC plugs into the PDB with XT30."
+    }
+   ],
+   "specs": {
+    "kv": 920,
+    "stator": "2216",
+    "quantity_in_kit": 4,
+    "prop": "1045",
+    "thrust_table": null,
+    "resistance_ohm": 0.11,
+    "no_load_a": 0.4,
+    "poles": 14
+   },
+   "ardupilot": {
+    "params": {},
+    "notes": ""
+   },
+   "sources": [
+    "https://holybro.com/products/x500-v2-kits",
+    "https://holybro.com/products/spare-parts-x500-v2-kit",
+    "https://docs.holybro.com/drone-development-kit/px4-development-kit-x500v2"
+   ],
+   "notes": "No official thrust table, motor mass, or max current is published by Holybro for the 2216 KV920 (Holybro docs search returned nothing; the Tyto Robotics database entry exists but its data could not be retrieved). Older X500 V1 used KV880 motors; do not mix up the two.",
+   "estimates": {
+    "mass_g": "Unpublished; 2216 size motors near 900 KV weigh 55 to 70 g.",
+    "resistance_ohm": "Unpublished; typical winding resistance for a 2216 at 900 KV.",
+    "no_load_a": "Unpublished; typical no load current at 10 V for this size.",
+    "poles": "Unpublished; 2216 outrunners are almost always 12N14P."
+   }
+  },
+  {
+   "id": "holybro_blheli_s_20a",
+   "name": "Holybro X500 V2 BLHeli S ESC 20A",
+   "vendor": "Holybro",
+   "role": "esc",
+   "url": "https://holybro.com/products/spare-parts-x500-v2-kit",
+   "price_usd": 13.99,
+   "mass_g": 10,
+   "supply": {
+    "min_v": 7.4,
+    "max_v": 16.8,
+    "typical_a": null,
+    "peak_a": 20
+   },
+   "logic_v": null,
+   "ports": [
+    {
+     "id": "SIGNAL",
+     "connector": "0.1in-servo",
+     "kind": "pwm",
+     "serial_index": null,
+     "signals": [
+      "SIGNAL",
+      "GND"
+     ],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Colour-coded servo lead; PX4 X500 V2 build guide: insert so the white cable faces up. Exact wire count and whether a BEC 5 V wire is present is not documented.",
+     "speaks": [
+      "pwm",
+      "oneshot125",
+      "dshot150",
+      "dshot300"
+     ]
+    },
+    {
+     "id": "POWER",
+     "connector": "XT30",
+     "kind": "power_in",
+     "serial_index": null,
+     "signals": [],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "To PDB."
+    }
+   ],
+   "specs": {
+    "current_rating_a": 20,
+    "firmware": "BLHeli_S",
+    "battery_compat": "4S (Holybro: 'Compatible with 4S Battery')",
+    "protocols_blheli_s_firmware": [
+     "PWM 1-2 ms",
+     "OneShot125",
+     "OneShot42",
+     "Multishot",
+     "DShot150",
+     "DShot300",
+     "DShot600 (only on 48 MHz MCUs)"
+    ],
+    "dshot600_supported": null,
+    "bidirectional_dshot": false,
+    "dshot_rates": [
+     150,
+     300
+    ],
+    "efficiency": 0.93
+   },
+   "ardupilot": {
+    "params": {
+     "MOT_PWM_TYPE": 5,
+     "SERVO_DSHOT_ESC": 2
+    },
+    "notes": "Conservative choice is DShot300 (MOT_PWM_TYPE=5): the BLHeli_S manual says 24 MHz MCUs do not support DShot600 and recommends DShot300 even on 48 MHz MCUs. Holybro does not publish the ESC MCU, so DShot600 support is unverified. Plain PWM (MOT_PWM_TYPE=0, with ESC calibration) is what Holybro's own PX4 kit uses. Stock BLHeli_S has no bi-directional DShot/RPM telemetry (ArduPilot: bi-directional DShot only on BLHeli32/AM32)."
+   },
+   "sources": [
+    "https://docs.holybro.com/drone-development-kit/px4-development-kit-x500v2",
+    "https://holybro.com/products/spare-parts-x500-v2-kit",
+    "https://github.com/bitdump/BLHeli/blob/master/BLHeli_S%20SiLabs/BLHeli_S%20manual%20SiLabs%20Rev16.x.pdf",
+    "https://ardupilot.org/copter/docs/common-dshot-escs.html",
+    "https://docs.px4.io/main/en/frames_multicopter/holybro_x500v2_pixhawk6c"
+   ],
+   "notes": "Holybro only states 'BLHeli S ESC 20A ... Compatible with 4S Battery'. Burst current, cell range, mass, MCU and firmware target are not published. The protocol list is from the BLHeli_S firmware manual (rev16.x), not from Holybro.",
+   "estimates": {
+    "mass_g": "Unpublished; bare 20 A BLHeli_S ESCs weigh 5 to 12 g with wires.",
+    "supply": "Holybro only says \"compatible with 4S\"; the range assumes 2S to 4S, the BLHeli_S norm.",
+    "efficiency": "Typical BLHeli_S efficiency at hover current."
+   }
+  },
+  {
+   "id": "holybro_1045_prop",
+   "name": "Holybro 1045 propeller (X500 V2)",
+   "vendor": "Holybro",
+   "role": "propeller",
+   "url": "https://holybro.com/products/spare-parts-x500-v2-kit",
+   "price_usd": 11.59,
+   "mass_g": 13,
+   "supply": null,
+   "logic_v": null,
+   "ports": [],
+   "specs": {
+    "diameter_in": 10,
+    "pitch_in": 4.5,
+    "retainer": true,
+    "quantity_in_kit": 6,
+    "price_note": "11.59 USD for 2 pairs",
+    "ct": 0.105,
+    "cp": 0.042
+   },
+   "ardupilot": {
+    "params": {},
+    "notes": ""
+   },
+   "sources": [
+    "https://holybro.com/products/x500-v2-kits",
+    "https://holybro.com/products/spare-parts-x500-v2-kit"
+   ],
+   "notes": "1045 is read as 10 x 4.5 in by the usual naming convention; Holybro gives no material or mass.",
+   "estimates": {
+    "mass_g": "Unpublished; plastic 10x4.5 multirotor props weigh 11 to 15 g.",
+    "ct": "Static thrust coefficient of 10x4.5 multirotor props in the UIUC propeller database (0.10 to 0.12).",
+    "cp": "Static power coefficient of 10x4.5 multirotor props in the UIUC propeller database (0.04 to 0.05)."
+   }
+  },
+  {
+   "id": "ovonic_4s_5000_50c",
+   "name": "OVONIC 14.8V 5000mAh 4S 50C LiPo (XT60 & TRX plug)",
+   "vendor": "OVONIC",
+   "role": "battery",
+   "url": "https://us.ovonicshop.com/products/ovonic-50c-14-8v-5000mah-4s1p-xt60-and-trx-lipo-battery",
+   "price_usd": 45.99,
+   "mass_g": 448,
+   "supply": {
+    "min_v": null,
+    "max_v": 16.8,
+    "typical_a": null,
+    "peak_a": 500
+   },
+   "logic_v": null,
+   "ports": [
+    {
+     "id": "MAIN",
+     "connector": "XT60",
+     "kind": "power_out",
+     "serial_index": null,
+     "signals": [
+      "BAT+",
+      "BAT-"
+     ],
+     "logic_v": null,
+     "supply_out_v": 14.8,
+     "supply_out_max_a": 250,
+     "notes": "Continuous rating 50C x 5 Ah = 250 A, burst 100C = 500 A (pack rating; the XT60 and the PM02 V3 12 AWG lead are the real limits)."
+    },
+    {
+     "id": "BALANCE",
+     "connector": "JST-XH",
+     "kind": "power_out",
+     "serial_index": null,
+     "signals": [],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Balance lead for charging."
+    }
+   ],
+   "specs": {
+    "cells": 4,
+    "nominal_v": 14.8,
+    "capacity_mah": 5000,
+    "c_rating": 50,
+    "burst_c": 100,
+    "dimensions_mm": [
+     154,
+     42,
+     32
+    ],
+    "energy_wh": 74.0
+   },
+   "ardupilot": {
+    "params": {
+     "BATT_CAPACITY": 5000
+    },
+    "notes": "Set BATT_LOW_VOLT/BATT_CRT_VOLT per club policy; not a vendor fact."
+   },
+   "sources": [
+    "https://us.ovonicshop.com/products/ovonic-50c-14-8v-5000mah-4s1p-xt60-and-trx-lipo-battery"
+   ],
+   "notes": "Substituted for a generic 'common 4S 5000 mAh' pick because it ships with an XT60 plug that matches the X500 V2 PDB; Gens Ace 4S 5000 packs found on official Gens Ace stores were EC5/Deans only. max_v 16.8 is the standard 4.2 V/cell full charge, not a vendor-stated figure; energy_wh is 14.8 V x 5 Ah."
+  },
+  {
+   "id": "holybro_pm02_v3",
+   "name": "Holybro PM02 V3 (12S) analog power module",
+   "vendor": "Holybro",
+   "role": "power_module",
+   "url": "https://holybro.com/products/pm02-v3-12s-power-module",
+   "price_usd": 18.99,
+   "mass_g": 20,
+   "supply": {
+    "min_v": 7.0,
+    "max_v": 50.4,
+    "typical_a": 0.02,
+    "peak_a": null
+   },
+   "logic_v": 3.3,
+   "ports": [
+    {
+     "id": "BATT_IN",
+     "connector": "XT60",
+     "kind": "power_in",
+     "serial_index": null,
+     "signals": [
+      "BAT+",
+      "BAT-"
+     ],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "2S to 12S input. Pre-soldered XT60 with 12 AWG wire is rated 30 A continuous / 60 A for under 1 minute (Holybro connector and wire rating page), which is lower than the 60 A PCB rating."
+    },
+    {
+     "id": "BATT_OUT",
+     "connector": "XT60",
+     "kind": "power_out",
+     "serial_index": null,
+     "signals": [
+      "BAT+",
+      "BAT-"
+     ],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": 30,
+     "notes": "Pass-through to the X500 V2 PDB."
+    },
+    {
+     "id": "FC_POWER",
+     "connector": "Molex-CLIK-Mate-2.0-6 or JST-GH-6 (both cables included)",
+     "kind": "power_out",
+     "serial_index": null,
+     "signals": [
+      "VCC_5V",
+      "VCC_5V",
+      "CURRENT",
+      "VOLTAGE",
+      "GND",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": 5.2,
+     "supply_out_max_a": 3.0,
+     "notes": "Use the included Molex 6-position cable for the Cube POWER1 port. Pinout is the Holybro analog power module standard (documented on the Holybro PM07 quick start guide and returned by Holybro docs search for PM02 V3); current and voltage signals are 0 to 3.3 V analog."
+    }
+   ],
+   "specs": {
+    "input_cells": "2S-12S",
+    "continuous_a": 60,
+    "burst_a": 100,
+    "burst_duration": "<60 s",
+    "max_current_sensing_a": 120,
+    "bec_output": "5.2 V / 3 A max",
+    "adc_reference_v": 3.3,
+    "voltage_divider": 18.182,
+    "amps_per_volt": 36.364,
+    "dimensions_mm": [
+     25,
+     25,
+     10
+    ]
+   },
+   "ardupilot": {
+    "params": {
+     "BATT_MONITOR": 4,
+     "BATT_VOLT_PIN": 14,
+     "BATT_CURR_PIN": 15,
+     "BATT_VOLT_MULT": 18.182,
+     "BATT_AMP_PERVLT": 36.364
+    },
+    "notes": "BATT_MONITOR=4 is 'Analog Voltage and Current'. Pins 14/15 are the Cube POWER1 defaults (hwdef HAL_BATT_VOLT_PIN 14 / HAL_BATT_CURR_PIN 15). The CubeOrangePlus defaults.parm sets 12.02 / 39.877 for the Power Brick Mini, so these two scaling values MUST be changed when using PM02 V3."
+   },
+   "sources": [
+    "https://holybro.com/products/pm02-v3-12s-power-module",
+    "https://docs.holybro.com/power-module-and-pdb/power-module/analog-power-module-setup",
+    "https://docs.holybro.com/power-module-and-pdb/power-module-comparison",
+    "https://docs.holybro.com/power-module-and-pdb/power-module/connector-and-wire-rating",
+    "https://docs.holybro.com/power-module-and-pdb/power-module/pm07-quick-start-guide",
+    "https://docs.px4.io/main/en/power_module/holybro_pm02",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_HAL_ChibiOS/hwdef/CubeOrangePlus/defaults.parm"
+   ],
+   "notes": "Kept as requested (the X500 V2 kit ships without a power module; Holybro recommends PM02D, PM03D or PM02 V3). The CubePilot Power Brick Mini bundled in the Cube standard set is a zero-cost alternative (30 A continuous / 100 A burst per IR-LOCK, up to 8S) that already matches the firmware default scaling. supply.min_v/max_v left null because Holybro gives a cell count (2S-12S) rather than volts.",
+   "estimates": {
+    "supply": "Holybro gives 2S to 12S; converted at 3.5 and 4.2 V per cell."
+   }
+  },
+  {
+   "id": "matek_bec12s_pro",
+   "name": "Mateksys BEC12S-PRO (set to 12 V)",
+   "vendor": "Mateksys",
+   "role": "regulator",
+   "url": "http://www.mateksys.com/?portfolio=bec12s-pro",
+   "price_usd": 31.74,
+   "mass_g": 5,
+   "supply": {
+    "min_v": 9,
+    "max_v": 55,
+    "typical_a": null,
+    "peak_a": null
+   },
+   "logic_v": null,
+   "ports": [
+    {
+     "id": "VIN",
+     "connector": "solder-pads",
+     "kind": "power_in",
+     "serial_index": null,
+     "signals": [
+      "VIN",
+      "GND"
+     ],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "9 to 55 V with TVS protection."
+    },
+    {
+     "id": "VOUT",
+     "connector": "solder-pads",
+     "kind": "power_out",
+     "serial_index": null,
+     "signals": [
+      "VOUT",
+      "GND"
+     ],
+     "logic_v": null,
+     "supply_out_v": 12,
+     "supply_out_max_a": 5,
+     "notes": "Selectable 5.2 V (default), 8 V or 12 V; 5 A continuous, 9 A peak. 'Input>=14V is required for stable 12V output'."
+    }
+   ],
+   "specs": {
+    "output_options_v": [
+     5.2,
+     8,
+     12
+    ],
+    "default_output_v": 5.2,
+    "continuous_a": 5,
+    "peak_a": 9,
+    "efficiency": "88% to 96%",
+    "dimensions_mm": [
+     35,
+     24,
+     5.5
+    ],
+    "min_input_for_12v_out_v": 14
+   },
+   "ardupilot": {
+    "params": {},
+    "notes": ""
+   },
+   "sources": [
+    "http://www.mateksys.com/?portfolio=bec12s-pro",
+    "https://openelab.com/products/mateksys-bec12s-pro-5a-voltage-regulator"
+   ],
+   "notes": "Compatibility caveat for the checker: a 4S pack sags below 14 V late in the flight, at which point the 12 V output is no longer regulated and tracks input minus dropout. It stays well inside the Jetson 9 to 20 V window, so the Jetson keeps running. A second BEC12S-PRO left at its 5.2 V default is a clean way to power the RFD900x off the autopilot (RFD900x needs 5.0 to 5.5 V). Note the Jetson accepts 9 to 20 V directly, so a 4S pack (about 12 to 16.8 V) is inside its range even without a regulator; the regulator is there to isolate motor noise and transients."
+  },
+  {
+   "id": "cubepilot_here4",
+   "name": "CubePilot Here4 Multiband RTK GNSS",
+   "vendor": "CubePilot",
+   "role": "gnss",
+   "url": "https://docs.cubepilot.org/here-4/here-4-manual",
+   "price_usd": 255.0,
+   "mass_g": 60,
+   "supply": {
+    "min_v": 4.75,
+    "max_v": 5.5,
+    "typical_a": 0.15,
+    "peak_a": 0.2
+   },
+   "logic_v": null,
+   "ports": [
+    {
+     "id": "CAN",
+     "connector": "JST-GH-4",
+     "kind": "can",
+     "serial_index": null,
+     "signals": [
+      "5V",
+      "CAN_H",
+      "CAN_L",
+      "GND"
+     ],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Only the Here4 CAN1 lead (green, blue, white, grey cable) is supported by current Here4 firmware. Plugs straight into Cube CAN1 or CAN2 (identical pin order). Powered from the Cube CAN 5 V pin.",
+     "terminated": true,
+     "speaks": [
+      "dronecan"
+     ]
+    },
+    {
+     "id": "UART",
+     "connector": null,
+     "kind": "uart",
+     "serial_index": null,
+     "signals": [
+      "5V",
+      "GPS_TX",
+      "GPS_RX",
+      "I2C_SCL",
+      "I2C_SDA",
+      "GND"
+     ],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Alternate 6-pin UART/I2C lead from the manual. Not used in this design (DroneCAN is used)."
+    }
+   ],
+   "specs": {
+    "gnss_module": "u-blox NEO-F9P (dual band L1/L5)",
+    "processor": "STM32H757",
+    "imu": "ICM42688",
+    "compass": "RM3100",
+    "barometer": "MS5611",
+    "protocol": "DroneCAN, CAN FD up to 8 Mbit/s",
+    "rtk_rover": true,
+    "rtk_update_rate_hz": 20,
+    "accuracy": "0.01 m + 1 ppm CEP",
+    "rtk_convergence_s": "<10",
+    "constellations": [
+     "GPS",
+     "GLONASS",
+     "Galileo",
+     "BeiDou",
+     "SBAS",
+     "QZSS"
+    ],
+    "size_mm": "16 x 68 (height x diameter)",
+    "mass_note": "60 g with cable",
+    "safety_switch": false,
+    "moving_baseline": "units produced after 2023-12-07 (GPS1_TYPE=22 base / GPS2_TYPE=23 rover)",
+    "firmware": "AP_Periph (CubePilot GNSSPeriph)"
+   },
+   "ardupilot": {
+    "params": {
+     "CAN_P1_DRIVER": 1,
+     "CAN_D1_PROTOCOL": 1,
+     "GPS1_TYPE": 9,
+     "GPS_AUTO_CONFIG": 1,
+     "NTF_LED_TYPES": 231
+    },
+    "notes": "Verified at Copter-4.7.1: GPS1_TYPE (TYPE inside the GPS1_ group; old GPS_TYPE is migrated to GPS1_TYPE), value 9 = DroneCAN. CAN_D1_PROTOCOL default is already 1 (DroneCAN), CAN_P1_DRIVER must be set to 1 and the board rebooted. The Here4 manual still says 'GPS_TYPE: 9', which is the pre-4.6 name. GPS1_CAN_OVRIDE in 4.7 is stored as GPS1_CAN_NODEID. Node IDs: the autopilot's own DroneCAN node ID is CAN_D1_UC_NODE (default 10) and the autopilot runs a dynamic node allocation (DNA) server; an AP_Periph node with CAN_NODE=0 requests an ID from that server. The database can be reset with CAN_D1_UC_OPTION bit 0. CAN FD is opt-in via CAN_D1_UC_OPTION bit 2."
+   },
+   "sources": [
+    "https://docs.cubepilot.org/here-4/here-4-manual",
+    "https://irlock.com/products/here4-multiband-rtk-gnss",
+    "https://www.readymaderc.com/products/details/85804-here4-multiband-rtk-gnss",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_GPS/AP_GPS.cpp",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_GPS/AP_GPS_Params.cpp",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_CANManager/AP_CANManager_CANDriver_Params.cpp",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_DroneCAN/AP_DroneCAN.cpp",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/Tools/AP_Periph/Parameters.cpp",
+    "https://ardupilot.org/copter/docs/common-uavcan-setup-advanced.html",
+    "https://discuss.cubepilot.org/t/here-4-gnss-power-consumption/14945"
+   ],
+   "notes": "Supply voltage and current are NOT published for Here4 (manual, IR-LOCK and RMRC pages all silent; a CubePilot forum thread only cites 150 mA for older Here units and 130 mA for the bare F9P during acquisition). It is powered from the 5 V CAN pin. The Here4 factory default of CAN_NODE is not documented; DNA is the normal behaviour. CubePilot SB_0000010 requires a Here4 bootloader update before flight on affected units.",
+   "estimates": {
+    "supply": "Unpublished; 150 mA is the figure CubePilot staff give for earlier Here units, and the range is the Cube 5 V peripheral rail it is designed for.",
+    "terminated": "Here4 ships as the end node of a CubePilot CAN bus; the Cube side is terminated on the carrier."
+   }
+  },
+  {
+   "id": "jetson_orin_nano_super_devkit",
+   "name": "NVIDIA Jetson Orin Nano Super Developer Kit (8GB)",
+   "vendor": "NVIDIA",
+   "role": "companion",
+   "url": "https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/nano-super-developer-kit/",
+   "price_usd": 399.0,
+   "mass_g": 175,
+   "supply": {
+    "min_v": 9,
+    "max_v": 20,
+    "typical_a": null,
+    "peak_a": null,
+    "typical_w": 15,
+    "peak_w": 25
+   },
+   "logic_v": 3.3,
+   "ports": [
+    {
+     "id": "DC_IN",
+     "connector": "DC-barrel-5.5x2.5",
+     "kind": "power_in",
+     "serial_index": null,
+     "signals": [
+      "VIN",
+      "GND"
+     ],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "J16, 'Main DC input supplying DC jack input (9-20 V)'; 19 V supply provided in the box. Barrel 5.5 mm OD, 9.5 mm length; 2.5 mm pin per NVIDIA hardware layout page."
+    },
+    {
+     "id": "HEADER_UART1",
+     "connector": "40-pin-2.54mm-header (pins 8,10,11,36,6)",
+     "kind": "uart",
+     "serial_index": null,
+     "signals": [
+      "UART1_TXD (pin 8)",
+      "UART1_RXD (pin 10)",
+      "UART1_RTS* (pin 11)",
+      "UART1_CTS* (pin 36)",
+      "GND (pin 6)"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "linux_device": "/dev/ttyTHS1",
+     "notes": "'All the signals on the expansion header use 3.3V levels' (carrier board spec SP-11324-001_v1.3). Enabled by default on /dev/ttyTHS1 (NVIDIA forum moderator). Direct 3.3 V to 3.3 V connection to a Cube TELEM port, crossing TX/RX. Known issue reported June 2026: on JetPack 7 / L4T R39.2 the pinmux is not applied and pin 8 does not drive; NVIDIA suggests a pinmux spreadsheet flash, so pin the JetPack version or use USB.",
+     "speaks": [
+      "mavlink2",
+      "dds_xrce"
+     ]
+    },
+    {
+     "id": "HEADER_5V",
+     "connector": "40-pin-2.54mm-header (pins 2,4)",
+     "kind": "power_out",
+     "serial_index": null,
+     "signals": [
+      "5V",
+      "5V"
+     ],
+     "logic_v": null,
+     "supply_out_v": 5,
+     "supply_out_max_a": 1.0,
+     "notes": "Pin 2 listed as 'Main 5.0V Supply (input/output) 1A'."
+    },
+    {
+     "id": "ETH",
+     "connector": "RJ45",
+     "kind": "ethernet",
+     "serial_index": null,
+     "signals": [],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Gigabit Ethernet.",
+     "speaks": [
+      "ethernet"
+     ]
+    },
+    {
+     "id": "USB_A",
+     "connector": "USB-A x4",
+     "kind": "usb",
+     "serial_index": null,
+     "signals": [],
+     "logic_v": null,
+     "supply_out_v": 5,
+     "supply_out_max_a": null,
+     "notes": "USB 3.2 Type-A x4, 10 Gbps.",
+     "speaks": [
+      "mavlink2"
+     ]
+    },
+    {
+     "id": "USB_C",
+     "connector": "USB-C",
+     "kind": "usb",
+     "serial_index": null,
+     "signals": [],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Host/device/recovery."
+    }
+   ],
+   "specs": {
+    "ai_perf": "67 INT8 TOPS",
+    "power_modes": [
+     "7W",
+     "15W",
+     "25W (default)",
+     "MAXN SUPER"
+    ],
+    "power_range_w": "7-25",
+    "memory": "8GB 128-bit LPDDR5, 102 GB/s",
+    "cpu": "6-core Arm Cortex-A78AE v8.2, 1.7 GHz",
+    "gpu": "Ampere, 1024 CUDA cores, 32 tensor cores",
+    "m2": [
+     "Key M 2280 PCIe Gen3 x4",
+     "Key M 2230 PCIe Gen3 x2",
+     "Key E 2230 (WiFi)"
+    ],
+    "csi": "2x 22-pin",
+    "operating_temp_c": [
+     0,
+     35
+    ],
+    "launch_price_usd": 249,
+    "price_note": "NVIDIA raised the list price from 249 to 399 USD in July 2026"
+   },
+   "ardupilot": {
+    "params": {
+     "SERIAL2_PROTOCOL": 45,
+     "SERIAL2_BAUD": 115,
+     "DDS_ENABLE": 1
+    },
+    "notes": "DDS over TELEM2 at 115200 matches ArduPilot's ROS 2 docs (micro_ros_agent serial -b 115200) and AP_DDS README. Needs a custom firmware build with DDS because the stable CubeOrangePlus build excludes AP_DDS. Fallback without a custom build: SERIAL2_PROTOCOL=2 (MAVLink2) at 921 with BRD_SER2_RTSCTS for MAVROS/mavlink-router."
+   },
+   "sources": [
+    "https://developer.nvidia.com/downloads/assets/embedded/secure/jetson/orin_nano/docs/jetson_orin_nano_devkit_carrier_board_specification_sp.pdf",
+    "https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/hardware_layout.html",
+    "https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/quick_start.html",
+    "https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/nano-super-developer-kit/",
+    "https://forums.developer.nvidia.com/t/enable-uart1/341484/4",
+    "https://forums.developer.nvidia.com/t/ttyths1-uart1-40-pin-header-pins-8-10-tx-pad-does-not-drive-on-jetpack-7-l4t-r39-2-orin-nano-super-devkit/373290",
+    "https://www.cnx-software.com/2026/07/22/nvidia-increases-the-price-of-jetson-modules-and-devkits-by-up-to-101/",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_DDS/README.md",
+    "https://ardupilot.org/dev/docs/ros2-pi.html"
+   ],
+   "notes": "Mass 175 g is from the carrier board spec ('The Developer Kit Weighs 0.175kg'). Current draw is not published as amps; at 25 W from a 12 V regulator that is roughly 2.1 A (derived, not vendor data). Price 399 USD is NVIDIA's list after the July 2026 increase (per CNX Software and Hardware Busters); street prices vary widely."
+  },
+  {
+   "id": "siyi_a8_mini",
+   "name": "SIYI A8 mini gimbal camera",
+   "vendor": "SIYI",
+   "role": "camera",
+   "url": "https://shop.siyi.biz/products/siyi-a8-mini-gimbal-camera",
+   "price_usd": 257.4,
+   "mass_g": 95,
+   "supply": {
+    "min_v": 11,
+    "max_v": 25.2,
+    "typical_a": null,
+    "peak_a": null,
+    "typical_w": 5,
+    "peak_w": 12
+   },
+   "logic_v": 3.3,
+   "ports": [
+    {
+     "id": "POWER",
+     "connector": null,
+     "kind": "power_in",
+     "serial_index": null,
+     "signals": [],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "11 to 25.2 V (3S to 6S), average 5 W, peak 12 W. Units made before June 2023 may not support the top of that range (v1.2 manual said 11 to 16.8 V). Run directly off the 4S battery. Yellow LED blinks if input is below 10 V."
+    },
+    {
+     "id": "ETH",
+     "connector": null,
+     "kind": "ethernet",
+     "serial_index": null,
+     "signals": [],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Video (RTSP rtsp://192.168.144.25:8554/main.264) and UDP control (port 37260). Default IP 192.168.144.25. Include the SIYI Ethernet to RJ45 cable.",
+     "speaks": [
+      "ethernet"
+     ]
+    },
+    {
+     "id": "UART",
+     "connector": null,
+     "kind": "uart",
+     "serial_index": null,
+     "signals": [
+      "TX",
+      "RX",
+      "GND"
+     ],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "TTL serial, 115200 8N1, part of the '3 in 1 control cable' (UART input, S.Bus in and out).",
+     "speaks": [
+      "siyi"
+     ]
+    },
+    {
+     "id": "SBUS",
+     "connector": null,
+     "kind": "rc_in",
+     "serial_index": null,
+     "signals": [],
+     "logic_v": null,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "S.Bus input and output."
+    }
+   ],
+   "specs": {
+    "sensor": "8MP 1/1.7 in Sony CMOS",
+    "video": "4K recording, 6X digital zoom",
+    "yaw_range_deg": 320,
+    "video_outputs": [
+     "Ethernet",
+     "Micro-HDMI",
+     "CVBS"
+    ],
+    "control_inputs": [
+     "S.Bus",
+     "UART",
+     "Ethernet UDP/TCP"
+    ],
+    "uart_baud": 115200,
+    "power_avg_w": 5,
+    "power_peak_w": 12,
+    "dimensions_mm": [
+     55,
+     55,
+     70
+    ],
+    "min_firmware_for_ardupilot": "0.1.7"
+   },
+   "ardupilot": {
+    "params": {
+     "SERIAL4_PROTOCOL": 8,
+     "SERIAL4_BAUD": 115,
+     "MNT1_TYPE": 8,
+     "CAM1_TYPE": 4,
+     "MNT1_PITCH_MIN": -90,
+     "MNT1_PITCH_MAX": 25,
+     "MNT1_YAW_MIN": -135,
+     "MNT1_YAW_MAX": 135
+    },
+    "notes": "ArduPilot wiki example uses TELEM2; any spare UART works. SERIALn_PROTOCOL 8 is 'Gimbal' in 4.7.1 (wiki calls it 'SToRM32 Gimbal Serial'). MNT1_TYPE 8 = Siyi. CAM1_TYPE 4 = 'Mount (Siyi/Topotek/Viewpro/Xacti)'. Serial-over-Ethernet control is also possible (NET_ENABLE, NET_P1_TYPE=1, NET_P1_PORT=37260, NET_P1_PROTOCOL=8) but the Cube Orange+ has no Ethernet PHY, so here video goes to the Jetson over Ethernet and control goes over UART."
+   },
+   "sources": [
+    "https://siyi.biz/en/product/tri-axis-single-camera-gimbal/a8-mini/spec",
+    "https://shop.siyi.biz/products/siyi-a8-mini-gimbal-camera",
+    "https://m.xcopter.com/download/A8%20mini%20User%20Manual%20v1.2.pdf",
+    "https://ardupilot.org/copter/docs/common-siyi-zr10-gimbal.html",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_Mount/AP_Mount_Params.cpp"
+   ],
+   "notes": "UART logic level is not stated by SIYI ('TTL serial port' only), so logic_v is null; ArduPilot's wiring diagram connects it directly to autopilot UARTs. Connector types and pin order for the gimbal-side ports are not published in text form (only in cable drawings); SIYI supplies ready-made cables. Current in amps is derived only from watts: about 0.34 A average and 0.81 A peak at 14.8 V (derived).",
+   "estimates": {
+    "logic_v": "SIYI only says \"TTL\"; ArduPilot wires it straight to 3.3 V autopilot UARTs."
+   }
+  },
+  {
+   "id": "radiomaster_rp3_v2",
+   "name": "RadioMaster RP3 V2 ExpressLRS 2.4GHz Nano receiver",
+   "vendor": "RadioMaster",
+   "role": "rc_receiver",
+   "url": "https://radiomasterrc.com/products/rp3-expresslrs-2-4ghz-nano-receiver",
+   "price_usd": 22.99,
+   "mass_g": 4.6,
+   "supply": {
+    "min_v": 5,
+    "max_v": 5,
+    "typical_a": 0.12,
+    "peak_a": 0.15
+   },
+   "logic_v": 3.3,
+   "ports": [
+    {
+     "id": "UART",
+     "connector": "solder-pads",
+     "kind": "uart",
+     "serial_index": null,
+     "signals": [
+      "5V",
+      "GND",
+      "TX",
+      "RX"
+     ],
+     "signals_unordered": true,
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Pad labels only; RadioMaster does not publish a pin order. Receiver TX goes to autopilot RX and vice versa (full UART required for CRSF telemetry and for MAVLink mode). ELRS wiring guide: VCC to a 5 V pad.",
+     "speaks": [
+      "crsf",
+      "mavlink2"
+     ]
+    }
+   ],
+   "specs": {
+    "mcu": "ESP8285",
+    "rf_chip": "SX1281",
+    "band_ghz": [
+     2.404,
+     2.479
+    ],
+    "telemetry_power_mw": 100,
+    "max_packet_rate": "500Hz / F1000Hz",
+    "bus": "CRSF",
+    "firmware_preinstalled": "ExpressLRS v3.0 (target RadioMaster RP3 Diversity 2400 RX)",
+    "dimensions_mm": [
+     22,
+     13,
+     4
+    ],
+    "antennas": "2x 65 mm T antenna",
+    "crsf_baud_elrs": 420000,
+    "crsf_baud_tbs": 416666,
+    "logic_v_verified": false
+   },
+   "ardupilot": {
+    "params": {
+     "SERIAL4_PROTOCOL": 23,
+     "RSSI_TYPE": 3,
+     "RC_OPTIONS": 8704
+    },
+    "notes": "CRSF mode: SERIALn_PROTOCOL=23 (RCIN), RSSI_TYPE=3 (ReceiverProtocol), baud is auto-set by firmware. RC_OPTIONS 8704 = bit 9 (512, suppress CRSF mode/rate message for ELRS) + bit 13 (8192, use 420 kbaud for ELRS). ELRS MAVLink mode (needs ELRS 3.5.0+ on TX and RX, TX Backpack 1.5.0+): SERIALn_PROTOCOL=2, RSSI_TYPE=5 (TelemetryRadioRSSI); baud is 460 per the ExpressLRS docs ('fixed baud rate of 460800') but 115 per the ArduPilot wiki, so follow ExpressLRS and verify. MAVLink mode forces Hybrid/16ch-2 switch mode and telemetry ratio 1:2. The ExpressLRS docs list SRx_ stream-rate params; in 4.7 these are MAVn_ params. Use GPS2 (SERIAL4, RX has DMA) rather than GPS1 (UART4 RX is NODMA)."
+   },
+   "sources": [
+    "https://radiomasterrc.com/products/rp3-expresslrs-2-4ghz-nano-receiver",
+    "https://ardupilot.org/copter/docs/common-tbs-rc.html",
+    "https://www.expresslrs.org/quick-start/ardupilot-setup/",
+    "https://www.expresslrs.org/software/mavlink/",
+    "https://www.expresslrs.org/quick-start/receivers/wiring-up/",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/RC_Channel/RC_Channels_VarInfo.h"
+   ],
+   "notes": "Current draw is not published. UART logic level is not stated by RadioMaster; 3.3 V is inferred from the ESP8285 MCU (a 3.3 V part), flagged as logic_v_verified=false. The 5 V supply is a nominal 'DC 5V'; no tolerance band is published.",
+   "estimates": {
+    "typical_a": "Unpublished; ESP8285 plus SX1281 at 100 mW telemetry."
+   }
+  },
+  {
+   "id": "radiomaster_boxer_m2_elrs",
+   "name": "RadioMaster Boxer Radio Controller (M2), ELRS",
+   "vendor": "RadioMaster",
+   "role": "rc_transmitter",
+   "url": "https://radiomasterrc.com/products/boxer-radio-controller-m2",
+   "price_usd": 153.99,
+   "mass_g": null,
+   "supply": null,
+   "logic_v": null,
+   "ports": [],
+   "specs": {
+    "rf": "internal ExpressLRS 2.4 GHz, fan cooled, default 100 mW",
+    "band_ghz": [
+     2.4,
+     2.48
+    ],
+    "backpack": "built-in ExpressLRS Backpack (enables WiFi MAVLink forwarding in ELRS MAVLink mode)"
+   },
+   "ardupilot": {
+    "params": {},
+    "notes": ""
+   },
+   "sources": [
+    "https://radiomasterrc.com/products/boxer-radio-controller-m2"
+   ],
+   "notes": "EU LBT version is limited to 100 mW. Mass not captured."
+  },
+  {
+   "id": "rfd900x_us",
+   "name": "RFDesign RFD900x-US telemetry modem",
+   "vendor": "RFDesign",
+   "role": "telemetry_radio",
+   "url": "https://www.readymaderc.com/products/details/rfdesign-rfd-900x-modem-us-fcc",
+   "price_usd": 120.9,
+   "mass_g": 14,
+   "supply": {
+    "min_v": 5.0,
+    "max_v": 5.5,
+    "typical_a": 0.06,
+    "peak_a": 1.0
+   },
+   "logic_v": 3.3,
+   "ports": [
+    {
+     "id": "HEADER",
+     "connector": "2x8-0.1in-header-16",
+     "kind": "uart",
+     "serial_index": null,
+     "signals": [
+      "GND",
+      "GND",
+      "CTS",
+      "VCC_5V",
+      "VUSB",
+      "VUSB",
+      "RX",
+      "GPIO5",
+      "TX",
+      "GPIO4",
+      "RTS",
+      "GPIO3",
+      "GPIO0",
+      "GPIO2",
+      "GPIO1_PPM",
+      "GND"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Datasheet pin table, pin 1 first. External power goes to pins 2 (GND) and 4 (+5 V). Serial interface '+3.3V nominal, +3.5V ABS Max' (datasheet); ArduPilot wiki describes it as '+5v tolerant'. Needs a JST-GH-6 to 0.1 in adapter cable for the Cube TELEM port (CTS/RTS optional).",
+     "speaks": [
+      "mavlink1",
+      "mavlink2"
+     ]
+    }
+   ],
+   "specs": {
+    "band_mhz": [
+     902,
+     915
+    ],
+    "band_note": "US-locked variant 902-915 MHz, 51 channels (datasheet); RMRC page says 902-928 MHz. Unlocked RFD900x is 902-928 MHz.",
+    "tx_power_dbm_max": 30,
+    "air_rates_kbps": [
+     12,
+     56,
+     64,
+     100,
+     125,
+     200,
+     224,
+     500,
+     750
+    ],
+    "default_air_speed_kbps": 64,
+    "default_serial_baud": 57600,
+    "default_netid": 25,
+    "default_txpower_dbm": 30,
+    "serial_rates": [
+     2400,
+     4800,
+     9600,
+     19200,
+     38400,
+     57600,
+     115200,
+     230400,
+     460800,
+     1000000
+    ],
+    "dimensions_mm": [
+     30,
+     57.7,
+     12.8
+    ],
+    "firmware": "SiK / Point-to-Point (factory default)",
+    "antenna_ports": "2x RP-SMA, diversity switched",
+    "tx_current_peak_a_datasheet": 1.0,
+    "tx_current_peak_a_ardupilot_wiki": 0.8,
+    "rx_current_a": 0.06,
+    "can_cube_telem_5v_power_it": false
+   },
+   "ardupilot": {
+    "params": {
+     "SERIAL1_PROTOCOL": 2,
+     "SERIAL1_BAUD": 57
+    },
+    "notes": "MAVLink2 on TELEM1 at 57600 to match the radio's factory SERIAL_SPEED. Power the radio from a separate 5 V BEC, share ground with the Cube, and do not connect the Cube TELEM 5 V pin."
+   },
+   "sources": [
+    "https://files.rfdesign.com.au/Files/documents/RFD900x%20DataSheet%20V1.2.pdf",
+    "https://files.rfdesign.com.au/Files/documents/RFD900x%20Peer-to-peer%20V3.X%20User%20Manual%20V1.4.pdf",
+    "https://ardupilot.org/copter/docs/common-rfd900.html",
+    "https://www.readymaderc.com/products/details/rfdesign-rfd-900x-modem-us-fcc",
+    "https://docs.cubepilot.org/service-bulletins-and-critical-notices/critical-notices/powering-telemetry-radios-externally",
+    "https://docs.cubepilot.org/autopilot/the-cube/introduction/power-architecture"
+   ],
+   "notes": "Can a Cube TELEM 5 V pin supply it? No. Datasheet peak is 1 A at 30 dBm; TELEM1 has a 1.5 A private limit, but CubePilot explicitly says never to power radios from carrier board connectors, TELEM2 sits in the shared 1 A group, and the whole peripheral budget is 2.5 A. Mass: datasheet says 14 g, RMRC lists 18 g. Supply: datasheet says +5 V min / +5.5 V max / +6 V absolute max, while RMRC says 3.5 V min; the datasheet is used. AIR_SPEED default is written '64/200' in the manual (footnoted), so 64 kbps is the usual SiK default but check the unit."
+  },
+  {
+   "id": "benewake_tfmini_s",
+   "name": "Benewake TFmini-S LiDAR (I2C mode)",
+   "vendor": "Benewake",
+   "role": "rangefinder",
+   "url": "https://en.benewake.com/TFminiS/index.html",
+   "price_usd": null,
+   "mass_g": 5,
+   "supply": {
+    "min_v": 4.9,
+    "max_v": 5.1,
+    "typical_a": 0.14,
+    "peak_a": 0.2
+   },
+   "logic_v": 3.3,
+   "ports": [
+    {
+     "id": "MAIN",
+     "connector": "GH1.25-4P on sensor; Molex 51021-0400 (1.25 mm) on the 10 cm cable end",
+     "kind": "i2c",
+     "serial_index": null,
+     "signals": [
+      "GND",
+      "5V",
+      "RXD/SDA",
+      "TXD/SCL"
+     ],
+     "logic_v": 3.3,
+     "supply_out_v": null,
+     "supply_out_max_a": null,
+     "notes": "Pin 1 black GND, pin 2 red +5V, pin 3 white RXD/SDA, pin 4 green TXD/SCL. Pin order differs from the Cube I2C port (5V, SCL, SDA, GND) and the cable end is not JST-GH, so a re-pinned cable is required. Ships in UART mode (115200 8N1); send 5A 05 0A 01 then the save command to switch to I2C.",
+     "speaks": [
+      "i2c",
+      "benewake_uart"
+     ],
+     "i2c_address": 16
+    }
+   ],
+   "specs": {
+    "range_m": "0.1-12 @90% reflectivity, 0.1-7 @10%",
+    "accuracy": "+/-6 cm (0.1-6 m), +/-1% (6-12 m)",
+    "frame_rate_hz": "1-1000 (default 100)",
+    "fov_deg": 2,
+    "interfaces": [
+     "UART",
+     "I2C",
+     "I/O"
+    ],
+    "default_interface": "UART",
+    "uart_default_baud": 115200,
+    "i2c_default_address": "0x10",
+    "i2c_address_range": "0x01-0x7F",
+    "i2c_max_rate": "400 kbps",
+    "power_w_max": 0.7,
+    "dimensions_mm": [
+     42,
+     15,
+     16
+    ],
+    "operating_temp_c": [
+     0,
+     60
+    ],
+    "i2c_max_hz": 400000
+   },
+   "ardupilot": {
+    "params": {
+     "RNGFND1_TYPE": 25,
+     "RNGFND1_ADDR": 16,
+     "RNGFND1_ORIENT": 25,
+     "RNGFND1_MIN": 0.1,
+     "RNGFND1_MAX": 6
+    },
+    "notes": "RNGFND1_TYPE 25 = 'BenewakeTFmini-I2C' in 4.7.1 (wiki calls it 'Benewake TFminiPlus-I2C'). RNGFND1_ADDR is decimal: 16 = 0x10. 4.7 uses metres (RNGFND1_MIN / RNGFND1_MAX); the old _CM names are gone. Wiki suggests MAX 10 indoors or 6 outdoors, MIN 0.3 for TFmini and 0.1 for TFmini Plus. ORIENT 25 = Down. Serial alternative: SERIALn_PROTOCOL=9, SERIALn_BAUD=115, RNGFND1_TYPE=20."
+   },
+   "sources": [
+    "https://en.benewake.com/uploadfiles/2024/04/20240426140025367.pdf",
+    "https://en.benewake.com/uploadfiles/2024/04/20240426140053930.pdf",
+    "https://cdn.sparkfun.com/assets/8/a/f/a/c/16977-TFMini-S_-_Micro_LiDAR_Module-Product_Manual.pdf",
+    "https://ardupilot.org/copter/docs/common-benewake-tfmini-lidar.html",
+    "https://github.com/ArduPilot/ardupilot/blob/Copter-4.7.1/libraries/AP_RangeFinder/AP_RangeFinder_Params.cpp"
+   ],
+   "notes": "Chosen over the LightWare LW20/C because it is 5 g, cheap and supported in the stable build. LW20/C alternative for reference: RNGFND1_TYPE=7 (LightWareI2C), RNGFND1_ADDR=102 (0x66) per ArduPilot wiki. Supply is 5 V +/- 0.1 V per datasheet, so the Cube 5 V peripheral rail (up to 5.5 V after filtering per CubePilot) is nominally outside that tight band; in practice it is widely used this way, but the checker should flag it as a warning, not an error. Price not verified (retailer pages blocked or sold out). Ships in UART mode: send the \"switch to I2C\" command from the user manual once before wiring it to the I2C port."
+  }
+ ],
+ "open_questions": [
+  "Mass of the ADS-B carrier board (and therefore cube plus carrier) is not published anywhere found; only the 33 g cube module mass is.",
+  "Exact connector family and pin order of the CONS, SBUS OUT, SPKT and ADC headers on the ADS-B carrier: ArduPilot README gives 3-pin tables and says JST-GH unless noted; CubePilot shows a combined 6-pin CONS/SBUSo header. Check the physical board.",
+  "Whether the CONS header is still populated on the ADS-B carrier given that SERIAL5 drives the built-in ADS-B receiver.",
+  "Which ArduPilot I2C bus number maps to GPS1 vs GPS2 vs the I2C2 port: CubePilot/README (GPS1=I2C1, GPS2=I2C2) and the ArduPilot wiki table (GPS1=I2C2, GPS2=I2C1) disagree.",
+  "Holybro 2216 KV920 thrust table, motor mass, ESC mass, ESC MCU clock (decides DShot600 support) and ESC burst rating are unpublished.",
+  "Here4 supply voltage range and current draw are unpublished; factory CAN_NODE default not documented.",
+  "SIYI A8 mini UART logic level and connector types are not stated in text; the ArduPilot wiki shows a direct UART connection.",
+  "RadioMaster RP3 V2 current draw and UART logic level are unpublished (3.3 V inferred from ESP8285).",
+  "ELRS MAVLink mode baud: ExpressLRS docs say fixed 460800 (SERIALn_BAUD=460), ArduPilot wiki example says 115.",
+  "RFD900x-US frequency range: datasheet says US-locked 902-915 MHz, reseller page says 902-928 MHz.",
+  "TFmini-S and RFD900x retail prices could not be confirmed on an accessible vendor page (TFmini-S left null).",
+  "Jetson Orin Nano Super UART1 (/dev/ttyTHS1) has a reported TX pinmux bug on JetPack 7 / L4T R39.2 (June 2026 forum thread, no official fix yet).",
+  "DDS on the Cube Orange+ requires a custom firmware build because the stable 4.7.1 build excludes AP_DDS."
+ ]
+}

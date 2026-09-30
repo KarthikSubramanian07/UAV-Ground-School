@@ -1,0 +1,336 @@
+{
+  "name": "Protocol Pro",
+  "summary": "A 500 mm RTK survey quad: Cube Orange+ flight controller, Here4 RTK GNSS on DroneCAN, Jetson Orin Nano companion on DDS and MAVLink, SIYI gimbal camera, ExpressLRS control and a 900 MHz telemetry link.",
+  "firmware": "ArduCopter 4.7.1 custom build with AP_DDS",
+  "parts": {
+    "fc": {
+      "part": "cube_orange_plus_adsb",
+      "label": "Cube Orange+",
+      "x": 600,
+      "y": 380
+    },
+    "frame": {
+      "part": "holybro_x500_v2_frame",
+      "label": "X500 V2 frame"
+    },
+    "motor": {
+      "part": "holybro_2216_kv920",
+      "count": 4,
+      "label": "2216 KV920",
+      "included_in": "frame"
+    },
+    "esc": {
+      "part": "holybro_blheli_s_20a",
+      "count": 4,
+      "label": "ESC 20A",
+      "x": 600,
+      "y": 700,
+      "included_in": "frame"
+    },
+    "prop": {
+      "part": "holybro_1045_prop",
+      "count": 4,
+      "label": "1045 prop",
+      "included_in": "frame"
+    },
+    "battery": {
+      "part": "ovonic_4s_5000_50c",
+      "label": "4S 5000 mAh",
+      "x": 140,
+      "y": 700
+    },
+    "pm": {
+      "part": "holybro_pm02_v3",
+      "label": "PM02 V3",
+      "x": 140,
+      "y": 560
+    },
+    "bec12": {
+      "part": "matek_bec12s_pro",
+      "label": "BEC 12 V",
+      "x": 140,
+      "y": 420,
+      "setting_v": 12.0
+    },
+    "bec5": {
+      "part": "matek_bec12s_pro",
+      "label": "BEC 5.2 V",
+      "x": 1060,
+      "y": 700,
+      "setting_v": 5.2
+    },
+    "gnss": {
+      "part": "cubepilot_here4",
+      "label": "Here4 RTK",
+      "x": 600,
+      "y": 90
+    },
+    "companion": {
+      "part": "jetson_orin_nano_super_devkit",
+      "label": "Jetson Orin Nano",
+      "x": 140,
+      "y": 270
+    },
+    "camera": {
+      "part": "siyi_a8_mini",
+      "label": "SIYI A8 mini",
+      "x": 140,
+      "y": 110
+    },
+    "rx": {
+      "part": "radiomaster_rp3_v2",
+      "label": "ELRS RP3",
+      "x": 1060,
+      "y": 260
+    },
+    "radio": {
+      "part": "rfd900x_us",
+      "label": "RFD900x",
+      "x": 1060,
+      "y": 430
+    },
+    "lidar": {
+      "part": "benewake_tfmini_s",
+      "label": "TFmini-S",
+      "x": 1060,
+      "y": 100
+    }
+  },
+  "ground": {
+    "gcs": {
+      "label": "Ground station laptop (Mission Planner or QGroundControl)"
+    },
+    "radio_ground": {
+      "part": "rfd900x_us",
+      "label": "RFD900x ground unit"
+    },
+    "tx": {
+      "part": "radiomaster_boxer_m2_elrs",
+      "label": "RadioMaster Boxer"
+    },
+    "base": {
+      "part": "cubepilot_here4",
+      "label": "Here4 as RTK base (USB)"
+    }
+  },
+  "links": [
+    {
+      "id": "telemetry",
+      "a": "fc.TELEM1",
+      "b": "radio.HEADER",
+      "protocol": "mavlink2",
+      "baud": 57600,
+      "flow_control": true,
+      "powered_by": "bec5",
+      "purpose": "MAVLink to the ground station, and RTK corrections up to the drone",
+      "streams": {
+        "RAW_SENS": 1,
+        "EXT_STAT": 2,
+        "RC_CHAN": 1,
+        "POSITION": 3,
+        "EXTRA1": 4,
+        "EXTRA2": 2,
+        "EXTRA3": 2,
+        "PARAMS": 0,
+        "ADSB": 2
+      }
+    },
+    {
+      "id": "companion_dds",
+      "a": "fc.TELEM2",
+      "b": "companion.HEADER_UART1",
+      "protocol": "dds_xrce",
+      "baud": 921600,
+      "flow_control": true,
+      "powered_by": "self",
+      "purpose": "ROS 2 topics between the autopilot and the Jetson (DDS, the in drone half of the hybrid model)"
+    },
+    {
+      "id": "companion_mavlink",
+      "a": "fc.USB_GH",
+      "b": "companion.USB_A",
+      "protocol": "mavlink2",
+      "baud": 0,
+      "powered_by": "self",
+      "purpose": "MAVLink for mission logic and a UDP bridge to the ground over WiFi",
+      "streams": {
+        "RAW_SENS": 0,
+        "EXT_STAT": 2,
+        "RC_CHAN": 0,
+        "POSITION": 10,
+        "EXTRA1": 20,
+        "EXTRA2": 4,
+        "EXTRA3": 2,
+        "PARAMS": 0,
+        "ADSB": 0
+      }
+    },
+    {
+      "id": "gimbal",
+      "a": "fc.GPS1",
+      "b": "camera.UART",
+      "protocol": "siyi",
+      "baud": 115200,
+      "powered_by": "self",
+      "purpose": "Gimbal angles and camera triggers from the autopilot"
+    },
+    {
+      "id": "rc",
+      "a": "fc.GPS2",
+      "b": "rx.UART",
+      "protocol": "crsf",
+      "baud": 420000,
+      "powered_by": "fc",
+      "purpose": "Pilot sticks in, link statistics and telemetry out"
+    },
+    {
+      "id": "can",
+      "a": "fc.CAN1",
+      "b": "gnss.CAN",
+      "protocol": "dronecan",
+      "bitrate": 1000000,
+      "powered_by": "fc",
+      "purpose": "RTK position, compass, barometer, LED and buzzer on one bus"
+    },
+    {
+      "id": "lidar",
+      "a": "fc.I2C2",
+      "b": "lidar.MAIN",
+      "protocol": "i2c",
+      "clock_hz": 100000,
+      "address": 16,
+      "powered_by": "fc",
+      "purpose": "Height above ground for landing and terrain following"
+    },
+    {
+      "id": "video",
+      "a": "camera.ETH",
+      "b": "companion.ETH",
+      "protocol": "ethernet",
+      "purpose": "RTSP video to the Jetson for detection"
+    },
+    {
+      "id": "motors",
+      "a": "fc.AUX1-4",
+      "b": "esc.SIGNAL",
+      "protocol": "dshot300",
+      "purpose": "Motor commands"
+    }
+  ],
+  "power": [
+    {
+      "id": "main",
+      "from": "battery.MAIN",
+      "to": "pm.BATT_IN",
+      "wire_awg": 12
+    },
+    {
+      "id": "pdb",
+      "from": "pm.BATT_OUT",
+      "to": "esc.POWER",
+      "wire_awg": 12
+    },
+    {
+      "id": "fc_power",
+      "from": "pm.FC_POWER",
+      "to": "fc.POWER1"
+    },
+    {
+      "id": "bec12_in",
+      "from": "pm.BATT_OUT",
+      "to": "bec12.VIN"
+    },
+    {
+      "id": "bec5_in",
+      "from": "pm.BATT_OUT",
+      "to": "bec5.VIN"
+    },
+    {
+      "id": "jetson_power",
+      "from": "bec12.VOUT",
+      "to": "companion.DC_IN"
+    },
+    {
+      "id": "camera_power",
+      "from": "pm.BATT_OUT",
+      "to": "camera.POWER"
+    },
+    {
+      "id": "radio_power",
+      "from": "bec5.VOUT",
+      "to": "radio.HEADER"
+    }
+  ],
+  "wireless": [
+    {
+      "id": "elrs",
+      "a": "tx",
+      "b": "rx",
+      "band_mhz": [
+        2400,
+        2480
+      ],
+      "protocol": "ExpressLRS 250 Hz",
+      "tx_dbm": 20,
+      "sensitivity_dbm": -108,
+      "gain_dbi": [
+        2,
+        2
+      ],
+      "source": "https://www.expresslrs.org/info/signal-health/"
+    },
+    {
+      "id": "sik",
+      "a": "radio_ground",
+      "b": "radio",
+      "band_mhz": [
+        902,
+        915
+      ],
+      "protocol": "SiK (MAVLink transparent)",
+      "tx_dbm": 30,
+      "sensitivity_dbm": -105,
+      "gain_dbi": [
+        3,
+        3
+      ],
+      "air_kbps": 64,
+      "source": "RFD900x datasheet V1.2, sensitivity at 64 kbps"
+    },
+    {
+      "id": "wifi",
+      "a": "companion",
+      "b": "gcs",
+      "band_mhz": [
+        5150,
+        5850
+      ],
+      "protocol": "WiFi 5 GHz, MAVLink over UDP"
+    },
+    {
+      "id": "gnss",
+      "a": "sky",
+      "b": "gnss",
+      "band_mhz": [
+        1176,
+        1610
+      ],
+      "protocol": "GNSS L1 and L5 (receive only)"
+    },
+    {
+      "id": "adsb",
+      "a": "sky",
+      "b": "fc",
+      "band_mhz": [
+        1090,
+        1090
+      ],
+      "protocol": "ADS-B IN (receive only)"
+    }
+  ],
+  "payload_mass_g": {
+    "wiring, mounts and screws": 80,
+    "Jetson mount and fan duct": 40,
+    "gimbal mount": 25
+  }
+}
