@@ -22,8 +22,10 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install ruff
-      - run: ruff check week02 week03 tests scripts
-      - run: ruff format --check week02 week03 tests scripts || echo "formatting differences are advisory"
+      - run: ruff check week02 week03 week04 tests scripts
+      - name: Formatting (enforced for week 4)
+        run: ruff format --check week04 tests/test_week04_*.py
+      - run: ruff format --check week02 week03 tests scripts || echo "formatting differences outside week 4 are advisory"
       - name: No em or en dashes in tracked text
         run: |
           if git grep -nIP '[\x{2013}\x{2014}]' -- . ':!*.pdf'; then
@@ -44,10 +46,10 @@ jobs:
           cache: pip
       - name: Install
         run: |
-          pip install opencv-python-headless numpy pytest pytest-cov scikit-image
+          pip install opencv-python-headless numpy pytest pytest-cov scikit-image pymavlink dronecan pyrtcm
           pip install -e . --no-deps
       - name: Test
-        run: pytest --cov=week02 --cov=week03 --cov-report=term-missing --cov-report=xml
+        run: pytest --cov=week02 --cov=week03 --cov=week04 --cov-report=term-missing --cov-report=xml
       - uses: actions/upload-artifact@v4
         if: matrix.python-version == '3.12'
         with:
@@ -66,6 +68,8 @@ jobs:
           cmake --build build/cpp -j
           cmake -S week03/cpp -B build/cpp3 -DCMAKE_BUILD_TYPE=Release
           cmake --build build/cpp3 -j
+          cmake -S week04/cpp -B build/cpp4 -DCMAKE_BUILD_TYPE=Release
+          cmake --build build/cpp4 -j
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -74,10 +78,11 @@ jobs:
         env:
           WEEK02_CPP_BUILD: build/cpp
           WEEK03_CPP_BUILD: build/cpp3
+          WEEK04_CPP_BUILD: build/cpp4
         run: |
           pip install opencv-python-headless numpy pytest
           pip install -e . --no-deps
-          pytest tests/test_cpp_parity.py tests/test_week03_cpp_parity.py -v
+          pytest tests/test_cpp_parity.py tests/test_week03_cpp_parity.py tests/test_week04_cpp_parity.py -v
 
   site:
     runs-on: ubuntu-latest
