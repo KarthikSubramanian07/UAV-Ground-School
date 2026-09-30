@@ -33,6 +33,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 DOCS = ROOT / "docs" / "week02"
 DOCS3 = ROOT / "docs" / "week03"
+DOCS4 = ROOT / "docs" / "week04"
 CANONICAL = "https://uav-ground-school.pages.dev/"
 REPO = "https://github.com/KarthikSubramanian07/UAV-Ground-School"
 DESCRIPTION = (
@@ -297,6 +298,146 @@ def make_og_week3(hero: np.ndarray, path: Path, f1: str) -> None:
     cv2.putText(card, "UAVs@Berkeley Software Ground School 2026, Week 3", (72, 575), cv2.FONT_HERSHEY_SIMPLEX, 0.72, muted, 1, aa)
     if not cv2.imwrite(str(path), card, [cv2.IMWRITE_JPEG_QUALITY, 88]):
         raise BuildError(f"could not write {path}")
+
+
+W4_DESCRIPTION = (
+    "UAVs@Berkeley Ground School Week 4, solved: a drone designed from real parts around the Cube Orange+, wired pin by pin "
+    "and checked by a design rule checker, with MAVLink, DroneCAN, CAN, RTCM, CRSF, SBUS and DShot implemented from their "
+    "specifications and the generated parameters verified on ArduCopter 4.7.1 in simulation."
+)
+W4_DATA = ("summary.json", "site.json", "check.json", "scope.json", "journey.json", "pid.json", "bom.json", "sitl.json", "performance.json", "wiring.svg")
+
+
+def required_week4(docs4: Path) -> list[Path]:
+    return [docs4 / name for name in W4_DATA]
+
+
+def cpp_case_count() -> str:
+    readme = (ROOT / "week04" / "cpp" / "README.md").read_text()
+    match = re.search(r"All (\d+) cases pass", readme)
+    if not match:
+        raise BuildError("week04/cpp/README.md has no total parity case count")
+    return f"{int(match.group(1)):,}"
+
+
+def week4(docs4: Path) -> tuple[dict[str, str], dict[str, str]]:
+    """Stats and HTML fragments for week4.html."""
+    summary = load_json(docs4 / "summary.json")
+    bom = load_json(docs4 / "bom.json")
+    sitl = load_json(docs4 / "sitl.json")
+    perf = load_json(docs4 / "performance.json")
+    pid = load_json(docs4 / "pid.json")
+    report = load_json(docs4 / "check.json")
+    rows = []
+    for r in bom["rows"]:
+        if r.get("included_in"):
+            price = f"in the {r['included_in']} kit"
+        elif r["unit_usd"] is None:
+            price = "not found"
+        else:
+            price = f"${r['unit_usd']:,.2f}"
+        mass = "" if r["mass_g"] is None else f"{r['mass_g']:g} g" + (" est." if "mass_g" in r["estimated"] else "")
+        name = html.escape(r["name"])
+        link = f'<a href="{html.escape(r["url"])}" rel="noopener">{name}</a>' if r.get("url") else name
+        rows.append(f"<tr><td>{link}</td><td>{html.escape(r['role'].replace('_', ' '))}</td><td class=\"num\">{r['count']}</td><td class=\"num\">{price}</td><td class=\"num\">{mass}</td></tr>")
+    rows.append(f'<tr class="total"><td><strong>Total</strong></td><td></td><td></td><td class="num"><strong>${bom["total_usd"]:,.2f}</strong></td><td class="num"><strong>{summary["mass_kg"]} kg</strong></td></tr>')
+    budget_rows = []
+    for r in sitl["link_budget"]["rows"]:
+        budget_rows.append(
+            f"<tr><td>{html.escape(r['stream'])}</td><td class=\"mono\">{html.escape(r['message'])}</td><td class=\"num\">{r['predicted_hz']:g}</td>"
+            f"<td class=\"num\">{r['measured_hz']:.2f}</td><td class=\"num\">{r['measured_bytes_per_s']:.0f}</td></tr>"
+        )
+    air = pid["airframe"]
+    rules = len({f["rule"] for f in report})
+    stats = {
+        "w4_errors": str(summary["errors"]),
+        "w4_warnings": str(summary["warnings"]),
+        "w4_passed": str(summary["passed"]),
+        "w4_links": str(summary["links"]),
+        "w4_protocols": str(len(summary["protocols"])),
+        "w4_rules": str(rules),
+        "w4_mavlink": str(summary["mavlink_messages"]),
+        "w4_mass": f"{summary['mass_kg']:.2f}",
+        "w4_tw": f"{summary['thrust_to_weight']:.2f}",
+        "w4_minutes": f"{summary['hover_minutes']:.1f}",
+        "w4_hover": f"{100 * perf['hover_throttle']:.0f}",
+        "w4_hover_a": f"{perf['hover_current_a'] + perf['avionics_w'] / 14.8:.1f}",
+        "w4_ref_minutes": f"{perf['calibration']['reference_minutes']:.0f}",
+        "w4_sitl_params": f"{sitl['params']['accepted']} of {sitl['params']['sent']}",
+        "w4_link_pred": f"{sitl['link_budget']['predicted_bytes_per_s']:,.0f}",
+        "w4_link_meas": f"{sitl['link_budget']['measured_bytes_per_s']:,.0f}",
+        "w4_window": f"{sitl['link_budget']['window_s']:.0f}",
+        "w4_sigs": str(sitl["signing"]["usb_signatures_verified"]),
+        "w4_mav2_hz": f"{sitl['channel_mapping']['serial1_attitude_hz']:.1f}",
+        "w4_sim_rise": f"{air['sim_metrics']['rise_time']:.2f}",
+        "w4_sitl_rise": f"{air['sitl_metrics']['rise_time']:.2f}",
+        "w4_cpp_cases": cpp_case_count(),
+    }
+    svg = (docs4 / "wiring.svg").read_text()
+    tokens = {
+        "W4_DESCRIPTION": html.escape(W4_DESCRIPTION),
+        "W4_JSON_LD": week4_json_ld(),
+        "W4_BOM_ROWS": "".join(rows),
+        "W4_BUDGET_ROWS": "".join(budget_rows),
+        "W4_WIRING": svg,
+    }
+    return stats, tokens
+
+
+def export_week4(docs4: Path, out_dir: Path) -> None:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for name in ("site.json", "check.json", "scope.json", "journey.json", "pid.json"):
+        shutil.copyfile(docs4 / name, out_dir / name)
+
+
+def make_og_week4(svg_png: np.ndarray | None, path: Path, stats: dict[str, str]) -> None:
+    width, height = 1200, 630
+    card = np.zeros((height, width, 3), np.uint8)
+    card[:] = (29, 25, 18)
+    for x in range(0, width, 40):
+        cv2.line(card, (x, 0), (x, height), (42, 37, 27), 1)
+    for y in range(0, height, 40):
+        cv2.line(card, (0, y), (width, y), (42, 37, 27), 1)
+    orange, white, muted = (60, 138, 240), (242, 240, 236), (200, 196, 190)
+    colors = [(60, 138, 240), (255, 140, 181), (138, 211, 106), (216, 201, 76), (76, 201, 242), (255, 140, 181)]
+    aa = cv2.LINE_AA
+    # a stylised flight controller with its wires, echoing the diagram
+    cx, cy = 930, 315
+    for i, color in enumerate(colors):
+        y = 150 + i * 66
+        cv2.line(card, (cx - 110, cy - 90 + i * 36), (cx - 170, cy - 90 + i * 36), color, 4, aa)
+        cv2.line(card, (cx - 170, cy - 90 + i * 36), (cx - 170, y), color, 4, aa)
+        cv2.line(card, (cx - 170, y), (cx - 250, y), color, 4, aa)
+        cv2.circle(card, (cx - 250, y), 7, color, -1, aa)
+    cv2.rectangle(card, (cx - 110, cy - 115), (cx + 110, cy + 115), (42, 111, 232), -1)
+    cv2.putText(card, "Cube", (cx - 58, cy + 12), cv2.FONT_HERSHEY_DUPLEX, 1.5, (9, 17, 27), 2, aa)
+    cv2.rectangle(card, (72, 150), (152, 156), orange, -1)
+    cv2.putText(card, "Protocol", (66, 238), cv2.FONT_HERSHEY_TRIPLEX, 2.2, white, 3, aa)
+    cv2.putText(card, "Pro.", (66, 318), cv2.FONT_HERSHEY_TRIPLEX, 2.2, orange, 3, aa)
+    for i, line in enumerate(("A drone wired pin by pin, every", "protocol implemented and checked")):
+        cv2.putText(card, line, (72, 392 + i * 46), cv2.FONT_HERSHEY_DUPLEX, 1.0, muted, 2, aa)
+    cv2.putText(card, f"{stats['w4_errors']} errors, {stats['w4_passed']} checks passed, ArduCopter 4.7.1 verified", (72, 512), cv2.FONT_HERSHEY_DUPLEX, 0.72, orange, 2, aa)
+    cv2.putText(card, "UAVs@Berkeley Software Ground School 2026, Week 4", (72, 575), cv2.FONT_HERSHEY_SIMPLEX, 0.72, muted, 1, aa)
+    if not cv2.imwrite(str(path), card, [cv2.IMWRITE_JPEG_QUALITY, 88]):
+        raise BuildError(f"could not write {path}")
+
+
+def week4_json_ld() -> str:
+    data = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "UAV Ground School Week 4: flight controllers and protocols",
+        "description": W4_DESCRIPTION,
+        "url": CANONICAL + "week4",
+        "image": CANONICAL + "og-week4.jpg",
+        "codeRepository": REPO,
+        "programmingLanguage": ["Python", "C++", "JavaScript"],
+        "runtimePlatform": "ArduPilot",
+        "license": "https://opensource.org/licenses/MIT",
+        "keywords": "flight controller, Cube Orange, ArduPilot, MAVLink, DroneCAN, CAN bus, RTCM, RTK, CRSF, ExpressLRS, SBUS, DShot, PID, wiring diagram",
+        "author": {"@type": "Person", "name": "Karthik Subramanian"},
+    }
+    return json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
 
 
 def week3_json_ld() -> str:
@@ -684,14 +825,17 @@ def verify(out: Path) -> None:
 # ------------------------------------------------------------------- build ----
 
 
-def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Path = DOCS3) -> Path:
+def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Path = DOCS3, docs4: Path = DOCS4) -> Path:
     out = out.resolve()
-    for protected in (ROOT, SITE, docs.resolve(), docs3.resolve(), Path.home()):
+    for protected in (ROOT, SITE, docs.resolve(), docs3.resolve(), docs4.resolve(), Path.home()):
         if out == protected or out in protected.parents:
             raise BuildError(f"refusing to overwrite {out}")
     missing3 = [str(p) for p in required_week3(docs3) if not p.is_file()]
     if missing3:
         raise BuildError("missing week 3 build inputs:\n  " + "\n  ".join(missing3))
+    missing4 = [str(p) for p in required_week4(docs4) if not p.is_file()]
+    if missing4:
+        raise BuildError("missing week 4 build inputs:\n  " + "\n  ".join(missing4))
     inputs = check_inputs(docs)
     rows = inputs["rows"]
     today = today or dt.date.today()
@@ -718,7 +862,9 @@ def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Pat
     yolo_rows, yolo_notes, yolo_numbers = week3_yolo(load_json(docs3 / "yolo" / "results.json"), load_json(docs3 / "yolo" / "dataset.json"))
     reports = {name: parse_report((docs / "colors" / f"{name}_report.txt").read_text()) for name in DEMO_IMAGES}
 
-    numbers = {**stats(rows), **w3_numbers, **piece_numbers, **yolo_numbers}
+    w4_numbers, w4_tokens = week4(docs4)
+    export_week4(docs4, out / "assets" / "week4")
+    numbers = {**stats(rows), **w3_numbers, **piece_numbers, **yolo_numbers, **w4_numbers}
     sentence, figures = stitcher_copy(rows, images)
     ctx = Context(
         tokens={
@@ -737,6 +883,7 @@ def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Pat
             "W3_PIECE_ROWS": piece_rows,
             "W3_YOLO_ROWS": yolo_rows,
             "W3_YOLO_NOTES": yolo_notes,
+            **w4_tokens,
         },
         stats=numbers,
         images=images,
@@ -746,12 +893,14 @@ def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Pat
 
     make_og_image(read_image(docs / "rough_panorama.jpg"), out / "og.jpg", numbers["rough_best_rmse"])
     make_og_week3(read_image(docs3 / "hero.jpg"), out / "og-week3.jpg", numbers["w3_best_f1"])
+    make_og_week4(None, out / "og-week4.jpg", w4_numbers)
     (out / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {CANONICAL}sitemap.xml\n")
     (out / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         f"  <url>\n    <loc>{CANONICAL}</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
         f"  <url>\n    <loc>{CANONICAL}week3</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
+        f"  <url>\n    <loc>{CANONICAL}week4</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
         "</urlset>\n"
     )
     (out / "_headers").write_text(HEADERS)
@@ -776,6 +925,9 @@ HEADERS = """/*
 /og-week3.jpg
   Cache-Control: public, max-age=86400
 
+/og-week4.jpg
+  Cache-Control: public, max-age=86400
+
 /css/*
   Cache-Control: public, max-age=0, must-revalidate
 
@@ -789,9 +941,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", default=str(ROOT / "build" / "site"), help="output directory (replaced)")
     parser.add_argument("--docs", default=str(DOCS), help="directory with benchmark.json and preview images")
     parser.add_argument("--docs3", default=str(DOCS3), help="week 3 docs directory")
+    parser.add_argument("--docs4", default=str(DOCS4), help="week 4 docs directory")
     args = parser.parse_args(argv)
     try:
-        out = build(Path(args.out), Path(args.docs), docs3=Path(args.docs3))
+        out = build(Path(args.out), Path(args.docs), docs3=Path(args.docs3), docs4=Path(args.docs4))
     except BuildError as error:
         print(f"build_site: error: {error}", file=sys.stderr)
         return 1
