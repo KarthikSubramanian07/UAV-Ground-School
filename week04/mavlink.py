@@ -238,12 +238,13 @@ def xml_dir() -> Path | None:
     """Where to find the official XML: $MAVLINK_XML_DIR, else the copy inside an installed pymavlink."""
     env = os.environ.get("MAVLINK_XML_DIR")
     if env:
-        return Path(env)
+        return Path(env) if (Path(env) / "ardupilotmega.xml").exists() else None
     try:
         import pymavlink  # noqa: F401  (only used to locate its XML)
     except ImportError:
         return None
-    return Path(pymavlink.__file__).parent / "message_definitions" / "v1.0"
+    path = Path(pymavlink.__file__).parent / "message_definitions" / "v1.0"
+    return path if (path / "ardupilotmega.xml").exists() else None  # wheels on some platforms leave the XML out
 
 
 # ----------------------------------------------------------- framing ----

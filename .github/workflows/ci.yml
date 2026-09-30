@@ -48,7 +48,15 @@ jobs:
         run: |
           pip install opencv-python-headless numpy pytest pytest-cov scikit-image pymavlink dronecan pyrtcm
           pip install -e . --no-deps
+      - name: MAVLink XML pinned by ArduPilot Copter-4.7.1
+        run: |
+          mkdir -p build/mavlink
+          for f in ardupilotmega common minimal standard uAvionix icarous loweheiser cubepilot csAirLink; do
+            curl -fsSL "https://raw.githubusercontent.com/mavlink/mavlink/288b907c384a892c8519bfe271682424b1e1a3a0/message_definitions/v1.0/$f.xml" -o build/mavlink/$f.xml
+          done
       - name: Test
+        env:
+          MAVLINK_XML_DIR: build/mavlink
         run: pytest --cov=week02 --cov=week03 --cov=week04 --cov-report=term-missing --cov-report=xml
       - uses: actions/upload-artifact@v4
         if: matrix.python-version == '3.12'
