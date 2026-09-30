@@ -10,6 +10,6 @@ out/
 *.mp4
 *.pdf
 .DS_Store
-data/
+/data/
 *.pt
 runs/
