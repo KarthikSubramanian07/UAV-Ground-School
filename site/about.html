@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About UAV Ground School | computer vision and flight controller coursework</title>
+  <meta name="description" content="UAV Ground School is an open source showcase of UAVs@Berkeley Software Ground School solutions: computer vision for drones, object detection, and flight controller protocols with measured benchmarks.">
+  <meta name="theme-color" content="#15191c">
+  <link rel="canonical" href="{{CANONICAL}}about">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="text/markdown" href="{{CANONICAL}}about.md">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="UAV Ground School">
+  <meta property="og:title" content="About UAV Ground School">
+  <meta property="og:description" content="Open source computer vision and flight controller coursework for drones, with reproducible benchmarks in Python and C++.">
+  <meta property="og:url" content="{{CANONICAL}}about">
+  <meta property="og:image" content="{{CANONICAL}}og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About UAV Ground School">
+  <meta name="twitter:description" content="Open source computer vision and flight controller coursework for drones, with reproducible benchmarks in Python and C++.">
+  <meta name="twitter:image" content="{{CANONICAL}}og.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500&amp;family=Schibsted+Grotesk:wght@400;500;600&amp;family=Young+Serif&amp;display=swap">
+  <link rel="stylesheet" href="css/site.css">
+  <script type="application/ld+json">{{ABOUT_JSON_LD}}</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="wordmark" href="./" aria-label="UAV Ground School, home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#232a2e"/><path d="M14 20h36v12H14v12h36" fill="none" stroke="#f08a3c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="44" r="5.5" fill="#f08a3c"/></svg>
+        UAV Ground School
+      </a>
+      <nav class="site-nav" aria-label="Sections">
+        <ul>
+          <li class="keep"><a href="./">Week 2</a></li>
+          <li class="keep"><a href="week3">Week 3</a></li>
+          <li class="keep"><a href="week4">Week 4</a></li>
+          <li class="keep"><a href="about" aria-current="page">About</a></li>
+          <li class="keep"><a class="gh" href="https://github.com/KarthikSubramanian07/UAV-Ground-School">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" aria-labelledby="about-title">
+      <div class="wrap prose page-doc">
+        <p class="eyebrow">About</p>
+        <h1 id="about-title">UAV Ground School is coursework you can run, measure, and fork.</h1>
+        <p class="lede">UAV Ground School publishes end to end solutions for the UAVs@Berkeley Software Ground School skill boosters. The site and repository cover computer vision for aerial imagery, classical and learned object detection, and a flight controller design with every onboard protocol implemented from the specification and checked against real ArduPilot firmware.</p>
+        <p>The project exists so students, researchers, and tooling agents can inspect working pipelines instead of incomplete sketches. Every major claim on the showcase is backed by JSON benchmarks, ground truth alignments, or firmware in the loop checks that regenerate from the same code that ships in the repository.</p>
+        <h2>What you will find</h2>
+        <ul>
+          <li>Week 2: HSV color segmentation with object centers, SUAS shape classification, and drone video mosaicking with loop closure, bundle adjustment, and multi band blending in Python and C++17.</li>
+          <li>Week 3: blob detectors scored against hand checked dots, a classical cone cube and ring detector scored against SAM masks, and a YOLOv8 study that documents split leaks and sliced inference gains.</li>
+          <li>Week 4: a Cube Orange+ airframe design, a pin by pin harness, a design rule checker, and from scratch codecs for MAVLink, DroneCAN, CAN, RTCM, CRSF, SBUS, and DShot.</li>
+        </ul>
+        <h2>How the project is licensed</h2>
+        <p>Source code is released under the MIT License. Documentation and showcase pages are part of the same public repository. Prefer the GitHub tree when you need to run commands locally; prefer this site when you need the interactive demos, wiring diagram, or published benchmark tables.</p>
+        <p>For agent oriented discovery, start at <a href="llms.txt">llms.txt</a>. Pages also answer <code>Accept: text/markdown</code> on their canonical URLs.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer night">
+    <div class="wrap">
+      <p class="big">Built for UAVs@Berkeley Software Ground School 2026.</p>
+      <div>
+        <h2>Project</h2>
+        <ul>
+          <li><a href="https://github.com/KarthikSubramanian07/UAV-Ground-School">Repository</a></li>
+          <li><a href="about">About</a></li>
+          <li><a href="contact">Contact</a></li>
+          <li><a href="privacy">Privacy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Weeks</h2>
+        <ul>
+          <li><a href="./">Week 2: color and stitching</a></li>
+          <li><a href="week3">Week 3: object detection</a></li>
+          <li><a href="week4">Week 4: flight controllers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Agents</h2>
+        <ul>
+          <li><a href="llms.txt">llms.txt</a></li>
+          <li><a href="sitemap.xml">sitemap.xml</a></li>
+          <li><a href="index.md">Home (Markdown)</a></li>
+        </ul>
+      </div>
+      <p class="fine"><span>Karthik Subramanian. MIT License.</span><span class="mono">Built {{BUILD_DATE}}</span></p>
+    </div>
+  </footer>
+</body>
+</html>

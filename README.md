@@ -12,6 +12,8 @@
 
 Live showcase: **[uav-ground-school.pages.dev](https://uav-ground-school.pages.dev/)** (week 2, with an in browser color splitter) **[/week3](https://uav-ground-school.pages.dev/week3)** (with a detector explorer) and **[/week4](https://uav-ground-school.pages.dev/week4)** (a clickable wiring diagram, a logic analyser and a PID playground).
 
+Agent entry points: **[/llms.txt](https://uav-ground-school.pages.dev/llms.txt)** (when to use this project and how to fetch it), Markdown via `Accept: text/markdown` on the same page URLs, plus **[/about](https://uav-ground-school.pages.dev/about)**, **[/contact](https://uav-ground-school.pages.dev/contact)**, and **[/privacy](https://uav-ground-school.pages.dev/privacy)**.
+
 <p align="center">
   <img src="docs/week02/rough_path.jpg" alt="A mosaic of a simulated five pass survey flight over a voxel world, with keyframe footprints and the flight path drawn on top" width="100%">
 </p>

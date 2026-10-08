@@ -80,15 +80,22 @@ def test_required_files_exist(site: Path) -> None:
     required = [
         "index.html",
         "404.html",
+        "404.md",
         "og.jpg",
         "favicon.svg",
         "robots.txt",
         "sitemap.xml",
+        "llms.txt",
         "_headers",
+        "_worker.js",
+        "about.html",
+        "contact.html",
+        "privacy.html",
         "css/site.css",
         "js/hsv-segment.js",
         "js/demo.js",
         "js/site.js",
+        *(f"{name}.md" for name in build_site.MARKDOWN_PAGES),
         *(f"assets/demo/{name}.jpg" for name in build_site.DEMO_IMAGES),
         *(f"assets/img/{name}-{min(1600, cv2.imread(str(DOCS / f'{name}.jpg')).shape[1])}.webp" for name in build_site.STITCH_IMAGES),
     ]
@@ -113,7 +120,8 @@ def test_no_em_or_en_dashes(site: Path) -> None:
     offenders = [
         str(path.relative_to(site))
         for path in site.rglob("*")
-        if path.suffix in {".html", ".js", ".css", ".svg", ".txt", ".xml"} and re.search("[\u2013\u2014]", path.read_text(encoding="utf-8"))
+        if path.suffix in {".html", ".js", ".css", ".svg", ".txt", ".xml", ".md"}
+        and re.search("[\u2013\u2014]", path.read_text(encoding="utf-8"))
     ]
     assert not offenders
 
@@ -121,7 +129,7 @@ def test_no_em_or_en_dashes(site: Path) -> None:
 def test_local_references_resolve_and_are_relative(site: Path) -> None:
     checked = 0
     for path in site.rglob("*"):
-        if path.suffix not in {".html", ".css", ".js"}:
+        if path.suffix not in {".html", ".css", ".js"} or path.name == "_worker.js":
             continue
         base = site if path.suffix == ".js" else path.parent
         for ref in build_site.local_references(path):
@@ -145,19 +153,53 @@ def test_seo_metadata(site: Path, index_html: str) -> None:
     head.feed(index_html)
     canonical = build_site.CANONICAL
     assert head.links["canonical"] == canonical
+    assert head.links.get("alternate") == canonical + "index.md"
     for key in ("description", "og:title", "og:description", "og:type", "twitter:card", "twitter:title", "twitter:image"):
         assert head.meta.get(key), key
     assert head.meta["og:url"] == canonical
     assert head.meta["og:image"] == canonical + "og.jpg"
     assert head.meta["twitter:card"] == "summary_large_image"
+    assert "UAV Ground School computer vision" in head.meta["og:title"]
+    assert "UAV Ground School computer vision" in index_html
     ld = json.loads("".join(head.json_ld))
     assert ld["@type"] == "SoftwareSourceCode" and ld["codeRepository"].startswith("https://github.com/")
+    author = ld["author"]
+    assert author["@type"] == "Person"
+    assert author["name"] and author["description"] and author["url"]
+    assert author.get("sameAs") or author.get("jobTitle") or author.get("worksFor")
     assert f"Sitemap: {canonical}sitemap.xml" in (site / "robots.txt").read_text()
     assert f"<loc>{canonical}</loc>" in (site / "sitemap.xml").read_text()
+    for path in ("week3", "week4", "about", "contact", "privacy"):
+        assert f"<loc>{canonical}{path}</loc>" in (site / "sitemap.xml").read_text()
     assert canonical == "https://uav-ground-school.pages.dev/"
     headers = (site / "_headers").read_text()
     assert "X-Content-Type-Options: nosniff" in headers and "/assets/*" in headers
+    assert "text/markdown" in headers and "/llms.txt" in headers
     assert canonical in (site / "404.html").read_text()
+
+
+def test_agent_discovery_files(site: Path) -> None:
+    llms = (site / "llms.txt").read_text(encoding="utf-8")
+    assert llms.startswith("# UAV Ground School")
+    assert "## When to use this" in llms
+    assert "How agents should call this site" in llms
+    assert build_site.CANONICAL in llms
+    assert "Accept: text/markdown" in llms
+    not_found = (site / "404.md").read_text(encoding="utf-8")
+    assert len(not_found.strip()) >= 20
+    assert "llms.txt" in not_found and "sitemap.xml" in not_found
+    home_md = (site / "index.md").read_text(encoding="utf-8")
+    assert "UAV Ground School computer vision" in home_md
+    assert len(home_md.strip()) >= 20
+    worker = (site / "_worker.js").read_text(encoding="utf-8")
+    assert "text/markdown" in worker and "Vary" in worker
+    for page in build_site.TRUST_PAGES:
+        html = (site / f"{page}.html").read_text(encoding="utf-8")
+        text = re.sub(r"<[^>]+>", " ", html)
+        text = re.sub(r"\s+", " ", text).strip()
+        assert len(text) >= 500, page
+        md = (site / f"{page}.md").read_text(encoding="utf-8")
+        assert len(md.strip()) >= 500, page
 
 
 def test_benchmark_numbers_come_from_json(index_html: str, rows: list[dict]) -> None:

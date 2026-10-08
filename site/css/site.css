@@ -153,6 +153,45 @@ kbd,
   margin-top: 1em;
 }
 
+.prose.page-doc {
+  max-width: 72ch;
+  padding-block: 2rem 4rem;
+}
+
+.prose.page-doc h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-3);
+  line-height: 1.1;
+  text-wrap: balance;
+  margin: 0.4rem 0 1.25rem;
+}
+
+.prose.page-doc h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-1);
+  margin: 2.25rem 0 0.75rem;
+}
+
+.prose.page-doc ul {
+  margin: 0.75rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.prose.page-doc li + li {
+  margin-top: 0.55rem;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--signal-ink);
+}
+
 .lede {
   font-size: var(--step-1);
   line-height: 1.5;

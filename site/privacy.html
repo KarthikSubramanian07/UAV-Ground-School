@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy | UAV Ground School</title>
+  <meta name="description" content="Privacy practices for UAV Ground School: a static educational site without accounts, with standard hosting logs on Cloudflare Pages.">
+  <meta name="theme-color" content="#15191c">
+  <link rel="canonical" href="{{CANONICAL}}privacy">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="text/markdown" href="{{CANONICAL}}privacy.md">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="UAV Ground School">
+  <meta property="og:title" content="Privacy | UAV Ground School">
+  <meta property="og:description" content="How UAV Ground School handles visitor data on a static Cloudflare Pages deployment.">
+  <meta property="og:url" content="{{CANONICAL}}privacy">
+  <meta property="og:image" content="{{CANONICAL}}og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Privacy | UAV Ground School">
+  <meta name="twitter:description" content="How UAV Ground School handles visitor data on a static Cloudflare Pages deployment.">
+  <meta name="twitter:image" content="{{CANONICAL}}og.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500&amp;family=Schibsted+Grotesk:wght@400;500;600&amp;family=Young+Serif&amp;display=swap">
+  <link rel="stylesheet" href="css/site.css">
+  <script type="application/ld+json">{{PRIVACY_JSON_LD}}</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="wordmark" href="./" aria-label="UAV Ground School, home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#232a2e"/><path d="M14 20h36v12H14v12h36" fill="none" stroke="#f08a3c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="44" r="5.5" fill="#f08a3c"/></svg>
+        UAV Ground School
+      </a>
+      <nav class="site-nav" aria-label="Sections">
+        <ul>
+          <li class="keep"><a href="./">Week 2</a></li>
+          <li class="keep"><a href="week3">Week 3</a></li>
+          <li class="keep"><a href="week4">Week 4</a></li>
+          <li class="keep"><a href="about">About</a></li>
+          <li class="keep"><a class="gh" href="https://github.com/KarthikSubramanian07/UAV-Ground-School">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section" aria-labelledby="privacy-title">
+      <div class="wrap prose page-doc">
+        <p class="eyebrow">Privacy</p>
+        <h1 id="privacy-title">Privacy on UAV Ground School.</h1>
+        <p class="lede">UAV Ground School is a static educational showcase. The site does not create user accounts, does not sell personal information, and does not run a first party analytics product that identifies individual visitors for advertising.</p>
+        <h2>What this site processes</h2>
+        <p>Pages are hosted on Cloudflare Pages. Like most public websites, the hosting and CDN layer may record standard request metadata such as IP address, user agent, requested URL, referrer, and timestamps for security, reliability, and abuse prevention. Those operational logs are controlled by the host's policies and retention settings, not by a custom application database on this project.</p>
+        <p>Interactive demos on the showcase (color segmentation, detector explorer, wiring diagram, PID playground) run in your browser against assets already delivered with the page. They do not upload your images to a project operated backend. If you choose to open GitHub links, GitHub's own privacy policy applies to that service.</p>
+        <h2>Cookies and third parties</h2>
+        <p>This site loads webfonts from Google Fonts. Your browser may contact Google's font servers when rendering pages. The project does not set marketing cookies and does not embed third party ad networks. Cloudflare may set cookies or equivalent client signals required for bot management or performance of the edge network according to Cloudflare's documentation.</p>
+        <h2>Source code and contributions</h2>
+        <p>If you open an issue or pull request on the public repository, the content you submit becomes part of the GitHub project history under GitHub's terms. Do not include secrets, private flight logs, or personal data you are not willing to publish. To ask a question without filing an issue, use the channels listed on the <a href="contact">contact</a> page.</p>
+        <p>This privacy notice may be updated when hosting arrangements or page behavior change in a way that affects visitors. The canonical URL for this page is <a href="{{CANONICAL}}privacy">{{CANONICAL}}privacy</a>. For project orientation aimed at software agents, see <a href="llms.txt">llms.txt</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer night">
+    <div class="wrap">
+      <p class="big">Built for UAVs@Berkeley Software Ground School 2026.</p>
+      <div>
+        <h2>Project</h2>
+        <ul>
+          <li><a href="https://github.com/KarthikSubramanian07/UAV-Ground-School">Repository</a></li>
+          <li><a href="about">About</a></li>
+          <li><a href="contact">Contact</a></li>
+          <li><a href="privacy">Privacy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Weeks</h2>
+        <ul>
+          <li><a href="./">Week 2: color and stitching</a></li>
+          <li><a href="week3">Week 3: object detection</a></li>
+          <li><a href="week4">Week 4: flight controllers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Agents</h2>
+        <ul>
+          <li><a href="llms.txt">llms.txt</a></li>
+          <li><a href="sitemap.xml">sitemap.xml</a></li>
+          <li><a href="privacy.md">Privacy (Markdown)</a></li>
+        </ul>
+      </div>
+      <p class="fine"><span>Karthik Subramanian. MIT License.</span><span class="mono">Built {{BUILD_DATE}}</span></p>
+    </div>
+  </footer>
+</body>
+</html>
