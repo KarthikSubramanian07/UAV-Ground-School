@@ -1,0 +1,39 @@
+{
+ "type_hashes": [
+  1210,
+  1210
+ ],
+ "qos_pairs": [
+  1265625,
+  1265625
+ ],
+ "cdr": [
+  300,
+  300
+ ],
+ "cdr_rclpy_reads_ours": 300,
+ "cdr_rclpy_dirty_padding": 300,
+ "cdr_rclpy_overshoot": 11.1,
+ "interop_directions": 4,
+ "client_round_trip_ms": 55.91,
+ "cyclone_vendors": [
+  "Eclipse Cyclone DDS"
+ ],
+ "packets": {
+  "pubsub": 120,
+  "srvcli": 113
+ },
+ "mission_seconds": 11.781,
+ "mission_outcome": "MISSION COMPLETE: succeeded at (11.13, 7.04, 0.00)",
+ "target_confirmed": "target confirmed at (11.13, 7.06) m",
+ "recorded_frames": 179,
+ "recorded_megabytes": 42.1,
+ "recorded_topics": 79,
+ "blocking_single_max_ms": 317.8,
+ "blocking_groups_max_ms": 86.6,
+ "deadlock": [
+  "deadlock (killed after 6 s)",
+  "returned",
+  "returned"
+ ]
+}

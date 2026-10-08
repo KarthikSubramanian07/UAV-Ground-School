@@ -1,0 +1,64 @@
+{
+ "ros_talker_to_python_listener": {
+  "received": [
+   "Hello World: 1",
+   "Hello World: 2",
+   "Hello World: 3",
+   "Hello World: 4",
+   "Hello World: 5"
+  ],
+  "participants": 1,
+  "remote_writers": 11
+ },
+ "python_talker_to_ros_listener": {
+  "matched": true,
+  "listener_output": [
+   "[INFO] [1791453710.157903973] [minimal_subscriber]: I heard: \"Hello from pure Python: 0\"",
+   "[INFO] [1791453710.538575848] [minimal_subscriber]: I heard: \"Hello from pure Python: 1\"",
+   "[INFO] [1791453711.039013278] [minimal_subscriber]: I heard: \"Hello from pure Python: 2\"",
+   "[INFO] [1791453711.542793704] [minimal_subscriber]: I heard: \"Hello from pure Python: 3\"",
+   "[INFO] [1791453712.044378712] [minimal_subscriber]: I heard: \"Hello from pure Python: 4\""
+  ]
+ },
+ "python_client_to_ros_service": {
+  "ready": true,
+  "request": {
+   "a": 2,
+   "b": 3
+  },
+  "reply": {
+   "sum": 5
+  },
+  "round_trip_ms": 55.91,
+  "service_output": [
+   "[INFO] [1791453716.777113126] [minimal_service]: Incoming request",
+   "a: 2 b: 3"
+  ]
+ },
+ "ros_clients_to_python_service": {
+  "client_output": {
+   "py_srvcli": [
+    "[INFO] [1791453721.419663259] [minimal_client_async]: Result of add_two_ints: for 7 + 35 = 42"
+   ],
+   "cpp_srvcli": [
+    "[INFO] [1791453722.892389598] [rclcpp]: Sum: 42"
+   ]
+  },
+  "service_output": [
+   "Incoming request",
+   "a: 7 b: 35",
+   "Incoming request",
+   "a: 7 b: 35"
+  ]
+ },
+ "cyclone_talker_to_python_listener": {
+  "received": [
+   "Hello World: 1",
+   "Hello World: 2",
+   "Hello World: 3"
+  ],
+  "vendors": [
+   "Eclipse Cyclone DDS"
+  ]
+ }
+}

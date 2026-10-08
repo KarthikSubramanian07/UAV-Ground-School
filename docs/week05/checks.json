@@ -1,0 +1,12 @@
+{
+ "qos_pairs_identical": 1265625,
+ "qos_pairs_total": 1265625,
+ "cdr_alltypes_identical_except_padding": 300,
+ "cdr_alltypes_byte_identical": 0,
+ "cdr_alltypes_rclpy_padding_not_zero": 300,
+ "cdr_alltypes_rclpy_deserializes_ours": 300,
+ "cdr_rclpy_mean_overshoot_bytes": 11.1,
+ "cdr_alltypes_trials": 300,
+ "type_hashes_identical": 1210,
+ "type_hashes_total": 1210
+}

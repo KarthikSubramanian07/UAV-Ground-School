@@ -5,8 +5,8 @@
 Steps: copy ``site/``, re-encode the committed images from ``docs/week02`` and
 ``docs/week03`` as WebP (800 and 1600 px wide), copy the Color Me Impressed test
 images for the in-browser demo and the week 3 detections for the explorer,
-render the benchmark tables from their JSON, write ``og.jpg``, ``og-week3.jpg``,
-``robots.txt``, ``sitemap.xml`` and the Cloudflare ``_headers`` file, then verify
+render the benchmark tables from their JSON, write ``og.jpg`` and one card per
+week page, ``robots.txt``, ``sitemap.xml`` and the Cloudflare ``_headers`` file, then verify
 the result (no unreplaced tokens, no em or en dashes, every local reference
 resolves).
 
@@ -34,6 +34,7 @@ SITE = ROOT / "site"
 DOCS = ROOT / "docs" / "week02"
 DOCS3 = ROOT / "docs" / "week03"
 DOCS4 = ROOT / "docs" / "week04"
+DOCS5 = ROOT / "docs" / "week05"
 CANONICAL = "https://uav-ground-school.pages.dev/"
 REPO = "https://github.com/KarthikSubramanian07/UAV-Ground-School"
 DESCRIPTION = (
@@ -513,6 +514,259 @@ def week4_json_ld() -> str:
     return json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
 
 
+W5_DESCRIPTION = (
+    "UAVs@Berkeley Ground School Week 5, solved: the ROS 2 Jazzy tutorials, a simulated drone wired with topics, services "
+    "and an action, measured QoS and executor experiments, and a pure Python RTPS and DDS participant with its own CDR codec, "
+    "REP 2011 type hashes and QoS rules, checked against real ROS 2 nodes and Cyclone DDS."
+)
+W5_DATA = ("summary.json", "wire.json", "mission.json", "lab.json", "interop.json", "transcripts.json", "checks.json")
+W5_EXPORT = ("mission.json", "wire.json", "lab.json")
+
+
+def required_week5(docs5: Path) -> list[Path]:
+    return [docs5 / name for name in W5_DATA]
+
+
+def _cell(value: object, cls: str = "") -> str:
+    attr = f' class="{cls}"' if cls else ""
+    return f"<td{attr}>{html.escape(str(value))}</td>"
+
+
+def _policy(name: str) -> str:
+    return f"<code>{html.escape(name.replace('_', ' '))}</code>"
+
+
+def week5_tables(lab: dict) -> dict[str, str]:
+    """The measured QoS and executor tables, rendered at build time so they work without JavaScript."""
+    rel = []
+    for r in lab["reliability"]:
+        event = ", ".join(sorted(set(r["publisher_event"]) | set(r["subscription_event"]))) or "none"
+        verdict = r["rclpy_check"].split(":")[0].lower()
+        rel.append(
+            f'<tr class="{"bad" if not r["matched"] else ""}"><td>{_policy(r["publisher"])}</td><td>{_policy(r["subscription"])}</td>'
+            f'<td>{"yes" if r["matched"] else "no"}</td><td class="num">{r["received"]} of {r["sent"]}</td>'
+            f'<td>{html.escape(event)}</td><td><span class="pill {verdict}">{verdict}</span></td></tr>'
+        )
+    dur = []
+    for r in lab["durability"]:
+        dur.append(
+            f'<tr><td>{_policy(r["publisher"])}</td><td>{_policy(r["late_subscription"])}</td><td class="num">{r["received"]}</td>'
+            f'<td class="mono small">{html.escape(r["rclpy_check"])}</td></tr>'
+        )
+    top = max(r["received"] for r in lab["depth"])
+    depth = []
+    for r in lab["depth"]:
+        share = r["received"] / r["sent"]
+        depth.append(
+            f"<tr><td><code>{html.escape(r['history'])}</code></td><td>{_policy(r['reliability'])}</td>"
+            f'<td class="num">{r["received"]} of {r["sent"]}</td>'
+            f'<td class="bar-cell"><span class="bar" style="--w: {100 * r["received"] / top:.1f}%"></span><span class="mono">{100 * share:.0f}%</span></td>'
+            f"<td>{'yes' if r['in_order'] else 'no'}</td></tr>"
+        )
+    block = []
+    for r in lab["blocking"]:
+        block.append(
+            f'<tr><td>{html.escape(r["executor"])}</td><td class="num">{r["ticks"]}</td><td class="num">{r["mean_gap_ms"]:.1f}</td>'
+            f'<td class="num">{r["max_gap_ms"]:.1f}</td></tr>'
+        )
+    dead = []
+    for r in lab["deadlock"]:
+        ok = r["outcome"] == "returned"
+        ms = "" if r["ms"] is None else f"{r['ms']:g}"
+        dead.append(
+            f'<tr class="{"" if ok else "bad"}"><td>{html.escape(r["setup"])}</td>'
+            f'<td><span class="pill {"ok" if ok else "error"}">{html.escape(r["outcome"])}</span></td>'
+            f'<td class="num">{ms}</td></tr>'
+        )
+    return {
+        "W5_RELIABILITY_ROWS": "".join(rel),
+        "W5_DURABILITY_ROWS": "".join(dur),
+        "W5_DEPTH_ROWS": "".join(depth),
+        "W5_BLOCKING_ROWS": "".join(block),
+        "W5_DEADLOCK_ROWS": "".join(dead),
+    }
+
+
+def week5_transcripts(transcripts: list[dict]) -> str:
+    """The tutorial runs as terminal windows, one pair per tutorial."""
+    out = []
+    for item in transcripts:
+        terms = []
+        for term in item["terminals"]:
+            lines = "\n".join(html.escape(line) for line in term["output"])
+            words = term["command"].split()
+            package, executable = (words[2], words[3]) if len(words) > 3 else ("ros2", term["command"])
+            terms.append(
+                '<figure class="terminal">'
+                f"<header><span>{html.escape(executable)}</span><span>{html.escape(package)}</span></header>"
+                f'<pre><code><span class="p">$ </span>{html.escape(term["command"])}\n{lines}</code></pre></figure>'
+            )
+        out.append(
+            f'<div class="transcript"><h3>{html.escape(item["title"])}</h3><div class="transcript-pair">{"".join(terms)}</div></div>'
+        )
+    return "".join(out)
+
+
+def week5_interop(interop: dict) -> str:
+    """The five interop runs as a list of what crossed the wire."""
+    a = interop["ros_talker_to_python_listener"]
+    b = interop["python_talker_to_ros_listener"]
+    c = interop["python_client_to_ros_service"]
+    d = interop["ros_clients_to_python_service"]
+    e = interop["cyclone_talker_to_python_listener"]
+    heard = next((line for line in b["listener_output"] if "I heard" in line), b["listener_output"][0])
+    heard = heard.split("]: ", 1)[-1]
+    clients = d["client_output"]
+    rows = [
+        ("ROS talker", "Python listener", f"received {', '.join(repr(m) for m in a['received'][:3])}", "Fast DDS"),
+        ("Python talker", "ROS listener", heard, "Fast DDS"),
+        ("Python client", "ROS service", f"{c['request']} gave {c['reply']} in {c['round_trip_ms']:.2f} ms", "Fast DDS"),
+        (
+            "ROS clients, Python and C++",
+            "Python service",
+            "; ".join(f"{k}: {v[0].split(']: ', 1)[-1]}" for k, v in clients.items()),
+            "Fast DDS",
+        ),
+        ("Cyclone DDS talker", "Python listener", f"received {len(e['received'])} messages", ", ".join(e["vendors"])),
+    ]
+    items = []
+    for i, (src, dst, what, vendor) in enumerate(rows, 1):
+        items.append(
+            f'<li><span class="n">{i}</span><div><p class="dir"><b>{html.escape(src)}</b> to <b>{html.escape(dst)}</b>'
+            f'<span class="vendor">{html.escape(vendor)}</span></p><p class="mono small">{html.escape(what)}</p></div></li>'
+        )
+    return "".join(items)
+
+
+def week5(docs5: Path) -> tuple[dict[str, str], dict[str, str]]:
+    """Stats and HTML fragments for week5.html."""
+    summary = load_json(docs5 / "summary.json")
+    checks = load_json(docs5 / "checks.json")
+    lab = load_json(docs5 / "lab.json")
+    mission = load_json(docs5 / "mission.json")
+    wire = load_json(docs5 / "wire.json")
+    for key in ("type_hashes", "qos_pairs", "cdr", "interop_directions", "mission_outcome", "target_confirmed"):
+        if key not in summary:
+            raise BuildError(f"{docs5 / 'summary.json'} is missing {key!r}")
+    if not isinstance(wire, list) or not all({"hex", "spans", "title"} <= set(p) for p in wire):
+        raise BuildError(f"{docs5 / 'wire.json'} must be a list of packets with hex, spans and title")
+    for key in ("events", "odometry", "feedback", "status", "detections"):
+        if not mission.get(key):
+            raise BuildError(f"{docs5 / 'mission.json'} has no {key!r}")
+    target = re.search(r"\(([-\d.]+), ([-\d.]+)\)", summary["target_confirmed"])
+    landed = re.search(r"\(([-\d.]+), ([-\d.]+), ([-\d.]+)\)", summary["mission_outcome"])
+    if not target or not landed:
+        raise BuildError("summary.json target_confirmed and mission_outcome must carry coordinates")
+    single = next(r for r in lab["blocking"] if r["executor"] == "SingleThreadedExecutor")
+    groups = next(r for r in lab["blocking"] if "separate" in r["executor"])
+    keep_all = next(r for r in lab["depth"] if r["history"] == "keep_all")
+    keep1 = next(r for r in lab["depth"] if r["history"] == "keep_last 1")
+    stats = {
+        "w5_hashes": f"{summary['type_hashes'][0]:,} of {summary['type_hashes'][1]:,}",
+        "w5_qos": f"{summary['qos_pairs'][0]:,}",
+        "w5_qos_total": f"{summary['qos_pairs'][1]:,}",
+        "w5_cdr": f"{summary['cdr'][0]} of {summary['cdr'][1]}",
+        "w5_cdr_reads": f"{summary['cdr_rclpy_reads_ours']} of {summary['cdr'][1]}",
+        "w5_cdr_dirty": str(summary["cdr_rclpy_dirty_padding"]),
+        "w5_overshoot": f"{summary['cdr_rclpy_overshoot']:.1f}",
+        "w5_directions": str(summary["interop_directions"]),
+        "w5_cyclone": ", ".join(summary["cyclone_vendors"]),
+        "w5_rtt": f"{summary['client_round_trip_ms']:.2f}",
+        "w5_mission_s": f"{summary['mission_seconds']:.1f}",
+        "w5_target": f"({target.group(1)}, {target.group(2)})",
+        "w5_landed": f"({landed.group(1)}, {landed.group(2)})",
+        "w5_frames": str(summary["recorded_frames"]),
+        "w5_megabytes": f"{summary['recorded_megabytes']:.1f}",
+        "w5_topics": str(summary["recorded_topics"]),
+        "w5_pubsub_packets": str(summary["packets"]["pubsub"]),
+        "w5_srvcli_packets": str(summary["packets"]["srvcli"]),
+        "w5_block_single": f"{single['max_gap_ms']:.1f}",
+        "w5_block_groups": f"{groups['max_gap_ms']:.1f}",
+        "w5_ticks_single": str(single["ticks"]),
+        "w5_ticks_groups": str(groups["ticks"]),
+        "w5_keep_all": f"{keep_all['received']} of {keep_all['sent']}",
+        "w5_keep1": f"{keep1['received']} of {keep1['sent']}",
+        "w5_packets_tour": str(len(wire)),
+        "w5_checks_hashes": f"{checks['type_hashes_identical']:,}",
+    }
+    tokens = {
+        "W5_DESCRIPTION": html.escape(W5_DESCRIPTION),
+        "W5_JSON_LD": week5_json_ld(),
+        "W5_TRANSCRIPTS": week5_transcripts(load_json(docs5 / "transcripts.json")),
+        "W5_INTEROP": week5_interop(load_json(docs5 / "interop.json")),
+        **week5_tables(lab),
+    }
+    return stats, tokens
+
+
+def export_week5(docs5: Path, out_dir: Path) -> None:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for name in W5_EXPORT:
+        shutil.copyfile(docs5 / name, out_dir / name)
+
+
+def make_og_week5(path: Path, stats: dict[str, str]) -> None:
+    width, height = 1200, 630
+    card = np.zeros((height, width, 3), np.uint8)
+    card[:] = (29, 25, 18)
+    for x in range(0, width, 40):
+        cv2.line(card, (x, 0), (x, height), (42, 37, 27), 1)
+    for y in range(0, height, 40):
+        cv2.line(card, (0, y), (width, y), (42, 37, 27), 1)
+    orange, white, muted = (60, 138, 240), (242, 240, 236), (200, 196, 190)
+    steel, green = (216, 201, 76), (138, 211, 106)
+    aa = cv2.LINE_AA
+    # the four drone nodes and the edges between them, echoing the page's graph
+    boxes = {"camera": (770, 150), "px4": (1030, 150), "detector": (770, 440), "planner": (1030, 440)}
+    edges = [("px4", "camera", steel), ("camera", "detector", steel), ("detector", "planner", steel), ("px4", "planner", green)]
+    for a, b, color in edges:
+        cv2.line(card, boxes[a], boxes[b], color, 4, aa)
+    cv2.line(card, (boxes["planner"][0] + 40, 440), (boxes["px4"][0] + 40, 150), orange, 4, aa)
+    for (x1, y1), (x2, y2) in ((boxes["px4"], boxes["camera"]), (boxes["camera"], boxes["detector"])):
+        cv2.circle(card, ((x1 + x2) // 2, (y1 + y2) // 2), 9, orange, -1, aa)
+    for name, (x, y) in boxes.items():
+        cv2.rectangle(card, (x - 95, y - 34), (x + 95, y + 34), (42, 37, 27), -1)
+        cv2.rectangle(card, (x - 95, y - 34), (x + 95, y + 34), (110, 100, 88), 2, aa)
+        size = cv2.getTextSize(name, cv2.FONT_HERSHEY_DUPLEX, 0.85, 2)[0]
+        cv2.putText(card, name, (x - size[0] // 2, y + size[1] // 2), cv2.FONT_HERSHEY_DUPLEX, 0.85, white, 2, aa)
+    cv2.rectangle(card, (72, 150), (152, 156), orange, -1)
+    cv2.putText(card, "ROS 2, from", (66, 238), cv2.FONT_HERSHEY_TRIPLEX, 2.0, white, 3, aa)
+    cv2.putText(card, "the wire up.", (66, 318), cv2.FONT_HERSHEY_TRIPLEX, 2.0, orange, 3, aa)
+    for i, line in enumerate(("A drone in four nodes, and DDS", "rebuilt from scratch in Python")):
+        cv2.putText(card, line, (72, 392 + i * 46), cv2.FONT_HERSHEY_DUPLEX, 1.0, muted, 2, aa)
+    cv2.putText(
+        card,
+        f"{stats['w5_hashes']} type hashes, {stats['w5_qos']} QoS pairs match ROS 2",
+        (72, 512),
+        cv2.FONT_HERSHEY_DUPLEX,
+        0.72,
+        orange,
+        2,
+        aa,
+    )
+    cv2.putText(card, "UAVs@Berkeley Software Ground School 2026, Week 5", (72, 575), cv2.FONT_HERSHEY_SIMPLEX, 0.72, muted, 1, aa)
+    if not cv2.imwrite(str(path), card, [cv2.IMWRITE_JPEG_QUALITY, 88]):
+        raise BuildError(f"could not write {path}")
+
+
+def week5_json_ld() -> str:
+    data = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "UAV Ground School Week 5: ROS 2 nodes and communication",
+        "description": W5_DESCRIPTION,
+        "url": CANONICAL + "week5",
+        "image": CANONICAL + "og-week5.jpg",
+        "codeRepository": REPO,
+        "programmingLanguage": ["Python", "C++", "JavaScript"],
+        "runtimePlatform": "ROS 2 Jazzy",
+        "license": "https://opensource.org/licenses/MIT",
+        "keywords": "ROS 2, Jazzy, DDS, RTPS, CDR, QoS, topics, services, actions, executors, callback groups, Fast DDS, Cyclone DDS, REP 2011",
+        "author": {"@type": "Person", "name": "Karthik Subramanian"},
+    }
+    return json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+
+
 def week3_json_ld() -> str:
     data = {
         "@context": "https://schema.org",
@@ -898,9 +1152,11 @@ def verify(out: Path) -> None:
 # ------------------------------------------------------------------- build ----
 
 
-def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Path = DOCS3, docs4: Path = DOCS4) -> Path:
+def build(
+    out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Path = DOCS3, docs4: Path = DOCS4, docs5: Path = DOCS5
+) -> Path:
     out = out.resolve()
-    for protected in (ROOT, SITE, docs.resolve(), docs3.resolve(), docs4.resolve(), Path.home()):
+    for protected in (ROOT, SITE, docs.resolve(), docs3.resolve(), docs4.resolve(), docs5.resolve(), Path.home()):
         if out == protected or out in protected.parents:
             raise BuildError(f"refusing to overwrite {out}")
     missing3 = [str(p) for p in required_week3(docs3) if not p.is_file()]
@@ -909,6 +1165,9 @@ def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Pat
     missing4 = [str(p) for p in required_week4(docs4) if not p.is_file()]
     if missing4:
         raise BuildError("missing week 4 build inputs:\n  " + "\n  ".join(missing4))
+    missing5 = [str(p) for p in required_week5(docs5) if not p.is_file()]
+    if missing5:
+        raise BuildError("missing week 5 build inputs:\n  " + "\n  ".join(missing5))
     inputs = check_inputs(docs)
     rows = inputs["rows"]
     today = today or dt.date.today()
@@ -938,11 +1197,14 @@ def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Pat
 
     w4_numbers, w4_tokens = week4(docs4)
     export_week4(docs4, out / "assets" / "week4")
-    numbers = {**stats(rows), **w3_numbers, **piece_numbers, **yolo_numbers, **w4_numbers}
+    w5_numbers, w5_tokens = week5(docs5)
+    export_week5(docs5, out / "assets" / "week5")
+    numbers = {**stats(rows), **w3_numbers, **piece_numbers, **yolo_numbers, **w4_numbers, **w5_numbers}
     sentence, figures = stitcher_copy(rows, images)
     ctx = Context(
         tokens={
             "CANONICAL": CANONICAL,
+            "REPO": REPO,
             "DESCRIPTION": html.escape(DESCRIPTION),
             "JSON_LD": json_ld(),
             "BENCHMARK_ROWS": benchmark_rows(rows),
@@ -958,6 +1220,7 @@ def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Pat
             "W3_YOLO_ROWS": yolo_rows,
             "W3_YOLO_NOTES": yolo_notes,
             **w4_tokens,
+            **w5_tokens,
         },
         stats=numbers,
         images=images,
@@ -968,6 +1231,7 @@ def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Pat
     make_og_image(read_image(docs / "rough_panorama.jpg"), out / "og.jpg", numbers["rough_best_rmse"])
     make_og_week3(read_image(docs3 / "hero.jpg"), out / "og-week3.jpg", numbers["w3_best_f1"])
     make_og_week4(None, out / "og-week4.jpg", w4_numbers)
+    make_og_week5(out / "og-week5.jpg", w5_numbers)
     (out / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {CANONICAL}sitemap.xml\n")
     (out / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -975,6 +1239,7 @@ def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Pat
         f"  <url>\n    <loc>{CANONICAL}</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
         f"  <url>\n    <loc>{CANONICAL}week3</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
         f"  <url>\n    <loc>{CANONICAL}week4</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
+        f"  <url>\n    <loc>{CANONICAL}week5</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
         "</urlset>\n"
     )
     (out / "_headers").write_text(HEADERS)
@@ -1002,6 +1267,9 @@ HEADERS = """/*
 /og-week4.jpg
   Cache-Control: public, max-age=86400
 
+/og-week5.jpg
+  Cache-Control: public, max-age=86400
+
 /css/*
   Cache-Control: public, max-age=0, must-revalidate
 
@@ -1016,9 +1284,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--docs", default=str(DOCS), help="directory with benchmark.json and preview images")
     parser.add_argument("--docs3", default=str(DOCS3), help="week 3 docs directory")
     parser.add_argument("--docs4", default=str(DOCS4), help="week 4 docs directory")
+    parser.add_argument("--docs5", default=str(DOCS5), help="week 5 docs directory")
     args = parser.parse_args(argv)
     try:
-        out = build(Path(args.out), Path(args.docs), docs3=Path(args.docs3), docs4=Path(args.docs4))
+        out = build(Path(args.out), Path(args.docs), docs3=Path(args.docs3), docs4=Path(args.docs4), docs5=Path(args.docs5))
     except BuildError as error:
         print(f"build_site: error: {error}", file=sys.stderr)
         return 1

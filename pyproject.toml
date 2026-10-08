@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uav-ground-school"
-version = "0.4.0"
-description = "UAVs@Berkeley Software Ground School 2026 solutions: color segmentation, drone video mosaicking, blob detection, object detection, YOLOv8, and a flight controller design with MAVLink, DroneCAN and CAN from scratch."
+version = "0.5.0"
+description = "UAVs@Berkeley Software Ground School 2026 solutions: color segmentation, drone video mosaicking, blob detection, object detection, YOLOv8, a flight controller design with MAVLink, DroneCAN and CAN from scratch, and ROS 2 with a pure Python RTPS participant."
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "Karthik Subramanian" }]
 requires-python = ">=3.10"
-keywords = ["opencv", "computer-vision", "uav", "drone", "image-stitching", "orthomosaic", "suas", "blob-detection", "object-detection", "yolov8", "ardupilot", "mavlink", "dronecan", "can-bus", "flight-controller"]
+keywords = ["opencv", "computer-vision", "uav", "drone", "image-stitching", "orthomosaic", "suas", "blob-detection", "object-detection", "yolov8", "ardupilot", "mavlink", "dronecan", "can-bus", "flight-controller", "ros2", "dds", "rtps", "cdr"]
 dependencies = ["opencv-python>=4.8", "numpy>=1.24"]
 
 [project.optional-dependencies]
@@ -22,13 +22,15 @@ protocols = ["pymavlink>=2.4.40", "dronecan>=1.0.25", "pyrtcm>=1.1"]
 week02 = "week02.cli:main"
 week03 = "week03.cli:main"
 week04 = "week04.cli:main"
+week05 = "week05.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["week02*", "week03*", "week04*"]
+include = ["week02*", "week03*", "week04*", "week05*"]
 
 [tool.setuptools.package-data]
 week03 = ["annotations/*.json"]
 week04 = ["data/*.json", "dsdl/LICENSE", "dsdl/**/*.uavcan"]
+week05 = ["interfaces/README.md", "interfaces/*/msg/*.msg", "interfaces/*/srv/*.srv", "interfaces/*/action/*.action"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
