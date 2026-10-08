@@ -25,7 +25,7 @@ def test_every_cell_is_sourced(data):
         for fw in firmware.FIRMWARES:
             assert f[fw]["how"].endswith("."), f"{f['id']}.{fw}"
     text = firmware.DATA.read_text()
-    assert "—" not in text and "–" not in text
+    assert chr(0x2014) not in text and chr(0x2013) not in text  # no em or en dashes
 
 
 def test_validate_catches_bad_cells(data):
