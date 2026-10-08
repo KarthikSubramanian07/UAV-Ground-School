@@ -10,6 +10,7 @@ photos in ``docs/week03/photos`` and writes:
 * ``synthetic.jpg``: one scene per synthetic preset;
 * ``objects.jpg``, ``objects.json``, ``objects_robustness.jpg``;
 * ``targets.jpg`` and ``targets.json``;
+* ``beyond.jpg`` and ``beyond.json``: Challenge 1 on the objects and shapes photos (:mod:`week03.beyond`);
 * ``dots_benchmark.md`` and ``dots_benchmark.json`` (unless ``--skip-benchmark``).
 
 The YOLO figures need trained weights and are made by ``yolo figures``.
@@ -23,7 +24,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from . import benchmark, blobs, dots, evaluate, objects, synth, targets
+from . import benchmark, beyond, blobs, dots, evaluate, objects, synth, targets
 
 PHOTOS = ("polka_dots_1.png", "polka_dots_2.jpg", "polka_dots_3.jpg")
 
@@ -231,6 +232,11 @@ def run(out: str | Path, photos: str | Path | None = None, run_benchmark: bool =
     print(f"objects: {result['counts']}, mean mask IoU {result['score']['mean_mask_iou']:.3f}", flush=True)
     found = target_figures(photos, out)
     print(f"targets: {', '.join(t['shape'] for t in found)}", flush=True)
+    study = beyond.run(out, photos)
+    print(
+        f"beyond: LoG {study['objects']['log']['matched']}/6 objects, denoised LoG {study['shapes']['log+nlm']['tp']}/10 shape dots",
+        flush=True,
+    )
     if run_benchmark:
         report = benchmark.run(out, photos, seeds=seeds)
         overall = ", ".join(f"{m} {v['f1']:.3f}" for m, v in report["synthetic_overall"].items())

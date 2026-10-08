@@ -1,0 +1,286 @@
+{
+ "noise_lab": {
+  "polka_dots_1.png": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "polka_dots_2.jpg": [
+   1.24,
+   0.25,
+   0.25
+  ],
+  "polka_dots_3.jpg": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "objects.jpg": [
+   0.74,
+   0.0,
+   0.0
+  ],
+  "shapes.png": [
+   1.48,
+   1.24,
+   1.24
+  ]
+ },
+ "denoise_strength": 10.0,
+ "shape_dot_radii": {
+  "min_radius": 8.0,
+  "max_radius": 40.0
+ },
+ "objects": {
+  "log": {
+   "label": "Laplacian of Gaussian",
+   "detections": 81,
+   "matched": 4,
+   "false_positives": 77,
+   "missed": [
+    "ring_top",
+    "ring_bottom"
+   ],
+   "mean_box_iou": 0.668,
+   "strongest_matched": 4
+  },
+  "dog": {
+   "label": "Difference of Gaussians",
+   "detections": 82,
+   "matched": 4,
+   "false_positives": 78,
+   "missed": [
+    "ring_top",
+    "ring_bottom"
+   ],
+   "mean_box_iou": 0.661,
+   "strongest_matched": 4
+  },
+  "doh": {
+   "label": "Determinant of Hessian",
+   "detections": 46,
+   "matched": 4,
+   "false_positives": 42,
+   "missed": [
+    "ring_top",
+    "ring_bottom"
+   ],
+   "mean_box_iou": 0.626,
+   "strongest_matched": 4
+  },
+  "gray": {
+   "label": "SimpleBlobDetector, grayscale",
+   "detections": 14,
+   "matched": 1,
+   "false_positives": 13,
+   "missed": [
+    "cube_top",
+    "cone_upright",
+    "cone_fallen",
+    "ring_top",
+    "ring_bottom"
+   ],
+   "mean_box_iou": 0.655,
+   "strongest_matched": 1
+  },
+  "contours": {
+   "label": "Contours of Otsu on saturation",
+   "detections": 5,
+   "matched": 4,
+   "false_positives": 1,
+   "missed": [
+    "cube_top",
+    "cone_upright"
+   ],
+   "mean_box_iou": 0.883,
+   "strongest_matched": 4
+  },
+  "objects.py": {
+   "label": "Purpose built (objects.py)",
+   "detections": 6,
+   "matched": 6,
+   "false_positives": 0,
+   "missed": [],
+   "mean_box_iou": 0.955,
+   "strongest_matched": 6
+  }
+ },
+ "shapes": {
+  "gray": {
+   "label": "gray",
+   "tp": 0,
+   "fp": 0,
+   "fn": 10,
+   "precision": 1.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "center_error_px": null,
+   "radius_error": null
+  },
+  "gray+nlm": {
+   "label": "gray, denoised",
+   "tp": 5,
+   "fp": 0,
+   "fn": 5,
+   "precision": 1.0,
+   "recall": 0.5,
+   "f1": 0.6667,
+   "center_error_px": 0.319,
+   "radius_error": 0.0081
+  },
+  "simple": {
+   "label": "simple",
+   "tp": 0,
+   "fp": 0,
+   "fn": 10,
+   "precision": 1.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "center_error_px": null,
+   "radius_error": null
+  },
+  "simple+nlm": {
+   "label": "simple, denoised",
+   "tp": 5,
+   "fp": 0,
+   "fn": 5,
+   "precision": 1.0,
+   "recall": 0.5,
+   "f1": 0.6667,
+   "center_error_px": 0.324,
+   "radius_error": 0.0063
+  },
+  "contrast": {
+   "label": "contrast",
+   "tp": 0,
+   "fp": 0,
+   "fn": 10,
+   "precision": 1.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "center_error_px": null,
+   "radius_error": null
+  },
+  "contrast+nlm": {
+   "label": "contrast, denoised",
+   "tp": 7,
+   "fp": 0,
+   "fn": 3,
+   "precision": 1.0,
+   "recall": 0.7,
+   "f1": 0.8235,
+   "center_error_px": 0.342,
+   "radius_error": 0.0035
+  },
+  "contour": {
+   "label": "contour",
+   "tp": 0,
+   "fp": 0,
+   "fn": 10,
+   "precision": 1.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "center_error_px": null,
+   "radius_error": null
+  },
+  "contour+nlm": {
+   "label": "contour, denoised",
+   "tp": 6,
+   "fp": 0,
+   "fn": 4,
+   "precision": 1.0,
+   "recall": 0.6,
+   "f1": 0.75,
+   "center_error_px": 0.337,
+   "radius_error": 0.0088
+  },
+  "log": {
+   "label": "log",
+   "tp": 0,
+   "fp": 1,
+   "fn": 10,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "center_error_px": null,
+   "radius_error": null
+  },
+  "log+nlm": {
+   "label": "log, denoised",
+   "tp": 8,
+   "fp": 3,
+   "fn": 2,
+   "precision": 0.7273,
+   "recall": 0.8,
+   "f1": 0.7619,
+   "center_error_px": 0.34,
+   "radius_error": 0.001
+  },
+  "dog": {
+   "label": "dog",
+   "tp": 0,
+   "fp": 1,
+   "fn": 10,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "center_error_px": null,
+   "radius_error": null
+  },
+  "dog+nlm": {
+   "label": "dog, denoised",
+   "tp": 8,
+   "fp": 3,
+   "fn": 2,
+   "precision": 0.7273,
+   "recall": 0.8,
+   "f1": 0.7619,
+   "center_error_px": 0.34,
+   "radius_error": 0.0008
+  },
+  "doh": {
+   "label": "doh",
+   "tp": 0,
+   "fp": 1,
+   "fn": 10,
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "center_error_px": null,
+   "radius_error": null
+  },
+  "doh+nlm": {
+   "label": "doh, denoised",
+   "tp": 8,
+   "fp": 3,
+   "fn": 2,
+   "precision": 0.7273,
+   "recall": 0.8,
+   "f1": 0.7619,
+   "center_error_px": 0.34,
+   "radius_error": 0.0013
+  },
+  "log+nlm+0.90": {
+   "label": "log, denoised, roundness 0.90",
+   "tp": 10,
+   "fp": 6,
+   "fn": 0,
+   "precision": 0.625,
+   "recall": 1.0,
+   "f1": 0.7692,
+   "center_error_px": 0.34,
+   "radius_error": 0.001
+  },
+  "contours": {
+   "label": "contours (targets.py regions)",
+   "tp": 10,
+   "fp": 0,
+   "fn": 0,
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "center_error_px": 0.526,
+   "radius_error": 0.0188
+  }
+ }
+}

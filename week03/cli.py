@@ -228,6 +228,18 @@ def cmd_synth(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_beyond(args: argparse.Namespace) -> int:
+    from . import beyond
+
+    result = beyond.run(args.out, args.photos)
+    for key, r in result["objects"].items():
+        print(f"objects.jpg  {key:11s} {r['matched']}/6 found, {r['false_positives']:3d} false, box IoU {r['mean_box_iou']:.3f}")
+    for key, r in result["shapes"].items():
+        print(f"shapes.png   {key:14s} {r['tp']:2d}/10 dots, {r['fp']} false, F1 {r['f1']:.3f}")
+    print(f"wrote {Path(args.out) / 'beyond.json'} and beyond.jpg")
+    return 0
+
+
 def cmd_benchmark(args: argparse.Namespace) -> int:
     from . import benchmark
 
@@ -395,6 +407,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--presets", help="comma separated synthetic presets (default: all)")
     p.add_argument("--no-ablation", action="store_true", help="skip the with and without edge fit comparison")
     p.set_defaults(func=cmd_benchmark)
+
+    p = sub.add_parser("beyond", help="Challenge 1 on the objects and shapes photos: LoG and contours beyond the dots")
+    p.add_argument("--out", default="docs/week03", help="where beyond.json and beyond.jpg go")
+    p.add_argument("--photos", default="docs/week03/photos")
+    p.set_defaults(func=cmd_beyond)
 
     p = sub.add_parser("docs", help="regenerate the figures and data in docs/week03")
     p.add_argument("out", nargs="?", default="docs/week03")
