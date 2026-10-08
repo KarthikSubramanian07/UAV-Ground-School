@@ -20,6 +20,11 @@ turns raw detections into measured dots:
    surround that is itself one color. This rejects squares, stars, fabric
    texture and gaps of background enclosed by dots.
 5. **Filter.** By radius, color name, contrast and roundness.
+
+Noisy images (``shapes.png`` carries per pixel color noise five times that of
+the polka dot photos, see :func:`estimate_noise`) can be cleaned first with
+non-local means (``denoise``), which averages patches that look alike and so
+keeps edges sharp where a blur would round them off.
 """
 
 from __future__ import annotations
@@ -37,6 +42,22 @@ from week02.colors import _silhouette, name_color
 from .blobs import DISK_PEAK, Blob, BlobFilter, detect_contours, detect_scale_space, detect_simple, prune_overlaps
 
 METHODS = ("gray", "simple", "contrast", "contour", "log", "dog", "doh")
+
+
+def estimate_noise(image: np.ndarray) -> tuple[float, float, float]:
+    """Standard deviation of pixel noise in each CIELAB channel (Immerkaer, 1996).
+
+    The mask below cancels any image that is locally a plane, so what is left
+    is mostly noise; the median absolute value makes edges barely count.
+    """
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB).astype(np.float32)
+    kernel = np.array([[1, -2, 1], [-2, 4, -2], [1, -2, 1]], np.float32)
+    return tuple(float(np.median(np.abs(cv2.filter2D(lab[..., c], -1, kernel))) * 1.4826 / 6.0) for c in range(3))  # type: ignore[return-value]
+
+
+def denoise(image: np.ndarray, strength: float) -> np.ndarray:
+    """Non-local means on the color image; ``strength`` is OpenCV's ``h`` (10 suits ``shapes.png``)."""
+    return cv2.fastNlMeansDenoisingColored(image, None, strength, strength, 7, 21) if strength > 0 else image
 
 
 def lab_image(image: np.ndarray) -> np.ndarray:
@@ -192,6 +213,7 @@ class DotSettings:
         default_factory=lambda: BlobFilter(blob_color=255, min_threshold=40, max_threshold=250, threshold_step=15)
     )
     palette_k: int | None = None
+    denoise: float = 0.0  # non-local means strength applied first; 0 is off
 
 
 def _sample(lab: np.ndarray, xs: np.ndarray, ys: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -500,6 +522,7 @@ def find_dots(image: np.ndarray, settings: DotSettings | None = None, **override
     if overrides:
         s = DotSettings(**{**s.__dict__, **overrides})
     start = time.perf_counter()
+    image = denoise(image, s.denoise)
     lab = lab_image(image)
     max_radius = s.max_radius or min(image.shape[:2]) / 6.0
     candidates, palette = _candidates(image, lab, s, max_radius)

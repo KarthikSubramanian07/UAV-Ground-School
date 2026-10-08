@@ -33,7 +33,9 @@ def test_world_too_small():
 
 
 def test_truth_round_trip(tmp_path):
-    truth = synth.FlightTruth(np.array([[1.0, 2.0, 0.1, 1.0], [3.0, 4.0, 0.2, 0.9]]), synth.FlightPlan(frame_width=64, frame_height=48, fps=24))
+    truth = synth.FlightTruth(
+        np.array([[1.0, 2.0, 0.1, 1.0], [3.0, 4.0, 0.2, 0.9]]), synth.FlightPlan(frame_width=64, frame_height=48, fps=24)
+    )
     loaded = synth.load_truth(synth.save_truth(tmp_path / "t.csv", truth))
     assert np.allclose(loaded.poses, truth.poses)
     assert (loaded.plan.frame_width, loaded.plan.frame_height, loaded.plan.fps) == (64, 48, 24)
@@ -48,7 +50,9 @@ def test_undistorter_inverts_simulated_lens():
     distorted = synth.render_frame(world, pose, lens_plan, 0, np.random.default_rng(0))
     restored = stitching.Undistorter(-0.08)(distorted)
     inner = (slice(20, 160), slice(30, 290))
-    assert np.abs(distorted.astype(int) - ideal.astype(int))[inner].mean() > 2 * np.abs(restored.astype(int) - ideal.astype(int))[inner].mean()
+    assert (
+        np.abs(distorted.astype(int) - ideal.astype(int))[inner].mean() > 2 * np.abs(restored.astype(int) - ideal.astype(int))[inner].mean()
+    )
 
 
 def test_color_test_images_are_deterministic():

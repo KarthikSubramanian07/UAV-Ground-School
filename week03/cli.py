@@ -73,6 +73,8 @@ def _settings(args: argparse.Namespace):
         colors=colors,
         refine=not args.no_refine,
         verify=not args.no_verify,
+        min_roundness=args.min_roundness,
+        denoise=args.denoise,
     )
 
 
@@ -89,8 +91,8 @@ def cmd_dots(args: argparse.Namespace) -> int:
             print(
                 f"  {i:3d} ({d.x:7.1f}, {d.y:7.1f})  r={d.radius:6.1f}  {d.color}  contrast {d.contrast:5.1f}  roundness {d.roundness or 0:.3f}"
             )
-    truth_path = evaluate.ANNOTATIONS / f"{Path(args.image).stem}.json"
-    if args.truth or (args.truth is None and truth_path.is_file()):
+    truth_path = evaluate.dot_truth_path(args.image)
+    if args.truth or truth_path:
         truth = evaluate.load_truth(args.truth or truth_path)
         score = evaluate.score_against(report.dots, truth)
         print(
@@ -133,10 +135,10 @@ def cmd_compare(args: argparse.Namespace) -> int:
 
     image = load_image(args.image)
     found = {}
-    truth_path = evaluate.ANNOTATIONS / f"{Path(args.image).stem}.json"
-    truth = evaluate.load_truth(truth_path) if truth_path.is_file() else None
+    truth_path = evaluate.dot_truth_path(args.image)
+    truth = evaluate.load_truth(truth_path) if truth_path else None
     for method in dots.METHODS:
-        report = dots.find_dots(image, method=method)
+        report = dots.find_dots(image, method=method, denoise=args.denoise, min_radius=args.min_radius, max_radius=args.max_radius)
         found[method] = report.dots
         line = f"{method:9s} {len(report.dots):4d} dots  {report.seconds:6.2f} s"
         if truth:
@@ -223,6 +225,18 @@ def cmd_synth(args: argparse.Namespace) -> int:
         (out / f"{preset}.json").write_text(json.dumps(truth, indent=1))
         print(f"{preset:12s} {len(scene.dots)} dots, {len(scene.distractors)} distractors")
     print(f"wrote {len(presets)} scenes to {out}")
+    return 0
+
+
+def cmd_beyond(args: argparse.Namespace) -> int:
+    from . import beyond
+
+    result = beyond.run(args.out, args.photos)
+    for key, r in result["objects"].items():
+        print(f"objects.jpg  {key:11s} {r['matched']}/6 found, {r['false_positives']:3d} false, box IoU {r['mean_box_iou']:.3f}")
+    for key, r in result["shapes"].items():
+        print(f"shapes.png   {key:14s} {r['tp']:2d}/10 dots, {r['fp']} false, F1 {r['f1']:.3f}")
+    print(f"wrote {Path(args.out) / 'beyond.json'} and beyond.jpg")
     return 0
 
 
@@ -344,6 +358,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--max-radius", type=float, default=None, help="largest dot radius (default: a sixth of the short side)")
     p.add_argument("--min-contrast", type=float, default=10.0, help="minimum Delta E between a dot and its surroundings")
     p.add_argument("--colors", help="keep only these colors, comma separated (red,green,light blue,...)")
+    p.add_argument("--min-roundness", type=float, default=0.93, help="edge fit roundness a dot needs (default 0.93)")
+    p.add_argument("--denoise", type=float, default=0.0, help="non-local means strength to apply first, 0 is off (try 10 on shapes.png)")
     p.add_argument("--no-refine", action="store_true", help="skip the edge fit")
     p.add_argument("--no-verify", action="store_true", help="keep every candidate")
     p.add_argument("--truth", default=None, help="annotation JSON to score against (found automatically for the ground school photos)")
@@ -355,6 +371,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("compare", help="every detector on one image, side by side")
     p.add_argument("image")
+    p.add_argument("--min-radius", type=float, default=3.0, help="smallest dot radius in pixels")
+    p.add_argument("--max-radius", type=float, default=None, help="largest dot radius (default: a sixth of the short side)")
+    p.add_argument("--denoise", type=float, default=0.0, help="non-local means strength to apply first, 0 is off")
     p.add_argument("--out", help="write the comparison sheet")
     p.add_argument("--no-show", dest="show", action="store_false")
     p.set_defaults(func=cmd_compare)
@@ -388,6 +407,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--presets", help="comma separated synthetic presets (default: all)")
     p.add_argument("--no-ablation", action="store_true", help="skip the with and without edge fit comparison")
     p.set_defaults(func=cmd_benchmark)
+
+    p = sub.add_parser("beyond", help="Challenge 1 on the objects and shapes photos: LoG and contours beyond the dots")
+    p.add_argument("--out", default="docs/week03", help="where beyond.json and beyond.jpg go")
+    p.add_argument("--photos", default="docs/week03/photos")
+    p.set_defaults(func=cmd_beyond)
 
     p = sub.add_parser("docs", help="regenerate the figures and data in docs/week03")
     p.add_argument("out", nargs="?", default="docs/week03")

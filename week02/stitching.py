@@ -92,7 +92,9 @@ class StitchResult:
         ]
         if self.adjustment:
             a = self.adjustment
-            lines.append(f"bundle adjust   residual RMS {a.rms_before:.2f} px -> {a.rms_after:.2f} px over {a.correspondences} correspondences")
+            lines.append(
+                f"bundle adjust   residual RMS {a.rms_before:.2f} px -> {a.rms_after:.2f} px over {a.correspondences} correspondences"
+            )
         if self.gains is not None and len(self.gains):
             lines.append(f"gains           {self.gains.min():.3f} .. {self.gains.max():.3f}")
         total = sum(self.timings.values())

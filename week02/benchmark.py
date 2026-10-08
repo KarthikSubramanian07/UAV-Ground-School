@@ -109,7 +109,14 @@ def run_benchmark(out: Path, seed: int = 42, include_stitcher: bool = True, log=
                 except stitching.StitchError as error:
                     status = str(error)
                 seconds = round(time.perf_counter() - start, 1)
-                rows.append({"scenario": scenario.name, "variant": f"cv2.Stitcher SCANS ({len(frames)} frames)", "status": status, "seconds": seconds})
+                rows.append(
+                    {
+                        "scenario": scenario.name,
+                        "variant": f"cv2.Stitcher SCANS ({len(frames)} frames)",
+                        "status": status,
+                        "seconds": seconds,
+                    }
+                )
                 log(f"  cv2.Stitcher: {status} in {seconds}s")
 
     (out / "benchmark.json").write_text(json.dumps(rows, indent=2))

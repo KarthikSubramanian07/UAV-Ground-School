@@ -649,6 +649,7 @@ struct DotSettings {
     double min_surround = 0.6;  // fraction of the outside ring that matches the local background
     double min_roundness = 0.93;  // 1 - RMS distance of the edge from the fitted ellipse / radius
     double min_aspect = 0.6;  // minor / major axis; dots seen at an angle are ellipses
+    double denoise = 0.0;  // non-local means strength applied first; 0 is off
     BlobFilter blob_filter = [] {
         BlobFilter f;
         f.blob_color = 255;
@@ -1064,8 +1065,10 @@ std::vector<Blob> candidates(const cv::Mat& image, const cv::Mat& lab, const Dot
     throw std::invalid_argument("method must be one of gray, contrast, log, dog, doh");
 }
 
-DotReport find_dots(const cv::Mat& image, const DotSettings& s) {
+DotReport find_dots(const cv::Mat& input, const DotSettings& s) {
     auto start = std::chrono::steady_clock::now();
+    cv::Mat image = input;
+    if (s.denoise > 0) cv::fastNlMeansDenoisingColored(input, image, static_cast<float>(s.denoise), static_cast<float>(s.denoise), 7, 21);
     cv::Mat lab = lab_image(image);
     const double max_radius = s.max_radius > 0 ? s.max_radius : std::min(image.rows, image.cols) / 6.0;
     std::vector<Blob> dots = candidates(image, lab, s, max_radius);
@@ -1187,7 +1190,7 @@ bool has_display() {
 int usage(const char* prog) {
     std::fprintf(stderr,
                  "usage: %s IMAGE [--method gray|contrast|log|dog|doh] [--min-radius F] [--max-radius F]\n"
-                 "       [--min-contrast F] [--out FILE] [--json FILE] [--no-show]\n",
+                 "       [--min-contrast F] [--min-roundness F] [--denoise H] [--out FILE] [--json FILE] [--no-show]\n",
                  prog);
     return 2;
 }
@@ -1209,6 +1212,8 @@ int main(int argc, char** argv) {
             else if (arg == "--min-radius") settings.min_radius = std::stod(value());
             else if (arg == "--max-radius") settings.max_radius = std::stod(value());
             else if (arg == "--min-contrast") settings.min_contrast = std::stod(value());
+            else if (arg == "--min-roundness") settings.min_roundness = std::stod(value());
+            else if (arg == "--denoise") settings.denoise = std::stod(value());
             else if (arg == "--out") out_path = value();
             else if (arg == "--json") json_path = value();
             else if (arg == "--no-show") show = false;

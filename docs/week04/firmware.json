@@ -1,0 +1,102 @@
+{
+ "versions": {
+  "ardupilot": "ArduCopter 4.7.1",
+  "px4": "v1.16.2",
+  "betaflight": "2026.6.2"
+ },
+ "needed": {
+  "board": "the flight controller is a CubePilot Cube Orange+ Standard Set (ADS-B IN carrier board)",
+  "control": "every multirotor",
+  "config": "every build",
+  "telemetry": "link telemetry: MAVLink to the ground station, and RTK corrections up to the drone",
+  "companion_dds": "link companion_dds: ROS 2 topics between the autopilot and the Jetson (DDS, the in drone half of the hybrid model)",
+  "companion_mavlink": "link companion_mavlink: MAVLink for mission logic and a UDP bridge to the ground over WiFi",
+  "gimbal": "link gimbal: Gimbal angles and camera triggers from the autopilot",
+  "rc": "link rc: Pilot sticks in, link statistics and telemetry out",
+  "can": "link can: RTK position, compass, barometer, LED and buzzer on one bus",
+  "lidar": "link lidar: Height above ground for landing and terrain following",
+  "motors": "link motors: Motor commands",
+  "rtk": "RTK corrections go up the telemetry link and on to the DroneCAN GPS",
+  "adsb": "the ADS-B receiver built into the carrier board",
+  "battery": "the PM02 power module on POWER1",
+  "autonomy": "a survey drone flies missions, a geofence and return to launch"
+ },
+ "verdicts": {
+  "ardupilot": {
+   "firmware": "ArduPilot",
+   "flies": true,
+   "supported": [
+    "board",
+    "control",
+    "config",
+    "telemetry",
+    "companion_mavlink",
+    "gimbal",
+    "rc",
+    "can",
+    "lidar",
+    "motors",
+    "rtk",
+    "adsb",
+    "battery",
+    "autonomy"
+   ],
+   "partial": [
+    "companion_dds"
+   ],
+   "lost": [],
+   "unconfirmed": []
+  },
+  "px4": {
+   "firmware": "PX4",
+   "flies": true,
+   "supported": [
+    "board",
+    "control",
+    "config",
+    "companion_dds",
+    "companion_mavlink",
+    "motors",
+    "rtk",
+    "adsb",
+    "battery"
+   ],
+   "partial": [
+    "telemetry",
+    "gimbal",
+    "rc",
+    "can",
+    "lidar",
+    "autonomy"
+   ],
+   "lost": [],
+   "unconfirmed": []
+  },
+  "betaflight": {
+   "firmware": "Betaflight",
+   "flies": false,
+   "supported": [
+    "control",
+    "config",
+    "rc",
+    "motors",
+    "battery"
+   ],
+   "partial": [
+    "telemetry",
+    "can",
+    "lidar",
+    "autonomy"
+   ],
+   "lost": [
+    "board",
+    "companion_dds",
+    "companion_mavlink",
+    "gimbal",
+    "rtk",
+    "adsb"
+   ],
+   "unconfirmed": []
+  }
+ }
+}

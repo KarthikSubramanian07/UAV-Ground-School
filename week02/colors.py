@@ -348,10 +348,7 @@ def format_report(layers: list[ColorLayer]) -> str:
             lines.append("        no objects above the size threshold")
         for i, obj in enumerate(layer.objects, start=1):
             shape = f", {obj.shape} ({obj.shape_confidence:.2f} IoU)" if obj.shape else ""
-            lines.append(
-                f"        object {i}: center (x={obj.center[0]:.1f}, y={obj.center[1]:.1f}), "
-                f"area {obj.area} px{shape}"
-            )
+            lines.append(f"        object {i}: center (x={obj.center[0]:.1f}, y={obj.center[1]:.1f}), area {obj.area} px{shape}")
     return "\n".join(lines)
 
 
@@ -405,9 +402,7 @@ def contact_sheet(
     tile_height = max(1, int(round(h * tile_width / w)))
     label_height = 30
     rows = (len(panels) + columns - 1) // columns
-    sheet = np.full(
-        (rows * (tile_height + label_height), columns * tile_width, 3), 24, dtype=np.uint8
-    )
+    sheet = np.full((rows * (tile_height + label_height), columns * tile_width, 3), 24, dtype=np.uint8)
     for i, (title, panel) in enumerate(panels):
         r, c = divmod(i, columns)
         y0 = r * (tile_height + label_height)

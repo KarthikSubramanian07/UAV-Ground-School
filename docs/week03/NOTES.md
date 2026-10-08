@@ -56,7 +56,7 @@ The club's own example: detecting SUAS targets (a red bullseye, shapes on grass)
 
 ## 5. Skill booster 2
 
-* **Option 1, OpenCV blob detection** ([tutorial](https://opencv.org/blob-detection-using-opencv/)): SimpleBlobDetector on the three polka dot images, filtering by size or color. Challenge 1: other methods (LoG, DoG, DoH, contour filtering). Challenge 2: detect and classify the cones, cubes and rings in the objects file with accurate contours or bounding boxes.
+* **Option 1, OpenCV blob detection** ([tutorial](https://opencv.org/blob-detection-using-opencv/)): SimpleBlobDetector on the three polka dot images, filtering by size or color. Challenge 1: other methods (LoG, DoG, DoH, contour filtering), tested on the polka dots and also on the real objects and the distorted shapes images. Challenge 2: detect and classify the cones, cubes and rings in the objects file with accurate contours or bounding boxes.
 * **Option 2, YOLO**: follow the Roboflow YOLOv8 notebook, train a model, explore Roboflow's preprocessing and augmentation, and try to improve performance. Deploying locally or on an edge device is not required.
 
 Solutions: [`week03/README.md`](../../week03/README.md).

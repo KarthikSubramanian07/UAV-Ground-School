@@ -6,11 +6,18 @@ from week02 import benchmark, synth
 def test_benchmark_writes_report(tmp_path, monkeypatch):
     tiny = [
         benchmark.Scenario("tiny", "2 passes", synth.FlightPlan(frame_width=320, frame_height=180, passes=2, speed=8.0, seed=3), 110),
-        benchmark.Scenario("tiny_lens", "2 passes with distortion", synth.FlightPlan.hard(frame_width=320, frame_height=180, passes=2, speed=8.0, seed=3), 120),
+        benchmark.Scenario(
+            "tiny_lens",
+            "2 passes with distortion",
+            synth.FlightPlan.hard(frame_width=320, frame_height=180, passes=2, speed=8.0, seed=3),
+            120,
+        ),
     ]
     monkeypatch.setattr(benchmark, "scenarios", lambda seed: tiny)
     original = synth.voxel_world
-    monkeypatch.setattr(synth, "voxel_world", lambda height_blocks, seed: original(width_blocks=200, height_blocks=height_blocks, seed=seed))
+    monkeypatch.setattr(
+        synth, "voxel_world", lambda height_blocks, seed: original(width_blocks=200, height_blocks=height_blocks, seed=seed)
+    )
 
     def small_stitcher(frames, max_frames=None):
         raise benchmark.stitching.StitchError("skipped in tests")

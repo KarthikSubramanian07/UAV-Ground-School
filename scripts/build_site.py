@@ -118,10 +118,11 @@ W3_IMAGES = {
     "w3_objects_truth": "objects_truth.jpg",
     "w3_robustness": "objects_robustness.jpg",
     "w3_targets": "targets.jpg",
+    "w3_beyond": "beyond.jpg",
     "w3_yolo_whole": "yolo/whole.jpg",
     "w3_yolo_sliced": "yolo/sliced.jpg",
 }
-W3_DATA = ("dots_benchmark.json", "objects.json", "yolo/results.json", "yolo/dataset.json")
+W3_DATA = ("dots_benchmark.json", "objects.json", "beyond.json", "yolo/results.json", "yolo/dataset.json")
 METHOD_LABELS = {
     "gray": "SimpleBlobDetector, grayscale",
     "simple": "SimpleBlobDetector, per palette color",
@@ -163,7 +164,8 @@ def week3_bench(report: dict) -> tuple[str, str, dict[str, str]]:
         raise BuildError("dots_benchmark.json has no real photo results (run the benchmark with the photos)")
     names = list(real)
     head = "\n                ".join(
-        f'<th scope="col" class="num">{html.escape(PHOTO_TITLES.get(n, n))}<small>{real[n]["required_dots"]} dots</small></th>' for n in names
+        f'<th scope="col" class="num">{html.escape(PHOTO_TITLES.get(n, n))}<small>{real[n]["required_dots"]} dots</small></th>'
+        for n in names
     )
     best_real = {n: max(real[n][m]["f1"] for m in methods) for n in names}
     syn = report["synthetic"]
@@ -231,6 +233,23 @@ def week3_pieces(result: dict) -> tuple[str, dict[str, str]]:
         "w3_robust": (summary if all_same else "mostly the same") + (f" in all {len(robust)} versions" if all_same else ""),
     }
     return "\n".join(rows), numbers
+
+
+def week3_beyond(result: dict) -> dict[str, str]:
+    """Challenge 1 on the objects and shapes photos, as sentences for the page."""
+    obj, shp = result["objects"], result["shapes"]
+    log, contours = obj["log"], obj["contours"]
+    raw_best = max(shp[m]["tp"] for m in METHOD_LABELS)
+    return {
+        "w3_beyond_objects": (
+            f"LoG's {log['strongest_matched']} strongest peaks are the {log['strongest_matched']} solid pieces, and it misses both rings: "
+            f"a ring is not a blob. Contours of saturation find {contours['matched']} of 6 and merge the touching cubes."
+        ),
+        "w3_beyond_shapes": (
+            f"On the noisy shapes file every dot detector finds {raw_best} of 10 dots. After non-local means denoising LoG finds "
+            f"{shp['log+nlm']['tp']}, and contours of the Delta E segmentation find all {shp['contours']['tp']} with no false positives."
+        ),
+    }
 
 
 def week3_yolo(results: dict, dataset: dict) -> tuple[str, str, dict[str, str]]:
@@ -305,7 +324,18 @@ W4_DESCRIPTION = (
     "and checked by a design rule checker, with MAVLink, DroneCAN, CAN, RTCM, CRSF, SBUS and DShot implemented from their "
     "specifications and the generated parameters verified on ArduCopter 4.7.1 in simulation."
 )
-W4_DATA = ("summary.json", "site.json", "check.json", "scope.json", "journey.json", "pid.json", "bom.json", "sitl.json", "performance.json", "wiring.svg")
+W4_DATA = (
+    "summary.json",
+    "site.json",
+    "check.json",
+    "scope.json",
+    "journey.json",
+    "pid.json",
+    "bom.json",
+    "sitl.json",
+    "performance.json",
+    "wiring.svg",
+)
 
 
 def required_week4(docs4: Path) -> list[Path]:
@@ -339,13 +369,17 @@ def week4(docs4: Path) -> tuple[dict[str, str], dict[str, str]]:
         mass = "" if r["mass_g"] is None else f"{r['mass_g']:g} g" + (" est." if "mass_g" in r["estimated"] else "")
         name = html.escape(r["name"])
         link = f'<a href="{html.escape(r["url"])}" rel="noopener">{name}</a>' if r.get("url") else name
-        rows.append(f"<tr><td>{link}</td><td>{html.escape(r['role'].replace('_', ' '))}</td><td class=\"num\">{r['count']}</td><td class=\"num\">{price}</td><td class=\"num\">{mass}</td></tr>")
-    rows.append(f'<tr class="total"><td><strong>Total</strong></td><td></td><td></td><td class="num"><strong>${bom["total_usd"]:,.2f}</strong></td><td class="num"><strong>{summary["mass_kg"]} kg</strong></td></tr>')
+        rows.append(
+            f'<tr><td>{link}</td><td>{html.escape(r["role"].replace("_", " "))}</td><td class="num">{r["count"]}</td><td class="num">{price}</td><td class="num">{mass}</td></tr>'
+        )
+    rows.append(
+        f'<tr class="total"><td><strong>Total</strong></td><td></td><td></td><td class="num"><strong>${bom["total_usd"]:,.2f}</strong></td><td class="num"><strong>{summary["mass_kg"]} kg</strong></td></tr>'
+    )
     budget_rows = []
     for r in sitl["link_budget"]["rows"]:
         budget_rows.append(
-            f"<tr><td>{html.escape(r['stream'])}</td><td class=\"mono\">{html.escape(r['message'])}</td><td class=\"num\">{r['predicted_hz']:g}</td>"
-            f"<td class=\"num\">{r['measured_hz']:.2f}</td><td class=\"num\">{r['measured_bytes_per_s']:.0f}</td></tr>"
+            f'<tr><td>{html.escape(r["stream"])}</td><td class="mono">{html.escape(r["message"])}</td><td class="num">{r["predicted_hz"]:g}</td>'
+            f'<td class="num">{r["measured_hz"]:.2f}</td><td class="num">{r["measured_bytes_per_s"]:.0f}</td></tr>'
         )
     air = pid["airframe"]
     rules = len({f["rule"] for f in report})
@@ -381,7 +415,37 @@ def week4(docs4: Path) -> tuple[dict[str, str], dict[str, str]]:
         "W4_BUDGET_ROWS": "".join(budget_rows),
         "W4_WIRING": svg,
     }
+    tokens["W4_FIRMWARE_ROWS"], fw_stats = week4_firmware(docs4)
+    stats.update(fw_stats)
     return stats, tokens
+
+
+def week4_firmware(docs4: Path) -> tuple[str, dict[str, str]]:
+    """The firmware matrix rows (from week04/data/firmware.json) and one verdict per firmware."""
+    from week04 import firmware
+
+    report = load_json(docs4 / "firmware.json")
+    data = firmware.load()
+    labels = {"yes": "yes", "partial": "partly", "no": "no", "unconfirmed": "unconfirmed"}
+    rows = []
+    for f in data["features"]:
+        if f["id"] not in report["needed"]:
+            continue
+        cells = []
+        for fw in firmware.FIRMWARES:
+            c = f[fw]
+            cells.append(
+                f'<td><span class="fw fw-{c["support"]}">{labels[c["support"]]}</span> {html.escape(c["how"])} '
+                f'<a class="src" href="{html.escape(c["source"])}" rel="noopener">source</a></td>'
+            )
+        rows.append(f'<tr><th scope="row">{html.escape(f["feature"])}</th>{"".join(cells)}</tr>')
+    total = len(report["needed"])
+    stats = {}
+    for fw, v in report["verdicts"].items():
+        stats[f"w4_fw_{fw}"] = f"{len(v['supported'])} of {total}"
+        stats[f"w4_fw_{fw}_changes"] = str(len(v["partial"]))
+        stats[f"w4_fw_{fw}_lost"] = str(len(v["lost"]))
+    return "".join(rows), stats
 
 
 def export_week4(docs4: Path, out_dir: Path) -> None:
@@ -416,7 +480,16 @@ def make_og_week4(svg_png: np.ndarray | None, path: Path, stats: dict[str, str])
     cv2.putText(card, "Pro.", (66, 318), cv2.FONT_HERSHEY_TRIPLEX, 2.2, orange, 3, aa)
     for i, line in enumerate(("A drone wired pin by pin, every", "protocol implemented and checked")):
         cv2.putText(card, line, (72, 392 + i * 46), cv2.FONT_HERSHEY_DUPLEX, 1.0, muted, 2, aa)
-    cv2.putText(card, f"{stats['w4_errors']} errors, {stats['w4_passed']} checks passed, ArduCopter 4.7.1 verified", (72, 512), cv2.FONT_HERSHEY_DUPLEX, 0.72, orange, 2, aa)
+    cv2.putText(
+        card,
+        f"{stats['w4_errors']} errors, {stats['w4_passed']} checks passed, ArduCopter 4.7.1 verified",
+        (72, 512),
+        cv2.FONT_HERSHEY_DUPLEX,
+        0.72,
+        orange,
+        2,
+        aa,
+    )
     cv2.putText(card, "UAVs@Berkeley Software Ground School 2026, Week 4", (72, 575), cv2.FONT_HERSHEY_SIMPLEX, 0.72, muted, 1, aa)
     if not cv2.imwrite(str(path), card, [cv2.IMWRITE_JPEG_QUALITY, 88]):
         raise BuildError(f"could not write {path}")
@@ -859,6 +932,7 @@ def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Pat
     export_explorer(docs3, out / "assets" / "week3")
     head, bench_rows, w3_numbers = week3_bench(load_json(docs3 / "dots_benchmark.json"))
     piece_rows, piece_numbers = week3_pieces(load_json(docs3 / "objects.json"))
+    piece_numbers.update(week3_beyond(load_json(docs3 / "beyond.json")))
     yolo_rows, yolo_notes, yolo_numbers = week3_yolo(load_json(docs3 / "yolo" / "results.json"), load_json(docs3 / "yolo" / "dataset.json"))
     reports = {name: parse_report((docs / "colors" / f"{name}_report.txt").read_text()) for name in DEMO_IMAGES}
 

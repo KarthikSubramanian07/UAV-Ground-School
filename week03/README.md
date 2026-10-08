@@ -4,6 +4,7 @@ Skill booster 2 from UAVs@Berkeley Software Ground School (22 September 2026). L
 
 * [Option 1: OpenCV blob detection](#option-1-opencv-blob-detection)
 * [Challenge 1: LoG, DoG, DoH and contours](#challenge-1-log-dog-doh-and-contours)
+* [Challenge 1 on the objects and shapes photos](#challenge-1-on-the-objects-and-shapes-photos)
 * [Challenge 2: cones, cubes and rings](#challenge-2-cones-cubes-and-rings)
 * [Bonus: the shapes file](#bonus-the-shapes-file)
 * [Option 2: YOLOv8](#option-2-yolov8)
@@ -99,6 +100,54 @@ Across all seven methods and three photos there is one false positive (DoH, on t
   <img src="../docs/week03/scale_space.jpg" alt="The flat polka dot print and its LoG response at four scales" width="100%">
 </p>
 
+## Challenge 1 on the objects and shapes photos
+
+> Use other methods such as LoG or contours, and test them out on the real objects and the distorted shapes images.
+
+```bash
+python -m week03 beyond                  # writes docs/week03/beyond.json and beyond.jpg
+python -m week03 dots docs/week03/photos/shapes.png --denoise 10 --min-radius 8 --max-radius 40
+```
+
+[`beyond.py`](beyond.py) runs the same kinds of detector on the other two photos from the Drive folder and scores them against ground truth.
+
+<p align="center">
+  <img src="../docs/week03/beyond.jpg" alt="Top: LoG, Otsu contours and objects.py on the objects photo. Bottom: LoG raw, LoG after denoising and contours on the dot group of the shapes photo. Green is correct, red is false, white rings are missed dots." width="100%">
+</p>
+
+**Real objects.** The detectors know nothing about cones, cubes or rings, so they are scored like any object detector: a box must reach IoU 0.5 with a SAM 2.1 truth box.
+
+| Method | Found (of 6) | False | Box IoU | Strongest 6 that are right |
+| --- | ---: | ---: | ---: | ---: |
+| Laplacian of Gaussian, radius 20 to 160 px | 4 | 77 | 0.668 | 4 |
+| Difference of Gaussians | 4 | 78 | 0.661 | 4 |
+| Determinant of Hessian | 4 | 42 | 0.626 | 4 |
+| SimpleBlobDetector, grayscale, area filter only | 1 | 13 | 0.655 | 1 |
+| Contours of an Otsu threshold on saturation | 4 | 1 | 0.883 | 4 |
+| Purpose built ([`objects.py`](objects.py)) | **6** | **0** | **0.955** | 6 |
+
+* The four strongest LoG peaks are exactly the two cubes and the two cones: a solid piece is a blob. Both rings are missed by all three scale space methods, because a ring is not a blob. Its middle is floor, so LoG answers with a necklace of small peaks along the tube and one peak in the hole, never one circle around the whole ring.
+* Below the four real pieces, LoG's peaks are cardboard corners, tile grout and parts of the rings. Ranking by response is what makes LoG usable here; a fixed threshold is not.
+* Contours of saturation get four pieces almost exactly (box IoU 0.883), and fail in the two ways [`objects.py`](objects.py) was written to fix. The touching cubes merge into one region, and the upright cone merges with the brown cardboard behind it, which Otsu also calls saturated.
+
+**Distorted shapes.** `shapes.png` has color noise in every pixel. Measured with Immerkaer's method, its a and b channel noise is 1.24, against 0.25 or less for every other photo of the week. The ten dots of the dot group are hand checked truth ([`annotations/shapes.json`](annotations/shapes.json)); everything else in the image is a false positive if called a dot.
+
+| Method | Raw | After non-local means |
+| --- | ---: | ---: |
+| SimpleBlobDetector, grayscale | 0/10 | 5/10, 0 false |
+| SimpleBlobDetector, per palette color | 0/10 | 5/10, 0 false |
+| SimpleBlobDetector, background contrast | 0/10 | 7/10, 0 false |
+| Contours on color edges | 0/10 | 6/10, 0 false |
+| LoG, DoG and DoH (each) | 0/10, 1 false | 8/10, 3 false |
+| LoG with roundness 0.90 instead of 0.93 | | 10/10, 6 false |
+| Contours of the Delta E segmentation ([`targets.py`](targets.py)) | **10/10, 0 false** | |
+
+* Raw, every dot detector finds nothing. Noise ruins the edge fit (roundness about 0.83 against the 0.93 a dot needs) and the inside is no longer one color, so verification rejects every real dot. Without verification the same noise passes as hundreds of specks.
+* Non-local means (`--denoise 10`) averages patches that look alike, so it removes the noise without rounding off the edges. LoG then finds 8 of the 10 dots; its three false positives are round things that are not dots (the arrow's tail, the cyan pentagon and the gray hole inside the green outline). The two missed dots fit at roundness 0.921 and 0.927, because the image's distortion also makes the dots lumpy. Relaxing the threshold to 0.90 finds all ten but also accepts parts of the red rectangle and the red star.
+* Contours win here. `targets.py` thresholds Delta E from the local background on a median filtered image, and the dots are large, uniform regions in that map. Area and circularity alone then separate the dots from everything else.
+
+The lesson is the same in both photos. Scale space blob detectors want flat, filled, round things. Real objects with holes or touching neighbors, or a noisy image, need segmentation first, and then contours do the work.
+
 ## Challenge 2: cones, cubes and rings
 
 > Try to detect and classify the cones, cubes, and rings in the objects file (with accurate contours or bounding boxes).
@@ -188,10 +237,11 @@ What was built to try to improve it:
 
 ## C++
 
-[`cpp/`](cpp) ports the dot detectors (`polka_dots`: LoG, DoG, DoH, contrast and grayscale SimpleBlobDetector, the edge fit and verification) and the game piece classifier (`game_pieces`) to C++17. Against Python on six synthetic scenes and the three photos, every method matches with F1 1.000 and centers within 0.01 px; see [`cpp/README.md`](cpp/README.md). CI builds both and runs the parity tests.
+[`cpp/`](cpp) ports the dot detectors (`polka_dots`: LoG, DoG, DoH, contrast and grayscale SimpleBlobDetector, the edge fit and verification) and the game piece classifier (`game_pieces`) to C++17. It also takes `--denoise` and `--min-roundness`. Against Python on six synthetic scenes, the three photos and the denoised shapes photo, every method matches with F1 1.000 and centers within 0.01 px; see [`cpp/README.md`](cpp/README.md). CI builds both and runs the parity tests.
 
 ## Ground truth and tests
 
+* **Shapes**: [`annotations/shapes.json`](annotations/shapes.json), the ten dots of the dot group, edge fitted on the denoised image and checked by eye on a 4x overlay.
 * **Polka dots**: [`annotations/polka_dots_*.json`](annotations). Candidates from several detectors at a low threshold were drawn numbered on 2x crops, every one was checked by eye, fabric specks were removed and missed dots added by hand. Dots less than half inside the frame are `difficult` (optional); on the third photo the defocused cards are `ignore` polygons. The geometry comes from the same edge fit the pipeline uses, so on the photos only precision and recall are scored.
 * **Synthetic scenes**: [`synth.py`](synth.py) renders dots at 4x supersampling with exact centers and radii (and, under perspective, the radius of the equal area circle from the homography's Jacobian). A regression test checks the pixel center convention: an early version was off by 0.375 px in x and y, which showed up as the same 0.53 px error for seven different detectors.
 * `pytest` covers every module: scale space theory (peak scale and height), polarity, color blobs invisible in gray, pyramids, sidelobes, the scikit-image comparison, filters, border dots, synthetic accuracy, evaluation semantics, object features and invariance, box following augmentations, tiling, the mAP implementation against Ultralytics, sliced inference, the CLI and the site build.

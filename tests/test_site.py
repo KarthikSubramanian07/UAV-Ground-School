@@ -372,6 +372,6 @@ def test_week4_numbers_come_from_json(week4_html: str) -> None:
     assert f"{sitl['params']['accepted']} of {sitl['params']['sent']}" in week4_html
     assert f"{summary['mass_kg']:.2f} kg" in week4_html
     for row in sitl["link_budget"]["rows"]:
-        assert f"<td class=\"mono\">{row['message']}</td>" in week4_html
+        assert f'<td class="mono">{row["message"]}</td>' in week4_html
     bom = json.loads((DOCS4 / "bom.json").read_text())
     assert f"${bom['total_usd']:,.2f}" in week4_html

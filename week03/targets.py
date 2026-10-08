@@ -103,7 +103,8 @@ def classify_region(mask: np.ndarray) -> tuple[str, float]:
     return name, iou
 
 
-def find_targets(image: np.ndarray, min_contrast: float = 16.0, min_area: int = 300) -> list[Target]:
+def find_targets(image: np.ndarray, min_contrast: float = 16.0, min_area: int = 300, group: bool = True) -> list[Target]:
+    """Segment by Delta E from the local background, classify each region, and (with ``group``) merge dot clusters."""
     lab = dots.lab_image(cv2.medianBlur(image, 5))
     delta = dots.contrast_map(lab, max_radius=0.15 * max(image.shape[:2]), smooth=2.0)
     mask = (delta >= min_contrast).astype(np.uint8)
@@ -140,12 +141,17 @@ def find_targets(image: np.ndarray, min_contrast: float = 16.0, min_area: int = 
                 float(circularity),
             )
         )
-    return _group_dots(raw)
+    return _group_dots(raw) if group else raw
+
+
+def is_dot(t: Target) -> bool:
+    """A small, round, filled region: a dot candidate."""
+    return t.circularity >= 0.75 and t.area < 3000 and not t.outline
 
 
 def _group_dots(targets: list[Target]) -> list[Target]:
     """Merge small round regions of similar color (Delta E < 20) that sit close together into one group."""
-    small = [t for t in targets if t.circularity >= 0.75 and t.area < 3000 and not t.outline]
+    small = [t for t in targets if is_dot(t)]
     others = [t for t in targets if t not in small]
     groups: list[list[Target]] = []
     for t in small:

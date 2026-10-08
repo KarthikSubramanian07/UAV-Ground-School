@@ -1,0 +1,80 @@
+{
+ "image": "shapes.png",
+ "size": [
+  1285,
+  848
+ ],
+ "notes": "The ten purple dots of the dot group, the only dots in the image. Centers and radii are edge fits on the non-local means denoised image, each checked by eye on an overlay at 4x. The arrow, the painted shapes and the texture are not dots, so a detection on them is a false positive.",
+ "dots": [
+  {
+   "x": 296,
+   "y": 154,
+   "r": 15.2,
+   "color": "purple",
+   "difficult": false
+  },
+  {
+   "x": 296,
+   "y": 199,
+   "r": 15.3,
+   "color": "purple",
+   "difficult": false
+  },
+  {
+   "x": 255,
+   "y": 199,
+   "r": 15.8,
+   "color": "purple",
+   "difficult": false
+  },
+  {
+   "x": 215,
+   "y": 246,
+   "r": 15.2,
+   "color": "purple",
+   "difficult": false
+  },
+  {
+   "x": 255,
+   "y": 246,
+   "r": 15.3,
+   "color": "purple",
+   "difficult": false
+  },
+  {
+   "x": 297,
+   "y": 245,
+   "r": 15.7,
+   "color": "purple",
+   "difficult": false
+  },
+  {
+   "x": 175,
+   "y": 290,
+   "r": 15.1,
+   "color": "purple",
+   "difficult": false
+  },
+  {
+   "x": 215,
+   "y": 290,
+   "r": 15.2,
+   "color": "purple",
+   "difficult": false
+  },
+  {
+   "x": 256,
+   "y": 291,
+   "r": 15.6,
+   "color": "purple",
+   "difficult": false
+  },
+  {
+   "x": 295,
+   "y": 292,
+   "r": 15.8,
+   "color": "purple",
+   "difficult": false
+  }
+ ]
+}
