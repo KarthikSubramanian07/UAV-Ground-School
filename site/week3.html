@@ -46,6 +46,7 @@
       </a>
       <nav class="site-nav" aria-label="Sections">
         <ul>
+          <li><a href="#lecture">Lecture</a></li>
           <li><a href="#explorer">Explorer</a></li>
           <li><a href="#pieces">Game pieces</a></li>
           <li><a href="#yolo">YOLO</a></li>
@@ -91,6 +92,50 @@
           <span class="mono">{{STAT:w3_log_found}} dots, {{STAT:w3_log_fp}} false positives</span>
         </figcaption>
       </figure>
+    </section>
+
+    <section class="section" id="lecture" aria-labelledby="lecture-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="lecture-title">The lecture, in three answers.</h2>
+          <p class="lede">Focus topic 2 asked three questions. Short answers, each backed by something in this repo you can run. Full notes: <a class="text-link" href="https://github.com/KarthikSubramanian07/UAV-Ground-School/blob/main/docs/week03/NOTES.md" rel="noopener">docs/week03/NOTES.md</a>.</p>
+        </div>
+        <ol class="brief">
+          <li>
+            <span class="tag">Question 1</span>
+            <div>
+              <h3>How can OpenCV and non neural methods detect objects?</h3>
+            </div>
+            <ul class="shipped">
+              <li><span><strong>Threshold, find contours, filter by shape.</strong> SimpleBlobDetector is exactly that recipe, repeated at many thresholds, with filters on area, circularity, convexity and inertia.</span></li>
+              <li><span><strong>Scale space</strong> (LoG, DoG, DoH) finds round things of every size at once. On the three polka dot photos DoG reaches F1 0.998 against hand checked truth.</span></li>
+              <li><span>The limits are just as real: a ring is not a blob, and per pixel noise defeats every dot detector until the image is denoised. The <a class="text-link" href="#beyond">objects and shapes study</a> measures both.</span></li>
+            </ul>
+          </li>
+          <li>
+            <span class="tag">Question 2</span>
+            <div>
+              <h3>How are neural networks structured and created?</h3>
+            </div>
+            <ul class="shipped">
+              <li><span><strong>Layers of simple units.</strong> Each takes a weighted sum of the previous layer and applies an activation such as ReLU or a sigmoid.</span></li>
+              <li><span><strong>Trained, not written.</strong> Backpropagation finds how each weight changes the loss on labeled examples, and gradient descent nudges every weight a little, over and over.</span></li>
+              <li><span><strong>Creating one is mostly data:</strong> collect, annotate (SAM drew the cone, cube and ring masks here), train, then score on frames the model never saw. The football dataset's own split broke that last rule.</span></li>
+            </ul>
+          </li>
+          <li>
+            <span class="tag">Question 3</span>
+            <div>
+              <h3>How do vision models build on generic networks?</h3>
+            </div>
+            <ul class="shipped">
+              <li><span><strong>Convolution</strong> slides one small set of weights over the whole image, so the network learns edges, then parts, then objects, with far fewer weights than connecting every pixel. Pooling and strides shrink the maps as it goes deeper.</span></li>
+              <li><span><strong>Detectors like YOLO</strong> add a neck that mixes features from several resolutions and heads that predict boxes and classes for every cell in one pass.</span></li>
+              <li><span>The shrinking has a cost you can see: at 640 pixels the 11 pixel ball is under 4 pixels and the baseline never finds it (ball AP50 0.000). <a class="text-link" href="#yolo">Training and running on tiles</a> lifts it to 0.569.</span></li>
+            </ul>
+          </li>
+        </ol>
+      </div>
     </section>
 
     <section class="section" id="brief" aria-labelledby="brief-title">
@@ -380,7 +425,7 @@
           </figure>
         </div>
 
-        <div class="block">
+        <div class="block" id="beyond">
           <div class="block-head">
             <h3>Blob detectors, away from the dots.</h3>
             <p>Challenge 1 also asks for LoG and contours on these two photos. {{STAT:w3_beyond_objects}} {{STAT:w3_beyond_shapes}}</p>
