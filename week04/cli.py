@@ -7,6 +7,7 @@ Protocol Pro, the design:
   diagram      Draw the wiring diagram as SVG
   performance  Mass, thrust, hover and flight time
   budget       Bandwidth on every MAVLink link, RTK corrections included
+  firmware     What would still work on PX4 or Betaflight, feature by feature, with sources
 
 The protocols:
   journey      Follow one second of RTK corrections through five protocols
@@ -242,6 +243,23 @@ def cmd_sitl(args) -> int:
     return 0
 
 
+def cmd_firmware(args) -> int:
+    from . import firmware
+
+    design = _design(args)
+    data = firmware.load()
+    need = firmware.required_features(design)
+    features = {f["id"]: f for f in data["features"]}
+    print(f"{'feature':34s}" + "".join(f"{firmware.NAMES[fw]:12s}" for fw in firmware.FIRMWARES))
+    for fid in need:
+        f = features[fid]
+        print(f"{f['feature'][:33]:34s}" + "".join(f"{firmware.SYMBOL[f[fw]['support']]:12s}" for fw in firmware.FIRMWARES))
+    for fw, v in firmware.verdicts(design, data).items():
+        lost = ", ".join(v.lost) or "nothing"
+        print(f"{firmware.NAMES[fw]}: {len(v.supported)} of {len(need)} supported, {len(v.partial)} with changes, lost: {lost}")
+    return 0
+
+
 def cmd_docs(args) -> int:
     from . import docs
 
@@ -268,6 +286,7 @@ def main(argv: list[str] | None = None) -> int:
     s.set_defaults(func=cmd_diagram)
     sub.add_parser("performance").set_defaults(func=cmd_performance)
     sub.add_parser("budget").set_defaults(func=cmd_budget)
+    sub.add_parser("firmware").set_defaults(func=cmd_firmware)
     sub.add_parser("journey").set_defaults(func=cmd_journey)
     s = sub.add_parser("frame")
     s.add_argument("protocol", choices=["mavlink", "crsf", "sbus", "dshot", "can"])

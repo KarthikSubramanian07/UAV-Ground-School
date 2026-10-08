@@ -11,7 +11,7 @@ import json
 import math
 from pathlib import Path
 
-from . import check, dshot, i2c, journey, links, params, performance, pid, rc, uart
+from . import check, dshot, firmware, i2c, journey, links, params, performance, pid, rc, uart
 from .can import CanFrame
 from .design import Design, harness
 from .diagram import render
@@ -372,6 +372,8 @@ def build(out: Path, run_sitl: bool = False) -> None:
     _write(out / "journey.json", journey.run())
     _write(out / "site.json", site_bundle(design, report, cables))
     _write(out / "scope.json", scope())
+    _write(out / "firmware.json", firmware.report(design))
+    _write(out / "firmware.md", firmware.markdown(design))
 
     sitl_path = out / "sitl.json"
     if run_sitl:
