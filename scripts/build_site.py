@@ -415,7 +415,37 @@ def week4(docs4: Path) -> tuple[dict[str, str], dict[str, str]]:
         "W4_BUDGET_ROWS": "".join(budget_rows),
         "W4_WIRING": svg,
     }
+    tokens["W4_FIRMWARE_ROWS"], fw_stats = week4_firmware(docs4)
+    stats.update(fw_stats)
     return stats, tokens
+
+
+def week4_firmware(docs4: Path) -> tuple[str, dict[str, str]]:
+    """The firmware matrix rows (from week04/data/firmware.json) and one verdict per firmware."""
+    from week04 import firmware
+
+    report = load_json(docs4 / "firmware.json")
+    data = firmware.load()
+    labels = {"yes": "yes", "partial": "partly", "no": "no", "unconfirmed": "unconfirmed"}
+    rows = []
+    for f in data["features"]:
+        if f["id"] not in report["needed"]:
+            continue
+        cells = []
+        for fw in firmware.FIRMWARES:
+            c = f[fw]
+            cells.append(
+                f'<td><span class="fw fw-{c["support"]}">{labels[c["support"]]}</span> {html.escape(c["how"])} '
+                f'<a class="src" href="{html.escape(c["source"])}" rel="noopener">source</a></td>'
+            )
+        rows.append(f'<tr><th scope="row">{html.escape(f["feature"])}</th>{"".join(cells)}</tr>')
+    total = len(report["needed"])
+    stats = {}
+    for fw, v in report["verdicts"].items():
+        stats[f"w4_fw_{fw}"] = f"{len(v['supported'])} of {total}"
+        stats[f"w4_fw_{fw}_changes"] = str(len(v["partial"]))
+        stats[f"w4_fw_{fw}_lost"] = str(len(v["lost"]))
+    return "".join(rows), stats
 
 
 def export_week4(docs4: Path, out_dir: Path) -> None:

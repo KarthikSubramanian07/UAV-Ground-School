@@ -45,6 +45,7 @@
       </a>
       <nav class="site-nav" aria-label="Sections">
         <ul>
+          <li><a href="#lecture">Lecture</a></li>
           <li><a href="#wiring">Wiring</a></li>
           <li><a href="#wire">On the wire</a></li>
           <li><a href="#journey">Journey</a></li>
@@ -91,6 +92,49 @@
           <div class="wiring-canvas">{{W4_WIRING}}</div>
           <aside class="wiring-panel" id="wiring-panel" aria-live="polite">Loading the design.</aside>
         </div>
+      </div>
+    </section>
+
+    <section class="section" id="lecture" aria-labelledby="lecture-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="lecture-title">The lecture, in four answers.</h2>
+          <p class="lede">Focus topic 3 asked four questions about flight controllers. Short answers, each tied to this drone. Full notes: <a class="text-link" href="https://github.com/KarthikSubramanian07/UAV-Ground-School/blob/main/docs/week04/NOTES.md" rel="noopener">docs/week04/NOTES.md</a>.</p>
+        </div>
+        <ol class="brief">
+          <li>
+            <span class="tag">Question 1</span>
+            <div><h3>What does a flight controller do, and how is it different from a Jetson?</h3></div>
+            <ul class="shipped">
+              <li><span><strong>The flight controller keeps the drone in the air.</strong> It fuses IMU, GPS, barometer and compass into an attitude and position, and runs the control loops hundreds of times a second, whatever else is happening.</span></li>
+              <li><span><strong>The onboard computer decides what to do:</strong> detection, planning, mission logic. On this drone the Jetson Orin Nano talks to the Cube over DDS for ROS 2 and over MAVLink on USB, and never touches a motor.</span></li>
+            </ul>
+          </li>
+          <li>
+            <span class="tag">Question 2</span>
+            <div><h3>What sensors connect to a flight controller?</h3></div>
+            <ul class="shipped">
+              <li><span><strong>Inside the Cube:</strong> three IMUs (two on a heated, vibration isolated board), barometers and a compass.</span></li>
+              <li><span><strong>Outside, on this design:</strong> a Here4 RTK GPS with its own compass and barometer on CAN, a TFmini-S rangefinder on I2C, an ExpressLRS receiver, the ADS-B receiver on the carrier board, and the power module's voltage and current.</span></li>
+            </ul>
+          </li>
+          <li>
+            <span class="tag">Question 3</span>
+            <div><h3>Which protocols connect it to its peripherals?</h3></div>
+            <ul class="shipped">
+              <li><span><strong>UART</strong> for point to point links: telemetry, the companion, the gimbal and the receiver (CRSF). <strong>I2C</strong> for slow sensors on a shared bus. <strong>CAN</strong> for a robust bus, here DroneCAN to the Here4.</span></li>
+              <li><span><strong>MAVLink</strong> is a message format on top of them, carrying telemetry, commands, parameters and RTK corrections. <a class="text-link" href="#wire">Every one is implemented here</a> and checked against reference libraries.</span></li>
+            </ul>
+          </li>
+          <li>
+            <span class="tag">Question 4</span>
+            <div><h3>How does firmware shape what it can do?</h3></div>
+            <ul class="shipped">
+              <li><span><strong>The same board is a different machine under each firmware.</strong> On this drone ArduPilot supports {{STAT:w4_fw_ardupilot}} features as designed, PX4 {{STAT:w4_fw_px4}} with {{STAT:w4_fw_px4_changes}} more needing changes, and Betaflight cannot run on the Cube at all.</span></li>
+              <li><span>Betaflight trades autonomy for a faster inner loop, built for a pilot's hands. <a class="text-link" href="#fw-matrix">Every feature, with sources</a>.</span></li>
+            </ul>
+          </li>
+        </ol>
       </div>
     </section>
 
@@ -169,6 +213,19 @@
           <div><dt>{{STAT:w4_minutes}} minutes of hover</dt><dd>To 20 percent charge, {{STAT:w4_hover_a}} A at hover, avionics included.</dd></div>
           <div><dt>Calibrated, not guessed</dt><dd>The propeller and resistance terms are fitted so the stock X500 V2 kit gives Holybro's own {{STAT:w4_ref_minutes}} minutes and 1 kg at 70 percent throttle.</dd></div>
         </dl>
+
+        <div class="block" id="fw-matrix">
+          <div class="block-head">
+            <h3>Would it fly on PX4 or Betaflight?</h3>
+            <p>Every feature this design relies on, on ArduPilot 4.7.1, PX4 v1.16.2 and Betaflight 2026.6.2, with the parameter or driver involved and a link to the firmware's own docs or source. ArduPilot: {{STAT:w4_fw_ardupilot}} as designed. PX4: {{STAT:w4_fw_px4}}, {{STAT:w4_fw_px4_changes}} with changes, none lost. Betaflight: {{STAT:w4_fw_betaflight}}, {{STAT:w4_fw_betaflight_lost}} lost, starting with the board.</p>
+          </div>
+          <div class="table-scroll">
+            <table class="benchmark-table fw-matrix">
+              <thead><tr><th scope="col">Feature</th><th scope="col">ArduPilot</th><th scope="col">PX4</th><th scope="col">Betaflight</th></tr></thead>
+              <tbody>{{W4_FIRMWARE_ROWS}}</tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </section>
 

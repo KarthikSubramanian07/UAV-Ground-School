@@ -2642,3 +2642,59 @@ th.num {
     min-width: 720px;
   }
 }
+
+/* Week 4 firmware matrix */
+.benchmark-table.fw-matrix tbody th {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--step--1);
+  line-height: 1.5;
+  min-width: 11rem;
+  padding-top: 0.75rem;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+
+.fw-matrix td {
+  min-width: 15rem;
+  padding-top: 0.75rem;
+  vertical-align: top;
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+
+.fw {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  margin-right: 0.35rem;
+  border: 1px solid currentColor;
+}
+
+.fw-yes {
+  color: oklch(0.52 0.12 152);
+}
+
+.fw-partial {
+  color: oklch(0.58 0.12 75);
+}
+
+.fw-no {
+  color: oklch(0.55 0.17 30);
+}
+
+.fw-unconfirmed {
+  color: var(--ink-2);
+}
+
+
+.fw-matrix a.src {
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
