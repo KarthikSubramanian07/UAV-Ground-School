@@ -169,7 +169,7 @@ flowchart LR
 * Week 3 tests cover scale space theory (peak scale and height), polarity, color only blobs, sidelobes, a comparison with scikit-image's `blob_log`, the edge fit on exact synthetic truth, evaluation semantics, object features and invariance, augmentations that move boxes with pixels, tiling, the mAP implementation against Ultralytics, and regression tests on the ground school photos.
 * Week 4 tests compare the protocols with pymavlink, pydronecan and pyrtcm, break the design one rule at a time, validate the parameters against ArduCopter 4.7.1's metadata, check the recorded SITL measurements against the predictions, and hold the page's JavaScript PID simulator to bit for bit agreement with Python.
 * The C++ binaries are checked for parity with Python in CI (week 2: same colors, centers within 1.5 px, same shapes, stitching accuracy; week 3: the same dots with F1 1.000 and centers within 0.01 px, the same game pieces; week 4: 2,908 protocol cases byte for byte).
-* GitHub Actions: ruff (lint everywhere, formatting enforced for week 4), tests on Python 3.10 and 3.12, the C++ build against Ubuntu's OpenCV 4.6, and the site build. Cloudflare Pages rebuilds the site on every push to `main` and posts a preview deployment for every pull request.
+* GitHub Actions: ruff (lint everywhere, formatting enforced for week 4), tests on Python 3.10 and 3.12, the C++ build against Ubuntu's OpenCV 4.6, and the site build. Once every check is green on `main`, CI triggers a Cloudflare Pages deploy hook and the site at uav-ground-school.pages.dev rebuilds from that commit.
 
 ## License
 
