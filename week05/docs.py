@@ -268,7 +268,7 @@ def results_md(out: Path, s: dict, tour: list[dict]) -> str:
             matrix(), [("publisher", "Publisher"), ("subscription", "Subscription"), ("compatibility", "Result"), ("reason", "Reason")]
         )
     )
-    return "\n".join(parts).replace("–", "-").replace("—", "-")
+    return "\n".join(parts).replace(chr(0x2013), "-").replace(chr(0x2014), "-")
 
 
 def generate(out: Path, ros: bool = False) -> None:

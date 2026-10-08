@@ -24,4 +24,4 @@ def test_generated_docs_are_up_to_date(tmp_path):
 def test_no_dashes_in_docs():
     for path in DOCS.glob("*.md"):
         text = path.read_text()
-        assert "–" not in text and "—" not in text, path.name
+        assert chr(0x2013) not in text and chr(0x2014) not in text, path.name
