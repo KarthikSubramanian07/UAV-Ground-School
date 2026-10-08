@@ -50,7 +50,6 @@ from std_msgs.msg import Int32
 from std_srvs.srv import Trigger
 
 
-
 def policy_name(kind):
     """Turn rmw_qos_policy_kind_t.RMW_QOS_POLICY_RELIABILITY into 'reliability'."""
     return str(kind).rsplit('POLICY_', 1)[-1].lower()
