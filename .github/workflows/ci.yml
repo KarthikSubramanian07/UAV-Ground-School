@@ -105,3 +105,20 @@ jobs:
           pip install opencv-python-headless numpy
           pip install -e . --no-deps
           python scripts/build_site.py --out build/site
+
+  deploy:
+    # Cloudflare Pages is Git connected but receives no push events from this
+    # repo, so CI asks it to build main through a Deploy Hook once every check
+    # above is green. The hook URL is the CLOUDFLARE_DEPLOY_HOOK secret.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [lint, test, cpp, site]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger the Cloudflare Pages production build
+        env:
+          HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          test -n "$HOOK" || { echo "CLOUDFLARE_DEPLOY_HOOK secret is not set"; exit 1; }
+          curl -fsS -X POST "$HOOK"
+          echo
+          echo "Build requested for $GITHUB_SHA"
