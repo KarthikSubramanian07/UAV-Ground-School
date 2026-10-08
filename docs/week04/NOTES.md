@@ -60,6 +60,8 @@ Firmware is the software on the flight controller that we do not write: **ArduPi
 | Betaflight | FPV racing and freestyle | very responsive manual control, fast PID loops | little autonomy, no GPS missions |
 | PX4 | research, modular development, industry | clean architecture, SITL and HITL, ROS 2 integration | steeper learning curve |
 
+Applied to this week's design, feature by feature with sources ([`docs/week04/firmware.md`](firmware.md)): ArduPilot 4.7.1 supports 14 of its 15 features as designed and the last (DDS) with a custom build; PX4 v1.16.2 would fly it with six changes (no SIYI driver, CRSF and signing not in the default build, the TFmini-S only on UART, the Here4 not named, no terrain following in missions); Betaflight cannot fly it at all, since there is no Cube Orange+ board config and it has no companion computer control, RTK injection or ADS-B.
+
 Two ArduPilot details that cost time this week, both confirmed on the real firmware:
 
 * In 4.7 the per link stream rates are `MAVn_*` (they were `SRn_*`), and `n` counts **MAVLink ports in serial order**, not serial port numbers: USB is MAV1 and TELEM1 is MAV2 on this design.

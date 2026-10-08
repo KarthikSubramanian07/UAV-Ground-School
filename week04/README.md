@@ -15,6 +15,7 @@ Skill booster 3 from UAVs@Berkeley Software Ground School (29 September 2026). L
 * [Every protocol, from its specification](#every-protocol-from-its-specification)
 * [One RTK correction, five protocols](#one-rtk-correction-five-protocols)
 * [Checked on the real firmware](#checked-on-the-real-firmware)
+* [Would it fly on PX4 or Betaflight?](#would-it-fly-on-px4-or-betaflight)
 * [PID: Isabelle, Preeti and Darren](#pid-isabelle-preeti-and-darren)
 * [C++](#c)
 * [Tests](#tests)
@@ -25,6 +26,7 @@ python -m week04 check          # the compatibility report
 python -m week04 harness        # pin by pin cables
 python -m week04 params --out protocol_pro.param
 python -m week04 journey        # one RTK correction through five protocols
+python -m week04 firmware       # what would still work on PX4 or Betaflight
 python -m week04 docs           # regenerate docs/week04
 ```
 
@@ -140,6 +142,22 @@ All 629 bytes arrive intact and the base position decodes to the Memorial Glade.
 
 To rerun: build SITL once (`./waf configure --board sitl && ./waf copter` in an ArduPilot checkout at `Copter-4.7.1`), set `ARDUPILOT_DIR`, then `python -m week04 sitl` or `python -m week04 docs --sitl`.
 
+## Would it fly on PX4 or Betaflight?
+
+The lecture's fourth question is how firmware shapes what a flight controller can do. For one drone the answer is a list, so [`firmware.py`](firmware.py) reads what this design needs from the design itself (the board, every link, RTK, the built in ADS-B receiver, the power module, missions, the control loop) and rates each against ArduPilot 4.7.1, PX4 v1.16.2 and Betaflight 2026.6.2. Every cell in [`data/firmware.json`](data/firmware.json) names the parameter or driver involved and links the firmware's own documentation or source; the full table is [`docs/week04/firmware.md`](../docs/week04/firmware.md).
+
+| | ArduPilot 4.7.1 | PX4 v1.16.2 | Betaflight 2026.6.2 |
+| --- | ---: | ---: | ---: |
+| Features supported as designed | 14 of 15 | 9 of 15 | 5 of 15 |
+| Supported with changes | 1 | 6 | 4 |
+| Lost | 0 | 0 | 6 |
+
+* **ArduPilot** runs all of it. The one change is DDS, which the stable Cube Orange+ firmware leaves out, so this design already plans a custom build with `AP_DDS`.
+* **PX4** would fly this drone, with six changes. DDS is in its default build, which is easier than on ArduPilot. But message signing exists only in its development branch. The CRSF receiver driver needs a custom build. There is no SIYI gimbal driver, the TFmini-S is supported on UART but not I2C, the docs do not name the Here4, and terrain following is not available in missions.
+* **Betaflight** cannot fly it at all. There is no Cube Orange+ board config, and nothing drives the eight outputs behind the Cube's IO coprocessor. Even with a custom board config it has no companion computer control, no DDS, no RTK injection, no ADS-B and no SIYI gimbal. What it does do better is the inner loop: PID on every gyro sample at 4 to 8 kHz, against 400 Hz by default on ArduPilot and PX4.
+
+This is the design choice the lecture's table points at: Betaflight optimises for a pilot's hands, ArduPilot and PX4 for a mission. A survey drone with RTK, a companion computer and a gimbal is firmly the second kind.
+
 ## PID: Isabelle, Preeti and Darren
 
 [`pid.py`](pid.py) turns the slides' three characters into a pitch axis simulator: rigid body, motor lag, a 10 degree step, then a gust at 1.5 s.
@@ -164,7 +182,7 @@ WEEK04_CPP_BUILD=build/cpp4 pytest tests/test_week04_cpp_parity.py
 
 ## Tests
 
-`pytest tests/test_week04_*.py`: 107 tests. Beyond the reference library comparisons above: bit stuffing never leaves six equal bits, arbitration always picks the lowest identifier inside the arbitration field, DroneCAN transfers reject a wrong toggle or signature, the MAVLink parser counts CRC errors, losses, duplicates and unknown flags, the SITL measurements stay within 10 percent of the prediction, the committed docs match what the code generates, and the site's JavaScript simulator matches Python exactly.
+`pytest tests/test_week04_*.py`: 121 tests. Beyond the reference library comparisons above: every firmware table cell has a support level and an https source and the table covers every link in the design, bit stuffing never leaves six equal bits, arbitration always picks the lowest identifier inside the arbitration field, DroneCAN transfers reject a wrong toggle or signature, the MAVLink parser counts CRC errors, losses, duplicates and unknown flags, the SITL measurements stay within 10 percent of the prediction, the committed docs match what the code generates, and the site's JavaScript simulator matches Python exactly.
 
 ## Known limits
 
