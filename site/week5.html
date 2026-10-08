@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UAV Ground School Week 5: ROS 2 nodes, topics, services, actions and QoS, down to the wire</title>
+  <meta name="description" content="{{W5_DESCRIPTION}}">
+  <meta name="author" content="Karthik Subramanian">
+  <meta name="theme-color" content="#15191c">
+  <link rel="canonical" href="{{CANONICAL}}week5">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="UAV Ground School">
+  <meta property="og:title" content="Week 5: ROS 2, from the wire up">
+  <meta property="og:description" content="{{W5_DESCRIPTION}}">
+  <meta property="og:url" content="{{CANONICAL}}week5">
+  <meta property="og:image" content="{{CANONICAL}}og-week5.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Four ROS 2 nodes of a simulated drone, camera driver, detector, planner and PX4 bridge, joined by topics, services and an action">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Week 5: ROS 2, from the wire up">
+  <meta name="twitter:description" content="{{W5_DESCRIPTION}}">
+  <meta name="twitter:image" content="{{CANONICAL}}og-week5.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500&amp;family=Schibsted+Grotesk:wght@400;500;600&amp;family=Young+Serif&amp;display=swap">
+  <link rel="stylesheet" href="css/site.css">
+
+  <script>
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("motion");
+  </script>
+  <script type="application/ld+json">{{W5_JSON_LD}}</script>
+</head>
+<body class="w4 w5">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="wordmark" href="./" aria-label="UAV Ground School, home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#232a2e"/><path d="M14 20h36v12H14v12h36" fill="none" stroke="#f08a3c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="44" r="5.5" fill="#f08a3c"/></svg>
+        UAV Ground School
+      </a>
+      <nav class="site-nav" aria-label="Sections">
+        <ul>
+          <li><a href="#mission">Mission</a></li>
+          <li><a href="#quiz">Quiz</a></li>
+          <li><a href="#qos">QoS</a></li>
+          <li><a href="#callbacks">Callbacks</a></li>
+          <li><a href="#wire">On the wire</a></li>
+          <li><a href="#tutorials">Tutorials</a></li>
+          <li class="keep"><a href="week4">Week 4</a></li>
+          <li class="keep"><a class="gh" href="{{REPO}}">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero night" aria-labelledby="hero-title">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div>
+            <p class="kicker">Week 5, ROS 2: nodes and communication</p>
+            <h1 id="hero-title">ROS 2, from <em>the wire up.</em></h1>
+            <p class="lede">The official tutorials, a simulated drone wired together with topics, services and an action, measured QoS and executor experiments, and then ROS 2 taken apart: a pure Python DDS participant that speaks RTPS, CDR and REP 2011 type hashes well enough to talk to real ROS 2 nodes.</p>
+            <div class="actions">
+              <a class="button" href="{{REPO}}/tree/main/week05">
+                <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                Week 5 source
+              </a>
+              <a class="text-link" href="#mission">Watch the mission</a>
+            </div>
+          </div>
+          <dl class="spec">
+            <dt>stack</dt><dd>ROS 2 Jazzy, Fast DDS and Cyclone DDS, in a container</dd>
+            <dt>drone</dt><dd>camera_driver, detector, planner and px4_bridge: 2 topics in the pipeline, odometry and battery, 2 services and 1 action</dd>
+            <dt>from scratch</dt><dd>RTPS discovery and reliability, CDR, REP 2011 type hashes and the QoS rules, in pure Python</dd>
+          </dl>
+        </div>
+        <ul class="tiles" aria-label="Checked against ROS 2">
+          <li><b>{{STAT:w5_hashes}}</b><span>REP 2011 type hashes identical to every installed interface</span></li>
+          <li><b>{{STAT:w5_qos}}</b><span>QoS pairs judged exactly like <code>rclpy</code>, reason strings included</span></li>
+          <li><b>{{STAT:w5_cdr}}</b><span>random CDR messages identical to <code>rclpy.serialization</code></span></li>
+          <li><b>{{STAT:w5_directions}} directions</b><span>with the real tutorial nodes, plus {{STAT:w5_cyclone}}</span></li>
+          <li><b>{{STAT:w5_mission_s}} s</b><span>to find the target and land at {{STAT:w5_landed}} m</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section night wiring-section" id="mission" aria-labelledby="mission-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="mission-title">The drone, wired up <em>by ROS 2.</em></h2>
+          <p class="lede">A replay of <code>ros2 launch ugs_drone drone.launch.py</code>, recorded off the wire by this repo's pure Python participant: {{STAT:w5_topics}} topics and services, {{STAT:w5_frames}} camera frames ({{STAT:w5_megabytes}} MB), odometry, detections and the action's feedback. The planner flies a survey leg, spots the target, cancels the goal and retargets.</p>
+        </div>
+        <div class="mission" id="mission-app">
+          <div class="mission-views">
+            <figure class="graph-view">
+              <svg id="node-graph" viewBox="0 0 640 400" role="img" aria-label="ROS 2 node graph: px4_bridge publishes odometry to camera_driver and planner, camera_driver publishes images to detector, detector publishes detections to planner, planner calls the set_mode and arm services and the fly_to action on px4_bridge">
+                <defs>
+                  <marker id="arrow-topic" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="mk-topic"/></marker>
+                  <marker id="arrow-srv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="mk-srv"/></marker>
+                  <marker id="arrow-act" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="mk-act"/></marker>
+                </defs>
+                <g class="edges">
+                  <path id="e-odom-cam" class="edge topic" d="M440 78H200" marker-end="url(#arrow-topic)"/>
+                  <path id="e-image" class="edge topic" d="M120 104V296" marker-end="url(#arrow-topic)"/>
+                  <path id="e-det" class="edge topic" d="M200 322H440" marker-end="url(#arrow-topic)"/>
+                  <path id="e-odom-plan" class="edge topic" d="M470 104V296" marker-end="url(#arrow-topic)"/>
+                  <path id="e-srv" class="edge srv" d="M520 296V104" marker-start="url(#arrow-srv)" marker-end="url(#arrow-srv)"/>
+                  <path id="e-act" class="edge act" d="M570 296V104" marker-start="url(#arrow-act)" marker-end="url(#arrow-act)"/>
+                </g>
+                <g class="edge-labels">
+                  <text x="320" y="68" text-anchor="middle">/odometry</text>
+                  <text x="132" y="204">/camera/image</text>
+                  <text x="320" y="346" text-anchor="middle">/detections</text>
+                  <text transform="translate(462 200) rotate(-90)" text-anchor="middle">/odometry</text>
+                  <text transform="translate(512 200) rotate(-90)" text-anchor="middle" class="srv-label">/set_mode, /arm</text>
+                  <text transform="translate(562 200) rotate(-90)" text-anchor="middle" class="act-label">/fly_to</text>
+                </g>
+                <g class="nodes">
+                  <g class="node" id="n-camera_driver" transform="translate(40 52)"><rect width="160" height="52" rx="9"/><text x="80" y="24" text-anchor="middle">camera_driver</text><text x="80" y="40" text-anchor="middle" class="role">15 Hz images</text></g>
+                  <g class="node" id="n-detector" transform="translate(40 296)"><rect width="160" height="52" rx="9"/><text x="80" y="24" text-anchor="middle">detector</text><text x="80" y="40" text-anchor="middle" class="role">finds the orange target</text></g>
+                  <g class="node" id="n-planner" transform="translate(440 296)"><rect width="160" height="52" rx="9"/><text x="80" y="24" text-anchor="middle">planner</text><text x="80" y="40" text-anchor="middle" class="role">client of everything</text></g>
+                  <g class="node" id="n-px4_bridge" transform="translate(440 52)"><rect width="160" height="52" rx="9"/><text x="80" y="24" text-anchor="middle">px4_bridge</text><text x="80" y="40" text-anchor="middle" class="role">flight controller sim</text></g>
+                </g>
+                <g id="pulses"></g>
+              </svg>
+              <figcaption class="graph-legend">
+                <span class="lg topic">topic</span><span class="lg srv">service</span><span class="lg act">action</span>
+                <span class="muted small">A dot is a message. Camera frames are drawn at the driver's 15 Hz.</span>
+              </figcaption>
+            </figure>
+            <figure class="map-view">
+              <svg id="mission-map" viewBox="0 0 400 400" role="img" aria-label="Top down map of the flight: takeoff at the origin, a survey leg toward (12, 6), a cancel when the target is seen, and a landing on the target near (11, 7)"></svg>
+              <figcaption class="small muted">Top down, meters. Dashed: the mission's waypoints. Ring: the target at (11, 7).</figcaption>
+            </figure>
+          </div>
+          <div class="mission-controls" role="group" aria-label="Replay">
+            <button class="chip plain" type="button" id="mission-play" aria-pressed="false">Play</button>
+            <input type="range" id="mission-scrub" min="0" max="1000" step="1" value="0" aria-label="Mission time">
+            <output id="mission-clock" class="mono">0.0 s</output>
+            <div class="speed" role="group" aria-label="Speed">
+              <button class="chip plain" type="button" data-speed="1" aria-pressed="true">1x</button>
+              <button class="chip plain" type="button" data-speed="2" aria-pressed="false">2x</button>
+              <button class="chip plain" type="button" data-speed="4" aria-pressed="false">4x</button>
+            </div>
+          </div>
+          <div class="mission-panels">
+            <dl class="readout" id="mission-readout">
+              <div><dt>phase</dt><dd id="ro-phase">waiting</dd></div>
+              <div><dt>altitude</dt><dd id="ro-alt">0.0 m</dd></div>
+              <div><dt>speed</dt><dd id="ro-speed">0.0 m/s</dd></div>
+              <div><dt>/fly_to goal</dt><dd id="ro-goal">none</dd></div>
+              <div><dt>distance to go</dt><dd id="ro-dist"></dd></div>
+              <div><dt>battery</dt><dd id="ro-batt"></dd></div>
+            </dl>
+            <div class="cam-view">
+              <svg id="cam-view" viewBox="0 0 320 240" role="img" aria-label="The detector's latest detection in the 320 by 240 camera image"></svg>
+              <p class="small muted">/detections, in the 320 x 240 image</p>
+            </div>
+            <ol class="event-log" id="mission-log" aria-live="polite"></ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="interop" aria-labelledby="interop-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="interop-title">Talking to ROS 2 without ROS 2.</h2>
+          <p class="lede"><code>week05/participant.py</code> is a DDS participant in pure Python: SPDP and SEDP discovery, reliable RTPS with heartbeats and acknowledgements, DATA_FRAG reassembly, CDR, and ROS 2's naming and type hash conventions. Pointed at the unmodified tutorial nodes, it holds up in every direction.</p>
+        </div>
+        <ol class="interop">{{W5_INTEROP}}</ol>
+        <dl class="metrics">
+          <div><dt>{{STAT:w5_hashes}} type hashes</dt><dd>RIHS01 hashes computed from the .msg, .srv and .action files match every interface installed in Jazzy.</dd></div>
+          <div><dt>{{STAT:w5_qos}} of {{STAT:w5_qos_total}} QoS pairs</dt><dd>Every combination of policies, compared with <code>rclpy.qos.qos_check_compatible</code>, verdict and reason string.</dd></div>
+          <div><dt>{{STAT:w5_cdr_reads}} read back</dt><dd>rclpy deserializes this repo's CDR; ours matches rclpy's except where Fast CDR leaves the alignment padding unwritten ({{STAT:w5_cdr_dirty}} of 300 messages had leftover bytes there).</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section night" id="quiz" aria-labelledby="quiz-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="quiz-title">Topic, service <em>or action?</em></h2>
+          <p class="lede">The lecture's quick check. A topic is a stream nobody answers; a service is a quick question with one answer; an action is a long job with progress you can cancel.</p>
+        </div>
+        <ol class="quiz" id="quiz-app">
+          <li data-answer="action" data-why="Climbing takes seconds, you want progress on the way up, and you may need to cancel. That is an action, like /fly_to here."><p>Take off and climb to 5 m.</p></li>
+          <li data-answer="service" data-why="One request, one quick answer (done or not), nothing to stream. That is a service, like /reset_odometry on px4_bridge."><p>Reset the odometry origin.</p></li>
+          <li data-answer="topic" data-why="A continuous stream at a fixed rate where the newest frame matters and no one replies. That is a topic, /camera/image, best effort."><p>Send camera frames to the detector.</p></li>
+          <li data-answer="service" data-why="A mode switch is a fast request that either succeeds or not. That is a service, like /set_mode."><p>Switch the flight controller to position hold.</p></li>
+          <li data-answer="action" data-why="Landing takes time and the option to abort means cancel. That is an action: goal, feedback, result and cancel."><p>Land, with the option to abort.</p></li>
+        </ol>
+        <p class="quiz-score mono" id="quiz-score" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="section" id="qos" aria-labelledby="qos-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="qos-title">QoS <em>playground.</em></h2>
+          <p class="lede">Offered must be at least requested. Pick a publisher and a subscription; the verdict and reason below come from a JavaScript port of <code>week05/qos.py</code>, which agrees with rclpy on all {{STAT:w5_qos_total}} combinations. The page's tests hold the port to the Python exactly.</p>
+        </div>
+        <div class="qos" id="qos-app">
+          <fieldset class="qos-side" data-side="pub">
+            <legend>Publisher</legend>
+          </fieldset>
+          <fieldset class="qos-side" data-side="sub">
+            <legend>Subscription</legend>
+          </fieldset>
+          <div class="qos-verdict" id="qos-verdict" aria-live="polite"></div>
+        </div>
+
+        <div class="block">
+          <div class="block-head">
+            <h3>Measured in ROS 2.</h3>
+            <p>Twenty messages from a publisher to a subscription, for each reliability pair. The incompatible pair never matches and both sides get an incompatible QoS event.</p>
+          </div>
+          <div class="table-scroll">
+            <table class="benchmark-table lab-table">
+              <thead><tr><th scope="col">Publisher</th><th scope="col">Subscription</th><th scope="col">Matched</th><th scope="col" class="num">Received</th><th scope="col">QoS event</th><th scope="col">rclpy says</th></tr></thead>
+              <tbody>{{W5_RELIABILITY_ROWS}}</tbody>
+            </table>
+          </div>
+        </div>
+        <div class="lab-pair">
+          <div class="block">
+            <div class="block-head">
+              <h3>Late joiners.</h3>
+              <p>One message published, then a subscription joins. Only transient local on both sides replays it.</p>
+            </div>
+            <div class="table-scroll">
+              <table class="benchmark-table lab-table">
+                <thead><tr><th scope="col">Publisher</th><th scope="col">Late subscription</th><th scope="col" class="num">Received</th><th scope="col">rclpy says</th></tr></thead>
+                <tbody>{{W5_DURABILITY_ROWS}}</tbody>
+              </table>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block-head">
+              <h3>Depth against a slow reader.</h3>
+              <p>300 messages at 1 kHz into a callback that takes 10 ms. Keep last drops the oldest; keep all received {{STAT:w5_keep_all}}.</p>
+            </div>
+            <div class="table-scroll">
+              <table class="benchmark-table lab-table">
+                <thead><tr><th scope="col">History</th><th scope="col">Reliability</th><th scope="col" class="num">Received</th><th scope="col">Share</th><th scope="col">In order</th></tr></thead>
+                <tbody>{{W5_DEPTH_ROWS}}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="callbacks" aria-labelledby="callbacks-title" style="padding-top: 0">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="callbacks-title">One slow callback, three executors.</h2>
+          <p class="lede">A 50 ms timer shares a node with a subscription whose callback sleeps 300 ms; a message arrives every 500 ms for 3 s. In one mutually exclusive group the timer waits ({{STAT:w5_block_single}} ms worst gap). In separate groups on a MultiThreadedExecutor it keeps time ({{STAT:w5_block_groups}} ms).</p>
+        </div>
+        <figure class="timeline">
+          <svg id="exec-timeline" viewBox="0 0 960 300" role="img" aria-label="Timeline of timer ticks against 300 ms subscription callbacks for three executor setups"></svg>
+          <figcaption class="small muted">Drawn from the experiment's schedule; the tick counts and gaps in the table are measured.</figcaption>
+        </figure>
+        <div class="lab-pair">
+          <div class="table-scroll">
+            <table class="benchmark-table lab-table">
+              <thead><tr><th scope="col">Executor</th><th scope="col" class="num">Ticks in 3 s</th><th scope="col" class="num">Mean gap (ms)</th><th scope="col" class="num">Worst gap (ms)</th></tr></thead>
+              <tbody>{{W5_BLOCKING_ROWS}}</tbody>
+            </table>
+          </div>
+          <div class="table-scroll">
+            <table class="benchmark-table lab-table">
+              <caption>Calling a service from inside a callback.</caption>
+              <thead><tr><th scope="col">Setup</th><th scope="col">Outcome</th><th scope="col" class="num">Round trip (ms)</th></tr></thead>
+              <tbody>{{W5_DEADLOCK_ROWS}}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section night" id="wire" aria-labelledby="wire-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="wire-title">On <em>the wire.</em></h2>
+          <p class="lede">Seven packets from the tutorials' captures ({{STAT:w5_pubsub_packets}} and {{STAT:w5_srvcli_packets}} packets), dissected by <code>week05/dissect.py</code>. Pick a packet, then hover or tap any byte to see which field it belongs to.</p>
+        </div>
+        <div class="inspector" id="wire-app">
+          <ol class="packet-list" id="packet-list"></ol>
+          <div class="packet-detail">
+            <header class="packet-head" id="packet-head"></header>
+            <p class="field-readout" id="field-readout" aria-live="polite"><span class="muted">Hover a byte.</span></p>
+            <div class="packet-body">
+              <div class="hexgrid" id="hexgrid" aria-label="Packet bytes"></div>
+              <ol class="field-tree" id="field-tree" aria-label="Fields"></ol>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <p><b>{{STAT:w5_cdr}}</b>random <code>AllTypes</code> messages serialize like rclpy, except for alignment padding: Fast CDR skips it without writing, so rclpy's bytes carry leftover memory there.</p>
+          <p><b>{{STAT:w5_overshoot}} bytes</b>past the real CDR, on average: <code>serialize_message</code> returns rmw_fastrtps's size estimate as the length.</p>
+          <p><b>{{STAT:w5_rtt}} ms</b>for the pure Python client's AddTwoInts request to the ROS tutorial service and back.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tutorials" aria-labelledby="tutorials-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="tutorials-title">The tutorials, as they ran.</h2>
+          <p class="lede">The official Jazzy publisher and subscriber and service and client tutorials, in Python and C++, built with colcon in <code>ros2_ws/</code>. Real terminal output.</p>
+        </div>
+        <div class="transcripts">{{W5_TRANSCRIPTS}}</div>
+      </div>
+    </section>
+
+    <section class="section" id="run" aria-labelledby="run-title" style="padding-top: 0">
+      <div class="wrap cpp-grid">
+        <div class="prose">
+          <h2 id="run-title" style="font-size: var(--step-3)">Read it, run it.</h2>
+          <ul class="repo-links">
+            <li><a class="text-link" href="{{REPO}}/blob/main/week05/README.md">week05/README.md</a>: the pure Python DDS stack, and how each piece was checked.</li>
+            <li><a class="text-link" href="{{REPO}}/tree/main/ros2_ws">ros2_ws/</a>: the tutorials, the drone and the lab, as ROS 2 packages.</li>
+            <li><a class="text-link" href="{{REPO}}/blob/main/docs/week05/NOTES.md">docs/week05/NOTES.md</a>: the lecture notes.</li>
+            <li><a class="text-link" href="{{REPO}}/blob/main/docs/week05/RESULTS.md">docs/week05/RESULTS.md</a>: every number on this page.</li>
+          </ul>
+        </div>
+        <div>
+          <figure class="terminal">
+            <header><span>ROS 2 Jazzy</span><span>ros2_ws</span></header>
+            <pre><code><span class="p">$ </span>colcon build --symlink-install &amp;&amp; source install/setup.bash
+<span class="p">$ </span>ros2 launch ugs_drone drone.launch.py
+<span class="p">$ </span>ros2 launch ugs_drone drone.launch.py cancel_after_s:=2.0</code></pre>
+          </figure>
+          <figure class="terminal">
+            <header><span>Pure Python</span><span>python -m week05</span></header>
+            <pre><code><span class="p">$ </span>python -m week05 docs
+<span class="p">$ </span>python -m week05 docs --ros</code></pre>
+          </figure>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer night">
+    <div class="wrap">
+      <p class="big">Built for UAVs@Berkeley Software Ground School 2026.</p>
+      <div>
+        <h2>Project</h2>
+        <ul>
+          <li><a href="{{REPO}}">Repository</a></li>
+          <li><a href="{{REPO}}/tree/main/week05">Week 5 source</a></li>
+          <li><a href="{{REPO}}/tree/main/ros2_ws">ros2_ws</a></li>
+          <li><a href="{{REPO}}/blob/main/docs/week05/RESULTS.md">Results</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Weeks</h2>
+        <ul>
+          <li><a href="./">Week 2: color and stitching</a></li>
+          <li><a href="week3">Week 3: object detection</a></li>
+          <li><a href="week4">Week 4: flight controllers</a></li>
+          <li><a href="week5">Week 5: ROS 2 nodes and communication</a></li>
+        </ul>
+      </div>
+      <p class="fine"><span>Karthik Subramanian. MIT License.</span><span class="mono">Built {{BUILD_DATE}}</span></p>
+    </div>
+  </footer>
+
+  <script src="js/week5.js" defer></script>
+  <script src="js/site.js" defer></script>
+</body>
+</html>
