@@ -116,11 +116,12 @@
             <span class="tag">Challenge 1</span>
             <div>
               <h3>LoG, DoG, DoH, contours</h3>
-              <blockquote><p>Detect objects using other methods.</p></blockquote>
+              <blockquote><p>Use other methods such as LoG or contours, and test them out on the real objects and the distorted shapes images.</p></blockquote>
             </div>
             <ul class="shipped">
               <li><span><strong>Scale space detectors from scratch</strong> in CIELAB, with an image pyramid, a streamed search and SIFT style sub pixel refinement. Checked against scikit-image.</span></li>
               <li><span>Contour filtering on color edges.</span></li>
+              <li><span><strong>Tested beyond the dots</strong> on the real objects and the distorted shapes, scored against SAM masks and hand checked dots.</span></li>
               <li><span>A synthetic benchmark with exact truth: fabric, pastels, distractor shapes, perspective, tiny and crowded dots.</span></li>
             </ul>
           </li>
@@ -376,6 +377,16 @@
           </div>
           <figure class="plate">
             <img {{IMG:w3_targets}} sizes="(min-width: 1300px) 1250px, 100vw" loading="lazy" decoding="async" alt="Painted shapes on a cracked gray texture, each boxed and labeled: red rectangle, cyan pentagon, green ellipse, red six point star, green arch outline, a group of ten dots">
+          </figure>
+        </div>
+
+        <div class="block">
+          <div class="block-head">
+            <h3>Blob detectors, away from the dots.</h3>
+            <p>Challenge 1 also asks for LoG and contours on these two photos. {{STAT:w3_beyond_objects}} {{STAT:w3_beyond_shapes}}</p>
+          </div>
+          <figure class="plate">
+            <img {{IMG:w3_beyond}} sizes="(min-width: 1300px) 1250px, 100vw" loading="lazy" decoding="async" alt="Top row: LoG circles, saturation contours and the purpose built detector on the cones, cubes and rings photo, correct detections in green and false ones in red. Bottom row: the dot group of the shapes file, where raw LoG finds no dots, denoised LoG finds eight and contours find all ten">
           </figure>
         </div>
       </div>

@@ -118,10 +118,11 @@ W3_IMAGES = {
     "w3_objects_truth": "objects_truth.jpg",
     "w3_robustness": "objects_robustness.jpg",
     "w3_targets": "targets.jpg",
+    "w3_beyond": "beyond.jpg",
     "w3_yolo_whole": "yolo/whole.jpg",
     "w3_yolo_sliced": "yolo/sliced.jpg",
 }
-W3_DATA = ("dots_benchmark.json", "objects.json", "yolo/results.json", "yolo/dataset.json")
+W3_DATA = ("dots_benchmark.json", "objects.json", "beyond.json", "yolo/results.json", "yolo/dataset.json")
 METHOD_LABELS = {
     "gray": "SimpleBlobDetector, grayscale",
     "simple": "SimpleBlobDetector, per palette color",
@@ -231,6 +232,23 @@ def week3_pieces(result: dict) -> tuple[str, dict[str, str]]:
         "w3_robust": (summary if all_same else "mostly the same") + (f" in all {len(robust)} versions" if all_same else ""),
     }
     return "\n".join(rows), numbers
+
+
+def week3_beyond(result: dict) -> dict[str, str]:
+    """Challenge 1 on the objects and shapes photos, as sentences for the page."""
+    obj, shp = result["objects"], result["shapes"]
+    log, contours = obj["log"], obj["contours"]
+    raw_best = max(shp[m]["tp"] for m in METHOD_LABELS)
+    return {
+        "w3_beyond_objects": (
+            f"LoG's {log['strongest_matched']} strongest peaks are the {log['strongest_matched']} solid pieces, and it misses both rings: "
+            f"a ring is not a blob. Contours of saturation find {contours['matched']} of 6 and merge the touching cubes."
+        ),
+        "w3_beyond_shapes": (
+            f"On the noisy shapes file every dot detector finds {raw_best} of 10 dots. After non-local means denoising LoG finds "
+            f"{shp['log+nlm']['tp']}, and contours of the Delta E segmentation find all {shp['contours']['tp']} with no false positives."
+        ),
+    }
 
 
 def week3_yolo(results: dict, dataset: dict) -> tuple[str, str, dict[str, str]]:
@@ -859,6 +877,7 @@ def build(out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Pat
     export_explorer(docs3, out / "assets" / "week3")
     head, bench_rows, w3_numbers = week3_bench(load_json(docs3 / "dots_benchmark.json"))
     piece_rows, piece_numbers = week3_pieces(load_json(docs3 / "objects.json"))
+    piece_numbers.update(week3_beyond(load_json(docs3 / "beyond.json")))
     yolo_rows, yolo_notes, yolo_numbers = week3_yolo(load_json(docs3 / "yolo" / "results.json"), load_json(docs3 / "yolo" / "dataset.json"))
     reports = {name: parse_report((docs / "colors" / f"{name}_report.txt").read_text()) for name in DEMO_IMAGES}
 
