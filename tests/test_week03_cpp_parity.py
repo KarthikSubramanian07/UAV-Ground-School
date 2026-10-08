@@ -64,9 +64,9 @@ def _as_png(image: np.ndarray, path: Path) -> np.ndarray:
     return cv2.imread(str(path))
 
 
-def _cpp_dots(path: Path, method: str, tmp_path: Path) -> list[Blob]:
+def _cpp_dots(path: Path, method: str, tmp_path: Path, extra: tuple = ()) -> list[Blob]:
     out = tmp_path / f"{path.stem}_{method}.json"
-    _run([DOTS_BIN, path, "--method", method, "--json", out, "--no-show"], timeout=600)
+    _run([DOTS_BIN, path, "--method", method, *extra, "--json", out, "--no-show"], timeout=600)
     data = json.loads(out.read_text())
     assert data["method"] == method and data["count"] == len(data["dots"])
     return [Blob(d["x"], d["y"], d["radius"], color=d["color"]) for d in data["dots"]]
@@ -105,6 +105,19 @@ def test_dots_match_python_on_photos(tmp_path: Path, name: str, method: str) -> 
     image = _as_png(cv2.imread(str(DATA / name)), path)
     python = dots.find_dots(image, method=method).dots
     _assert_dot_parity(python, _cpp_dots(path, method, tmp_path))
+
+
+@pytest.mark.parametrize("method", ["log", "contrast"])
+def test_denoised_dots_match_python_on_the_shapes_photo(tmp_path: Path, method: str) -> None:
+    """Non-local means first, as in the Challenge 1 study of shapes.png."""
+    if not (DATA / "shapes.png").is_file():
+        pytest.skip("shapes.png not present")
+    path = tmp_path / "shapes.png"
+    image = _as_png(cv2.imread(str(DATA / "shapes.png")), path)
+    python = dots.find_dots(image, method=method, denoise=10.0, min_radius=8.0, max_radius=40.0).dots
+    assert len(python) >= 7
+    extra = ("--denoise", "10", "--min-radius", "8", "--max-radius", "40")
+    _assert_dot_parity(python, _cpp_dots(path, method, tmp_path, extra))
 
 
 # ------------------------------------------------------------ game pieces ----

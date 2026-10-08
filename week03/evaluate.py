@@ -57,6 +57,14 @@ def truth_for(image_name: str) -> TruthSet:
     return load_truth(ANNOTATIONS / f"{Path(image_name).stem}.json")
 
 
+def dot_truth_path(image_name: str | Path) -> Path | None:
+    """The annotation file with dots for this photo, if there is one (``objects.json`` holds masks, not dots)."""
+    path = ANNOTATIONS / f"{Path(image_name).stem}.json"
+    if not path.is_file():
+        return None
+    return path if "dots" in json.loads(path.read_text()) else None
+
+
 @dataclass
 class DotScore:
     tp: int
