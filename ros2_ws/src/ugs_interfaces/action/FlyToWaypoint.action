@@ -1,0 +1,7 @@
+# Fly to a point, reporting the distance left. Exactly the slides' definition:
+# goal, then result, then feedback.
+geometry_msgs/Point target          # goal: metres, x east, y north, z up
+---
+bool success                        # result
+---
+float32 distance_remaining          # feedback: metres
