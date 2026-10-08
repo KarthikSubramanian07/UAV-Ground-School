@@ -121,7 +121,9 @@ def fill_polygon(image: np.ndarray, points: np.ndarray, color: tuple[int, int, i
     cv2.fillPoly(image, [pts], color, lineType=cv2.LINE_AA, shift=shift)
 
 
-def draw_centered_text(image: np.ndarray, text: str, center: tuple[float, float], height: float, color, thickness_ratio: float = 0.16) -> None:
+def draw_centered_text(
+    image: np.ndarray, text: str, center: tuple[float, float], height: float, color, thickness_ratio: float = 0.16
+) -> None:
     font = cv2.FONT_HERSHEY_DUPLEX
     thickness = max(1, int(round(height * thickness_ratio)))
     (w, h), _ = cv2.getTextSize(text, font, 1.0, thickness)
@@ -189,10 +191,16 @@ def apple(width: int = 800, height: int = 800, seed: int = 11) -> np.ndarray:
     red = np.stack([30 * light, 25 * light, 215 * light], axis=2)
     alpha = (body.astype(np.float32) / 255)[..., None]
     image = (image * (1 - alpha) + red * alpha).astype(np.uint8)
-    cv2.ellipse(image, (int(cx - r * 0.35), int(cy - r * 0.42)), (int(r * 0.16), int(r * 0.09)), -30, 0, 360, (150, 150, 250), -1, cv2.LINE_AA)
+    cv2.ellipse(
+        image, (int(cx - r * 0.35), int(cy - r * 0.42)), (int(r * 0.16), int(r * 0.09)), -30, 0, 360, (150, 150, 250), -1, cv2.LINE_AA
+    )
 
-    cv2.line(image, (int(cx), int(cy - r * 0.78)), (int(cx + r * 0.08), int(cy - r * 1.18)), (25, 60, 105), max(3, int(r * 0.07)), cv2.LINE_AA)
-    leaf = np.array([[cx + r * 0.1, cy - r * 1.02], [cx + r * 0.45, cy - r * 1.28], [cx + r * 0.78, cy - r * 1.12], [cx + r * 0.45, cy - r * 0.94]])
+    cv2.line(
+        image, (int(cx), int(cy - r * 0.78)), (int(cx + r * 0.08), int(cy - r * 1.18)), (25, 60, 105), max(3, int(r * 0.07)), cv2.LINE_AA
+    )
+    leaf = np.array(
+        [[cx + r * 0.1, cy - r * 1.02], [cx + r * 0.45, cy - r * 1.28], [cx + r * 0.78, cy - r * 1.12], [cx + r * 0.45, cy - r * 0.94]]
+    )
     fill_polygon(image, leaf, (40, 165, 55))
     return photo_finish(image, rng, noise=3.0)
 

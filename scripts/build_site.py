@@ -164,7 +164,8 @@ def week3_bench(report: dict) -> tuple[str, str, dict[str, str]]:
         raise BuildError("dots_benchmark.json has no real photo results (run the benchmark with the photos)")
     names = list(real)
     head = "\n                ".join(
-        f'<th scope="col" class="num">{html.escape(PHOTO_TITLES.get(n, n))}<small>{real[n]["required_dots"]} dots</small></th>' for n in names
+        f'<th scope="col" class="num">{html.escape(PHOTO_TITLES.get(n, n))}<small>{real[n]["required_dots"]} dots</small></th>'
+        for n in names
     )
     best_real = {n: max(real[n][m]["f1"] for m in methods) for n in names}
     syn = report["synthetic"]
@@ -323,7 +324,18 @@ W4_DESCRIPTION = (
     "and checked by a design rule checker, with MAVLink, DroneCAN, CAN, RTCM, CRSF, SBUS and DShot implemented from their "
     "specifications and the generated parameters verified on ArduCopter 4.7.1 in simulation."
 )
-W4_DATA = ("summary.json", "site.json", "check.json", "scope.json", "journey.json", "pid.json", "bom.json", "sitl.json", "performance.json", "wiring.svg")
+W4_DATA = (
+    "summary.json",
+    "site.json",
+    "check.json",
+    "scope.json",
+    "journey.json",
+    "pid.json",
+    "bom.json",
+    "sitl.json",
+    "performance.json",
+    "wiring.svg",
+)
 
 
 def required_week4(docs4: Path) -> list[Path]:
@@ -357,13 +369,17 @@ def week4(docs4: Path) -> tuple[dict[str, str], dict[str, str]]:
         mass = "" if r["mass_g"] is None else f"{r['mass_g']:g} g" + (" est." if "mass_g" in r["estimated"] else "")
         name = html.escape(r["name"])
         link = f'<a href="{html.escape(r["url"])}" rel="noopener">{name}</a>' if r.get("url") else name
-        rows.append(f"<tr><td>{link}</td><td>{html.escape(r['role'].replace('_', ' '))}</td><td class=\"num\">{r['count']}</td><td class=\"num\">{price}</td><td class=\"num\">{mass}</td></tr>")
-    rows.append(f'<tr class="total"><td><strong>Total</strong></td><td></td><td></td><td class="num"><strong>${bom["total_usd"]:,.2f}</strong></td><td class="num"><strong>{summary["mass_kg"]} kg</strong></td></tr>')
+        rows.append(
+            f'<tr><td>{link}</td><td>{html.escape(r["role"].replace("_", " "))}</td><td class="num">{r["count"]}</td><td class="num">{price}</td><td class="num">{mass}</td></tr>'
+        )
+    rows.append(
+        f'<tr class="total"><td><strong>Total</strong></td><td></td><td></td><td class="num"><strong>${bom["total_usd"]:,.2f}</strong></td><td class="num"><strong>{summary["mass_kg"]} kg</strong></td></tr>'
+    )
     budget_rows = []
     for r in sitl["link_budget"]["rows"]:
         budget_rows.append(
-            f"<tr><td>{html.escape(r['stream'])}</td><td class=\"mono\">{html.escape(r['message'])}</td><td class=\"num\">{r['predicted_hz']:g}</td>"
-            f"<td class=\"num\">{r['measured_hz']:.2f}</td><td class=\"num\">{r['measured_bytes_per_s']:.0f}</td></tr>"
+            f'<tr><td>{html.escape(r["stream"])}</td><td class="mono">{html.escape(r["message"])}</td><td class="num">{r["predicted_hz"]:g}</td>'
+            f'<td class="num">{r["measured_hz"]:.2f}</td><td class="num">{r["measured_bytes_per_s"]:.0f}</td></tr>'
         )
     air = pid["airframe"]
     rules = len({f["rule"] for f in report})
@@ -434,7 +450,16 @@ def make_og_week4(svg_png: np.ndarray | None, path: Path, stats: dict[str, str])
     cv2.putText(card, "Pro.", (66, 318), cv2.FONT_HERSHEY_TRIPLEX, 2.2, orange, 3, aa)
     for i, line in enumerate(("A drone wired pin by pin, every", "protocol implemented and checked")):
         cv2.putText(card, line, (72, 392 + i * 46), cv2.FONT_HERSHEY_DUPLEX, 1.0, muted, 2, aa)
-    cv2.putText(card, f"{stats['w4_errors']} errors, {stats['w4_passed']} checks passed, ArduCopter 4.7.1 verified", (72, 512), cv2.FONT_HERSHEY_DUPLEX, 0.72, orange, 2, aa)
+    cv2.putText(
+        card,
+        f"{stats['w4_errors']} errors, {stats['w4_passed']} checks passed, ArduCopter 4.7.1 verified",
+        (72, 512),
+        cv2.FONT_HERSHEY_DUPLEX,
+        0.72,
+        orange,
+        2,
+        aa,
+    )
     cv2.putText(card, "UAVs@Berkeley Software Ground School 2026, Week 4", (72, 575), cv2.FONT_HERSHEY_SIMPLEX, 0.72, muted, 1, aa)
     if not cv2.imwrite(str(path), card, [cv2.IMWRITE_JPEG_QUALITY, 88]):
         raise BuildError(f"could not write {path}")

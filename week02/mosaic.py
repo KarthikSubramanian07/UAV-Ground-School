@@ -157,12 +157,14 @@ def _normal_equations(params: np.ndarray, constraints: list[Constraint], robust:
             r = mapped / alpha_b - y
             ones = np.ones_like(x)
             # Columns: alpha_a, beta_a, alpha_b, beta_b (each as real and imaginary part).
-            J = np.hstack([
-                _real_block(x / alpha_b),
-                _real_block(ones / alpha_b),
-                _real_block(-mapped / alpha_b**2),
-                _real_block(-ones / alpha_b),
-            ])
+            J = np.hstack(
+                [
+                    _real_block(x / alpha_b),
+                    _real_block(ones / alpha_b),
+                    _real_block(-mapped / alpha_b**2),
+                    _real_block(-ones / alpha_b),
+                ]
+            )
             residual = np.concatenate([r.real, r.imag])
             W = np.concatenate([w, w])
             idx = np.r_[4 * ia : 4 * ia + 2, 4 * ia + 2 : 4 * ia + 4, 4 * ib : 4 * ib + 2, 4 * ib + 2 : 4 * ib + 4]
@@ -267,8 +269,7 @@ def plan_canvas(sizes: list[tuple[int, int]], transforms: list[np.ndarray], max_
     height += (-height) % pad_multiple
     if width * height > max_pixels:
         raise MemoryError(
-            f"Canvas would be {width}x{height} px; reduce --scale or raise the limit. "
-            "A huge canvas usually means alignment drifted."
+            f"Canvas would be {width}x{height} px; reduce --scale or raise the limit. A huge canvas usually means alignment drifted."
         )
     offset = np.array([[1, 0, -x0], [0, 1, -y0], [0, 0, 1]], np.float64)
     return Canvas(width, height, offset)

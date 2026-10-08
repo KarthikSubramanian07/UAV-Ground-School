@@ -21,11 +21,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install ruff
+      - run: pip install "ruff==0.16.10"  # pinned so a ruff release cannot change formatting under us
       - run: ruff check week02 week03 week04 tests scripts
-      - name: Formatting (enforced for week 4)
-        run: ruff format --check week04 tests/test_week04_*.py
-      - run: ruff format --check week02 week03 tests scripts || echo "formatting differences outside week 4 are advisory"
+      - name: Formatting
+        run: ruff format --check week02 week03 week04 tests scripts
       - name: No em or en dashes in tracked text
         run: |
           if git grep -nIP '[\x{2013}\x{2014}]' -- . ':!*.pdf'; then

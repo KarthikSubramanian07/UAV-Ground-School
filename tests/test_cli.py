@@ -25,11 +25,25 @@ def test_colors_command_missing_file(tmp_path, capsys):
 
 def test_stitch_command_reports_accuracy(small_flight, tmp_path, capsys):
     out = tmp_path / "pano.jpg"
-    code = cli.main([
-        "stitch", str(small_flight.video), "--out", str(out), "--every", "4", "--no-show",
-        "--path-overlay", str(tmp_path / "path.jpg"), "--transforms", str(tmp_path / "t.csv"),
-        "--truth", str(small_flight.truth_csv), "--world", str(small_flight.world_png),
-    ])
+    code = cli.main(
+        [
+            "stitch",
+            str(small_flight.video),
+            "--out",
+            str(out),
+            "--every",
+            "4",
+            "--no-show",
+            "--path-overlay",
+            str(tmp_path / "path.jpg"),
+            "--transforms",
+            str(tmp_path / "t.csv"),
+            "--truth",
+            str(small_flight.truth_csv),
+            "--world",
+            str(small_flight.world_png),
+        ]
+    )
     assert code == 0
     output = capsys.readouterr().out
     assert "pose RMSE" in output and "ZNCC" in output

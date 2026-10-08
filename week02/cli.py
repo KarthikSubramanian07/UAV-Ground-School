@@ -123,7 +123,10 @@ def cmd_stitch(args: argparse.Namespace) -> int:
         truth = synth.load_truth(args.truth)
         world = cv2.imread(args.world) if args.world else None
         evaluation = evaluate.evaluate(result.transforms, result.frame_indices, truth, result.panorama, world, frame_scale=args.scale)
-        print(f"accuracy        pose RMSE {evaluation.rmse_px:.2f} px (max {evaluation.max_px:.2f} px)" + (f", ZNCC {evaluation.zncc:.3f}" if evaluation.zncc is not None else ""))
+        print(
+            f"accuracy        pose RMSE {evaluation.rmse_px:.2f} px (max {evaluation.max_px:.2f} px)"
+            + (f", ZNCC {evaluation.zncc:.3f}" if evaluation.zncc is not None else "")
+        )
     if args.show and _has_display():
         preview = result.panorama
         limit = 1600

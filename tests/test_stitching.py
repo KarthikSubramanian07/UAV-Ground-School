@@ -44,7 +44,9 @@ def test_bundle_adjustment_beats_sequential_chaining_on_a_rough_flight(rough_fli
     k1 = rough_flight.truth.plan.distortion
     runs = {}
     for name, config in {
-        "sequential": stitching.StitchConfig(every=4, k1=k1, loop_closure=False, bundle_adjust=False, gain_compensation=False, blend="feather"),
+        "sequential": stitching.StitchConfig(
+            every=4, k1=k1, loop_closure=False, bundle_adjust=False, gain_compensation=False, blend="feather"
+        ),
         "adjusted": stitching.StitchConfig(every=4, k1=k1),
     }.items():
         result = stitching.stitch_video(rough_flight.video, config)
