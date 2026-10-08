@@ -22,9 +22,9 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install "ruff==0.16.10"  # pinned so a ruff release cannot change formatting under us
-      - run: ruff check week02 week03 week04 tests scripts
+      - run: ruff check week02 week03 week04 week05 tests scripts
       - name: Formatting
-        run: ruff format --check week02 week03 week04 tests scripts
+        run: ruff format --check week02 week03 week04 week05 tests scripts
       - name: No em or en dashes in tracked text
         run: |
           if git grep -nIP '[\x{2013}\x{2014}]' -- . ':!*.pdf'; then
@@ -56,7 +56,7 @@ jobs:
       - name: Test
         env:
           MAVLINK_XML_DIR: build/mavlink
-        run: pytest --cov=week02 --cov=week03 --cov=week04 --cov-report=term-missing --cov-report=xml
+        run: pytest --cov=week02 --cov=week03 --cov=week04 --cov=week05 --cov-report=term-missing --cov-report=xml
       - uses: actions/upload-artifact@v4
         if: matrix.python-version == '3.12'
         with:
@@ -91,6 +91,38 @@ jobs:
           pip install -e . --no-deps
           pytest tests/test_cpp_parity.py tests/test_week03_cpp_parity.py tests/test_week04_cpp_parity.py -v
 
+  ros:
+    # ROS 2 Jazzy itself: build the workspace, run every package's linters and
+    # launch tests, then hold week05 to the real middleware (interop with the
+    # tutorial nodes over Fast DDS and Cyclone DDS, CDR, type hashes, QoS).
+    runs-on: ubuntu-24.04
+    container: ros:jazzy-ros-base
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the workspace's dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends ros-jazzy-example-interfaces ros-jazzy-vision-msgs ros-jazzy-rmw-cyclonedds-cpp python3-numpy python3-pytest
+      - name: colcon build
+        working-directory: ros2_ws
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          colcon build --event-handlers console_cohesion+
+      - name: colcon test (linters, unit tests, launch tests)
+        working-directory: ros2_ws
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          colcon test --event-handlers console_direct+
+          colcon test-result --verbose
+      - name: week05 against ROS 2
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          source ros2_ws/install/setup.bash
+          python3 -m pytest -v -p no:cacheprovider --noconftest tests/test_week05_ros.py
+
   site:
     runs-on: ubuntu-latest
     steps:
@@ -110,7 +142,7 @@ jobs:
     # repo, so CI asks it to build main through a Deploy Hook once every check
     # above is green. The hook URL is the CLOUDFLARE_DEPLOY_HOOK secret.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [lint, test, cpp, site]
+    needs: [lint, test, cpp, ros, site]
     runs-on: ubuntu-latest
     steps:
       - name: Trigger the Cloudflare Pages production build

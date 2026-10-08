@@ -1,6 +1,6 @@
 # UAV Ground School
 
-**Solutions to the UAVs@Berkeley Software Ground School 2026, written to competition grade: color segmentation, SUAS target shapes and drone video mosaicking (week 2), blob detection, classical game piece detection and YOLOv8 (week 3), and a flight controller design verified on real ArduPilot firmware with every protocol on it implemented from scratch (week 4), in Python and C++, measured against ground truth.**
+**Solutions to the UAVs@Berkeley Software Ground School 2026, written to competition grade: color segmentation, SUAS target shapes and drone video mosaicking (week 2), blob detection, classical game piece detection and YOLOv8 (week 3), a flight controller design verified on real ArduPilot firmware with every protocol on it implemented from scratch (week 4), and ROS 2 from the tutorials down to the bytes, with a pure Python DDS participant that talks to real ROS 2 nodes (week 5), in Python and C++, measured against ground truth.**
 
 [![CI](https://github.com/KarthikSubramanian07/UAV-Ground-School/actions/workflows/ci.yml/badge.svg)](https://github.com/KarthikSubramanian07/UAV-Ground-School/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.10%2B-3776ab)
@@ -8,9 +8,9 @@
 ![C++17](https://img.shields.io/badge/C%2B%2B-17-00599c)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-`computer-vision` `opencv` `uav` `drones` `image-stitching` `orthomosaic` `bundle-adjustment` `suas` `color-segmentation` `blob-detection` `object-detection` `yolov8` `ardupilot` `mavlink` `dronecan` `can-bus` `flight-controller` `cpp`
+`computer-vision` `opencv` `uav` `drones` `image-stitching` `orthomosaic` `bundle-adjustment` `suas` `color-segmentation` `blob-detection` `object-detection` `yolov8` `ardupilot` `mavlink` `dronecan` `can-bus` `flight-controller` `ros2` `dds` `rtps` `cdr` `cpp`
 
-Live showcase: **[uav-ground-school.pages.dev](https://uav-ground-school.pages.dev/)** (week 2, with an in browser color splitter) **[/week3](https://uav-ground-school.pages.dev/week3)** (with a detector explorer) and **[/week4](https://uav-ground-school.pages.dev/week4)** (a clickable wiring diagram, a logic analyser and a PID playground).
+Live showcase: **[uav-ground-school.pages.dev](https://uav-ground-school.pages.dev/)** (week 2, with an in browser color splitter) **[/week3](https://uav-ground-school.pages.dev/week3)** (with a detector explorer) **[/week4](https://uav-ground-school.pages.dev/week4)** (a clickable wiring diagram, a logic analyser and a PID playground) and **[/week5](https://uav-ground-school.pages.dev/week5)** (a replay of the ROS 2 drone mission, a QoS playground and a packet inspector).
 
 <p align="center">
   <img src="docs/week02/rough_path.jpg" alt="A mosaic of a simulated five pass survey flight over a voxel world, with keyframe footprints and the flight path drawn on top" width="100%">
@@ -25,6 +25,7 @@ The ground school hands out a "skill booster" each week: something small that so
 | 2 | Computer vision and aerial imagery | Color Me Impressed, I'll be Needin' Stitches, both again in C++ | [`week02/`](week02/README.md), [lecture notes](docs/week02/NOTES.md) |
 | 3 | Object detection | Blob detection (SimpleBlobDetector, LoG, DoG, DoH, contours), cones, cubes and rings, YOLOv8, the classical parts again in C++ | [`week03/`](week03/README.md), [lecture notes](docs/week03/NOTES.md) |
 | 4 | Flight controllers | Protocol Pro: a drone designed around the Cube Orange+, wired pin by pin, a design rule checker, the ArduPilot parameters, MAVLink, DroneCAN, CAN, RTCM, CRSF, SBUS and DShot from scratch, ArduCopter 4.7.1 in the loop, the codecs again in C++ | [`week04/`](week04/README.md), [lecture notes](docs/week04/NOTES.md) |
+| 5 | ROS 2: nodes and communication | The Jazzy publisher and subscriber and service and client tutorials in Python and C++ with launch tests, the slides' drone as four nodes using topics, services and an action, QoS and callbacks measured, and RTPS, CDR and REP 2011 hashes from scratch, talking to real ROS 2 | [`week05/`](week05/README.md), [`ros2_ws/`](ros2_ws), [lecture notes](docs/week05/NOTES.md), [results](docs/week05/RESULTS.md) |
 
 ## Week 2 at a glance
 
@@ -71,6 +72,14 @@ Full numbers in [`docs/week02/benchmark.md`](docs/week02/benchmark.md), regenera
 
 **Checked on the real firmware**: ArduCopter 4.7.1 built from its release tag and driven only by this repo's MAVLink code accepts 72 of the 75 generated parameters (the other three cannot exist in simulation), sends exactly the predicted telemetry, verifies MAVLink signing, and flies this airframe's mass and inertia. The pitch step rises in 0.32 s; the week's own PID simulator with ArduPilot's gains predicts 0.33 s.
 
+## Week 5 at a glance
+
+**The tutorials, done properly**: the Jazzy publisher and subscriber and service and client, in Python and C++, built with colcon in a Docker image of the repo's own (ROS 2 does not run on macOS), every ament linter on, and launch tests that start the nodes and check what they print.
+
+**The slides' drone, for real**: `camera_driver`, `detector`, `planner` and `px4_bridge` talking through topics (best effort odometry, like PX4), services (`/arm`, `/set_mode`) and the slides' `FlyToWaypoint` action with feedback and cancel. The planner finds a target in the camera and lands 0.14 m from it. The lab measures the slides' claims: an incompatible QoS pair receives 0 of 20, a 300 ms callback stalls a 50 ms timer to 318 ms until it gets its own callback group, and `call()` inside a callback deadlocks.
+
+**ROS 2 without ROS 2**: RTPS, CDR and REP 2011 type hashes written from the specifications in pure Python. The participant joins a live ROS 2 graph as a peer: the tutorial's talker, listener, service and both clients all work with it, as does a Cyclone DDS talker, and it recorded the whole drone mission (42 MB of camera frames reassembled from fragments). Against ROS 2 itself: 1,210 of 1,210 type hashes, 1,265,625 of 1,265,625 QoS verdicts, and 300 of 300 CDR messages agree.
+
 ## Quick start
 
 ```bash
@@ -98,6 +107,11 @@ pip install -e ".[yolo]" && python -m week03 yolo fetch && python -m week03 yolo
 python -m week04 check
 python -m week04 params --out protocol_pro.param
 python -m week04 journey
+
+# Week 5 (ROS 2 runs in Docker; week05's own tools need no ROS)
+python -m week05 docker build && python -m week05 docker test
+python -m week05 docker run ros2 launch ugs_drone drone.launch.py
+python -m week05 decode docs/week05/captures/pubsub.pcap
 ```
 
 Using a real flight video works the same way: `python -m week02 stitch your_flight.mp4 --out mosaic.jpg`. Add `--live` to watch the mosaic grow and `--scale 0.5` for large 4K footage.
@@ -161,6 +175,10 @@ flowchart LR
 | [`week04/mavlink.py`](week04/mavlink.py), [`dronecan.py`](week04/dronecan.py), [`can.py`](week04/can.py), [`rtcm.py`](week04/rtcm.py), [`rc.py`](week04/rc.py), [`dshot.py`](week04/dshot.py), [`uart.py`](week04/uart.py), [`i2c.py`](week04/i2c.py), [`crc.py`](week04/crc.py) | The protocols, from their specifications |
 | [`week04/performance.py`](week04/performance.py), [`links.py`](week04/links.py), [`pid.py`](week04/pid.py), [`journey.py`](week04/journey.py), [`sitl.py`](week04/sitl.py) | Flight time, link budgets, the PID simulator, the RTK journey, ArduCopter SITL experiments |
 | [`week04/cpp/`](week04/cpp) | C++17 port of the protocol codecs |
+| [`week05/rtps.py`](week05/rtps.py), [`participant.py`](week05/participant.py) | RTPS from the specification, and a participant that joins a ROS 2 graph |
+| [`week05/cdr.py`](week05/cdr.py), [`idl.py`](week05/idl.py), [`qos.py`](week05/qos.py) | CDR, interface definitions and REP 2011 type hashes, the rmw QoS rules |
+| [`week05/experiments.py`](week05/experiments.py), [`docs.py`](week05/docs.py), [`dissect.py`](week05/dissect.py) | The live experiments in Docker, the docs generator, the packet dissector |
+| [`ros2_ws/src/`](ros2_ws/src) | The tutorial packages, `ugs_interfaces` and `ugs_drone` (Apache 2.0, like the ROS code they build on) |
 | [`site/`](site) | The showcase site, built by [`scripts/build_site.py`](scripts/build_site.py) |
 
 ## Quality
@@ -168,8 +186,9 @@ flowchart LR
 * `pytest` runs unit tests for every module plus end to end accuracy checks: shapes across 13 classes, 3 sizes and 3 rotations; exact color partitioning of the whole HSV cube; bundle adjustment removing injected drift and shrugging off outliers; a full stitch held to sub pixel pose error against the simulator.
 * Week 3 tests cover scale space theory (peak scale and height), polarity, color only blobs, sidelobes, a comparison with scikit-image's `blob_log`, the edge fit on exact synthetic truth, evaluation semantics, object features and invariance, augmentations that move boxes with pixels, tiling, the mAP implementation against Ultralytics, and regression tests on the ground school photos.
 * Week 4 tests compare the protocols with pymavlink, pydronecan and pyrtcm, break the design one rule at a time, validate the parameters against ArduCopter 4.7.1's metadata, check the recorded SITL measurements against the predictions, and hold the page's JavaScript PID simulator to bit for bit agreement with Python.
+* Week 5 tests hold CDR, type hashes and QoS to fixtures recorded from rclpy, decode the committed captures of the tutorial nodes, and run two participants against each other over real sockets, at 30 percent packet loss too. A CI job in the ROS 2 Jazzy container builds the workspace, runs every ament linter and the launch tests, and checks the participant against the tutorial nodes, Fast DDS and Cyclone DDS live.
 * The C++ binaries are checked for parity with Python in CI (week 2: same colors, centers within 1.5 px, same shapes, stitching accuracy; week 3: the same dots with F1 1.000 and centers within 0.01 px, the same game pieces; week 4: 2,908 protocol cases byte for byte).
-* GitHub Actions: ruff (lint everywhere, formatting enforced for week 4), tests on Python 3.10 and 3.12, the C++ build against Ubuntu's OpenCV 4.6, and the site build. Once every check is green on `main`, CI triggers a Cloudflare Pages deploy hook and the site at uav-ground-school.pages.dev rebuilds from that commit.
+* GitHub Actions: ruff (lint and formatting enforced everywhere), tests on Python 3.10 and 3.12, the C++ build against Ubuntu's OpenCV 4.6, the ROS 2 workspace in the Jazzy container, and the site build. Once every check is green on `main`, CI triggers a Cloudflare Pages deploy hook and the site at uav-ground-school.pages.dev rebuilds from that commit.
 
 ## License
 
