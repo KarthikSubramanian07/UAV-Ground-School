@@ -30,7 +30,7 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='Karthik Subramanian',
-    maintainer_email='winnerkarthik07@gmail.com',
+    maintainer_email='88288818+KarthikSubramanian07@users.noreply.github.com',
     description='The week 5 drone: camera, detector, planner and PX4 bridge nodes',
     license='Apache-2.0',
     extras_require={'test': ['pytest']},

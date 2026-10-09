@@ -4,7 +4,7 @@
   <name>ugs_drone</name>
   <version>0.5.0</version>
   <description>The week 5 drone: camera, detector, planner and PX4 bridge nodes</description>
-  <maintainer email="winnerkarthik07@gmail.com">Karthik Subramanian</maintainer>
+  <maintainer email="88288818+KarthikSubramanian07@users.noreply.github.com">Karthik Subramanian</maintainer>
   <license>Apache-2.0</license>
 
   <exec_depend>rclpy</exec_depend>
