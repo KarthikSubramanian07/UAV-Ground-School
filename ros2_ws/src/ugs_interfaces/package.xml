@@ -4,7 +4,7 @@
   <name>ugs_interfaces</name>
   <version>0.5.0</version>
   <description>Messages, services and the FlyToWaypoint action for the week 5 drone</description>
-  <maintainer email="winnerkarthik07@gmail.com">Karthik Subramanian</maintainer>
+  <maintainer email="88288818+KarthikSubramanian07@users.noreply.github.com">Karthik Subramanian</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
