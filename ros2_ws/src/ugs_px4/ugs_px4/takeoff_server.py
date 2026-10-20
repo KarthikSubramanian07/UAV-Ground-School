@@ -35,8 +35,9 @@ subscription would match nothing.
 
 A 20 Hz loop, in a thread of its own, runs the logic in ugs_px4.takeoff and
 publishes what it asks for; PX4's telemetry is received on a node and executor
-of its own, so neither waits on the action servers. Between goals the server keeps streaming the last
-setpoint, because PX4 treats a silent offboard link as a failsafe.
+of its own, so neither waits on the action servers. Between goals the server
+keeps streaming the last setpoint, because PX4 treats a silent offboard link as
+a failsafe.
 """
 
 import math
