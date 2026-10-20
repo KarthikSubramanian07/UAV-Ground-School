@@ -12,6 +12,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/GetMission.srv"
   "srv/SetMode.srv"
   "action/FlyToWaypoint.action"
+  "action/Takeoff.action"
+  "action/Land.action"
   DEPENDENCIES builtin_interfaces geometry_msgs
 )
 

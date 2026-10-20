@@ -1,0 +1,15 @@
+# Take off to an altitude and hold it. Week 6's action, served by ugs_px4's
+# takeoff_server against PX4 over uXRCE-DDS.
+float32 altitude                    # goal: metres above the takeoff point, up positive
+float32 climb_rate                  # m/s; 0 uses the server's default
+string method                       # "offboard" (default) or "takeoff_mode"
+---
+bool success                        # result
+float32 final_altitude              # metres above the takeoff point
+float32 climb_time                  # seconds from leaving the ground to settled at the goal
+string message
+---
+string phase                        # feedback: WAIT_FOR_PX4, PREFLIGHT, OFFBOARD, ARMING, CLIMB, SETTLE
+float32 altitude                    # metres above the takeoff point
+float32 vertical_speed              # m/s, up positive
+float32 remaining                   # metres left to climb
