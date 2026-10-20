@@ -43,8 +43,10 @@ class Flight:
         return cls.from_records(records)
 
     @classmethod
-    def from_records(cls, records: list[dict]) -> Flight:
+    def from_records(cls, records: list[dict], sim_time: bool = True) -> Flight:
         records = sorted(records, key=lambda r: r["t"])
+        if sim_time:
+            records = to_sim_time(records)
         kinds: dict[str, list[dict]] = {}
         for r in records:
             kinds.setdefault(r["kind"], []).append(r)
@@ -59,6 +61,34 @@ class Flight:
     def first_log(self, text: str, exact: bool = False) -> dict | None:
         found = [r for r in self.of("log") if r["msg"] == text] if exact else self.logs(text)
         return found[0] if found else None
+
+
+def to_sim_time(records: list[dict]) -> list[dict]:
+    """Restamp every record in PX4's clock (simulated seconds) instead of the recorder's.
+
+    PX4 SITL runs in lockstep with Gazebo, so when the host is loaded the whole
+    simulation slows down (the M1 went to half real time during some flights):
+    the vehicle's physics stay right, but wall clock durations stretch. Each
+    vehicle_local_position carries PX4's timestamp; the recorder's clock is mapped
+    onto it piecewise linearly, and every record (setpoints, feedback, logs,
+    Gazebo's pose) is restamped. Outside the samples time runs at real time.
+    """
+    pairs = [(r["t"], r["px4_us"] * 1e-6) for r in records if r["kind"] == "position" and r.get("px4_us")]
+    pairs = [p for i, p in enumerate(pairs) if i == 0 or (p[0] > pairs[i - 1][0] and p[1] > pairs[i - 1][1])]
+    if len(pairs) < 10:
+        return records
+    (w0, s0), (w1, s1) = pairs[0], pairs[-1]
+    out = []
+    for r in records:
+        w = r["t"]
+        if w <= w0:
+            t = w
+        elif w >= w1:
+            t = w0 + (s1 - s0) + (w - w1)
+        else:
+            t = w0 + (_interp(pairs, w) - s0)
+        out.append({**r, "t": round(t, 4), "wall_t": w})
+    return out
 
 
 def _lines(path: Path) -> list[dict]:

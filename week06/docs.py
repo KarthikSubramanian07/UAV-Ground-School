@@ -210,6 +210,10 @@ def results_md(summary: dict) -> str:
         )
     out += [
         "",
+        "The Result column quotes the action's result message, whose climb time is the server's own wall clock; every other "
+        "column is measured from the recording in simulated time (see below). The fixed clock flight is `--max-lead 0`: the "
+        "setpoint profile runs on regardless of the vehicle, as the server first did.",
+        "",
         "## Timing",
         "",
         "| Flight | PX4 first heard | Preflight checks pass | Offboard | Armed | Lift off | Result | Land took |",
@@ -221,7 +225,13 @@ def results_md(summary: dict) -> str:
             f"{_fmt(r.get('offboard_at'), 1, ' s')} | {_fmt(r.get('arm_time'), 1, ' s')} | {_fmt(r.get('liftoff'), 1, ' s')} | "
             f"{_fmt(r.get('result_time'), 1, ' s')} | {_fmt(r.get('land_time'), 1, ' s')} |"
         )
-    out += ["", "Times are seconds since the flight recorder started, which is when the launch started PX4."]
+    out += [
+        "",
+        "Times here and in every table are simulated seconds, PX4's clock, counted from when the flight recorder started "
+        "(the launch starts PX4 at the same moment). PX4 SITL runs in lockstep with Gazebo, and the 8 GB M1 ran the simulation "
+        "at down to half real time during the busiest flights, so wall clock durations would overstate every rise and settling "
+        "time; `week06.flight` maps the recorder's clock onto PX4's through the timestamps of `vehicle_local_position`.",
+    ]
     x = summary.get("xrce")
     if x:
         out += [
