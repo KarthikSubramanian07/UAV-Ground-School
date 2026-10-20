@@ -1,0 +1,1252 @@
+{
+ "versions": {
+  "px4": "v1.17.0",
+  "px4_msgs": "v1.17.0",
+  "agent": "v2.4.3",
+  "gazebo": "Harmonic",
+  "ros2": "Jazzy",
+  "vehicle": "x500 (gz_x500)"
+ },
+ "titles": {
+  "offboard_5m": "Offboard, 5 m",
+  "offboard_5m_fixed_clock": "Offboard, 5 m, reference on a fixed clock",
+  "takeoff_mode_5m": "Takeoff mode, 5 m",
+  "offboard_10m_2mps": "Offboard, 10 m at 2 m/s",
+  "offboard_cancel": "Canceled 4 s after lift off",
+  "xrce_5m": "Pure Python over XRCE, 5 m"
+ },
+ "flights": {
+  "offboard_5m": {
+   "target": 5.0,
+   "method": "offboard",
+   "goal_time": 0.189,
+   "px4_first_heard": 25.671,
+   "preflight_ok_at": 25.671,
+   "arm_time": 26.672,
+   "offboard_at": 26.493,
+   "result": "succeeded: holding 4.94 m (11.3 s climb)",
+   "succeeded": true,
+   "result_time": 44.137,
+   "liftoff": 29.463,
+   "rise_time": 3.98,
+   "peak_altitude": 5.064,
+   "overshoot": 0.064,
+   "overshoot_percent": 1.287,
+   "max_climb_rate": 1.213,
+   "settling_time": 5.756,
+   "arm_to_liftoff": 2.791,
+   "hover_seconds": 4.756,
+   "hover_rms_error": 0.046,
+   "hover_mean_error": 0.03,
+   "max_drift": 0.067,
+   "tracking_rms": 0.305,
+   "tracking_max": 0.402,
+   "landed": true,
+   "land_time": 12.634,
+   "estimate_vs_truth_rms": 0.092,
+   "estimate_vs_truth_max": 0.154,
+   "hover_truth_mean": 5.059
+  },
+  "offboard_5m_fixed_clock": {
+   "target": 5.0,
+   "method": "offboard",
+   "goal_time": 0.229,
+   "px4_first_heard": 22.974,
+   "preflight_ok_at": 22.974,
+   "arm_time": 24.315,
+   "offboard_at": 24.128,
+   "result": "succeeded: holding 4.91 m (7.0 s climb)",
+   "succeeded": true,
+   "result_time": 33.995,
+   "liftoff": 27.587,
+   "rise_time": 2.4,
+   "peak_altitude": 4.989,
+   "overshoot": 0.0,
+   "overshoot_percent": 0.0,
+   "max_climb_rate": 2.574,
+   "settling_time": 4.52,
+   "arm_to_liftoff": 3.272,
+   "hover_seconds": 4.97,
+   "hover_rms_error": 0.047,
+   "hover_mean_error": -0.039,
+   "max_drift": 0.059,
+   "tracking_rms": 1.218,
+   "tracking_max": 2.632,
+   "landed": true,
+   "land_time": 11.235
+  },
+  "takeoff_mode_5m": {
+   "target": 5.0,
+   "method": "takeoff_mode",
+   "goal_time": 0.112,
+   "px4_first_heard": 16.415,
+   "preflight_ok_at": 16.415,
+   "arm_time": 16.817,
+   "offboard_at": null,
+   "result": "succeeded: holding 4.90 m (10.2 s climb)",
+   "succeeded": true,
+   "result_time": 29.715,
+   "liftoff": 21.273,
+   "rise_time": 4.4,
+   "peak_altitude": 4.999,
+   "overshoot": 0.0,
+   "overshoot_percent": 0.0,
+   "max_climb_rate": 1.275,
+   "settling_time": 6.348,
+   "arm_to_liftoff": 4.456,
+   "hover_seconds": 5.042,
+   "hover_rms_error": 0.045,
+   "hover_mean_error": -0.038,
+   "max_drift": 0.054,
+   "landed": true,
+   "land_time": 11.05,
+   "estimate_vs_truth_rms": 0.094,
+   "estimate_vs_truth_max": 0.21,
+   "hover_truth_mean": 4.871
+  },
+  "offboard_10m_2mps": {
+   "target": 10.0,
+   "method": "offboard",
+   "goal_time": 0.117,
+   "px4_first_heard": 16.369,
+   "preflight_ok_at": 16.369,
+   "arm_time": 17.675,
+   "offboard_at": 17.467,
+   "result": "succeeded: holding 9.95 m (8.2 s climb)",
+   "succeeded": true,
+   "result_time": 28.492,
+   "liftoff": 20.651,
+   "rise_time": 4.165,
+   "peak_altitude": 9.98,
+   "overshoot": 0.0,
+   "overshoot_percent": 0.0,
+   "max_climb_rate": 2.121,
+   "settling_time": 6.125,
+   "arm_to_liftoff": 2.976,
+   "hover_seconds": 5.051,
+   "hover_rms_error": 0.058,
+   "hover_mean_error": -0.054,
+   "max_drift": 0.108,
+   "tracking_rms": 0.251,
+   "tracking_max": 0.394,
+   "landed": true,
+   "land_time": 15.758
+  },
+  "offboard_cancel": {
+   "target": 10.0,
+   "method": "offboard",
+   "goal_time": 0.189,
+   "px4_first_heard": 16.481,
+   "preflight_ok_at": 16.481,
+   "arm_time": 17.745,
+   "offboard_at": 17.545,
+   "result": "canceled at 4.34 m, holding",
+   "succeeded": false,
+   "result_time": 25.808,
+   "liftoff": 20.87,
+   "rise_time": null,
+   "peak_altitude": 4.534,
+   "overshoot": 0.0,
+   "overshoot_percent": 0.0,
+   "max_climb_rate": 1.06,
+   "settling_time": null,
+   "arm_to_liftoff": 3.124,
+   "hover_seconds": 5.035,
+   "hover_rms_error": null,
+   "hover_mean_error": null,
+   "cancel_altitude": 4.4,
+   "cancel_coast": 0.134,
+   "cancel_hold_rms": 0.113,
+   "max_drift": 0.036,
+   "tracking_rms": 0.283,
+   "tracking_max": 0.393,
+   "landed": true,
+   "land_time": 9.863
+  },
+  "xrce_5m": {
+   "target": 5.0,
+   "method": "offboard",
+   "goal_time": 0.044,
+   "px4_first_heard": 16.079,
+   "preflight_ok_at": 16.079,
+   "arm_time": 16.91,
+   "offboard_at": 16.714,
+   "result": "succeeded: holding 4.91 m (15.7 s climb)",
+   "succeeded": true,
+   "result_time": 37.491,
+   "liftoff": 18.989,
+   "rise_time": 4.032,
+   "peak_altitude": 5.007,
+   "overshoot": 0.007,
+   "overshoot_percent": 0.149,
+   "max_climb_rate": 1.224,
+   "settling_time": 6.72,
+   "arm_to_liftoff": 2.08,
+   "hover_seconds": 2.878,
+   "hover_rms_error": 0.038,
+   "hover_mean_error": -0.028,
+   "max_drift": 0.05,
+   "tracking_rms": 0.313,
+   "tracking_max": 0.399,
+   "landed": true,
+   "land_time": 11.509
+  }
+ },
+ "xrce": {
+  "duration_s": 43.478,
+  "client": {
+   "cookie": "XRCE",
+   "version": "0100",
+   "vendor": "010f",
+   "client_key": "00000001",
+   "session_id": 129,
+   "mtu": 508
+  },
+  "agent": {
+   "status": "OK",
+   "implementation_status": 0,
+   "cookie": "XRCE",
+   "version": "0100",
+   "vendor": "010f"
+  },
+  "created": 197,
+  "participants": 1,
+  "topics": [
+   {
+    "topic": "/fmu/in/register_ext_component_request",
+    "type": "px4_msgs/msg/RegisterExtComponentRequest",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 4
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/unregister_ext_component",
+    "type": "px4_msgs/msg/UnregisterExtComponent",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/config_overrides_request",
+    "type": "px4_msgs/msg/ConfigOverrides",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 8
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/arming_check_reply_v1",
+    "type": "px4_msgs/msg/ArmingCheckReply",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 8
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/message_format_request",
+    "type": "px4_msgs/msg/MessageFormatRequest",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/mode_completed",
+    "type": "px4_msgs/msg/ModeCompleted",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/config_control_setpoints",
+    "type": "px4_msgs/msg/VehicleControlMode",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/distance_sensor",
+    "type": "px4_msgs/msg/DistanceSensor",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/manual_control_input",
+    "type": "px4_msgs/msg/ManualControlSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/offboard_control_mode",
+    "type": "px4_msgs/msg/OffboardControlMode",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 466,
+    "bytes": 7456,
+    "sample_bytes": 16,
+    "rate_hz": 19.7,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/onboard_computer_status",
+    "type": "px4_msgs/msg/OnboardComputerStatus",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/obstacle_distance",
+    "type": "px4_msgs/msg/ObstacleDistance",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/sensor_optical_flow",
+    "type": "px4_msgs/msg/SensorOpticalFlow",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/goto_setpoint",
+    "type": "px4_msgs/msg/GotoSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/telemetry_status",
+    "type": "px4_msgs/msg/TelemetryStatus",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/trajectory_setpoint",
+    "type": "px4_msgs/msg/TrajectorySetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 471,
+    "bytes": 30144,
+    "sample_bytes": 64,
+    "rate_hz": 20.0,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/vehicle_attitude_setpoint_v1",
+    "type": "px4_msgs/msg/VehicleAttitudeSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/vehicle_mocap_odometry",
+    "type": "px4_msgs/msg/VehicleOdometry",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/vehicle_rates_setpoint",
+    "type": "px4_msgs/msg/VehicleRatesSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/vehicle_visual_odometry",
+    "type": "px4_msgs/msg/VehicleOdometry",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/vehicle_command",
+    "type": "px4_msgs/msg/VehicleCommand",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 16
+    },
+    "samples": 3,
+    "bytes": 168,
+    "sample_bytes": 56,
+    "rate_hz": 0.1,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/vehicle_command_mode_executor",
+    "type": "px4_msgs/msg/VehicleCommand",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 16
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/vehicle_thrust_setpoint",
+    "type": "px4_msgs/msg/VehicleThrustSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/vehicle_torque_setpoint",
+    "type": "px4_msgs/msg/VehicleTorqueSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/actuator_motors",
+    "type": "px4_msgs/msg/ActuatorMotors",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/actuator_servos",
+    "type": "px4_msgs/msg/ActuatorServos",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/aux_global_position",
+    "type": "px4_msgs/msg/VehicleGlobalPosition",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/fixed_wing_longitudinal_setpoint",
+    "type": "px4_msgs/msg/FixedWingLongitudinalSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/fixed_wing_lateral_setpoint",
+    "type": "px4_msgs/msg/FixedWingLateralSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/longitudinal_control_configuration",
+    "type": "px4_msgs/msg/LongitudinalControlConfiguration",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/lateral_control_configuration",
+    "type": "px4_msgs/msg/LateralControlConfiguration",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/rover_position_setpoint",
+    "type": "px4_msgs/msg/RoverPositionSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/rover_speed_setpoint",
+    "type": "px4_msgs/msg/RoverSpeedSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/rover_attitude_setpoint",
+    "type": "px4_msgs/msg/RoverAttitudeSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/rover_rate_setpoint",
+    "type": "px4_msgs/msg/RoverRateSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/rover_throttle_setpoint",
+    "type": "px4_msgs/msg/RoverThrottleSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/rover_steering_setpoint",
+    "type": "px4_msgs/msg/RoverSteeringSetpoint",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/in/landing_gear",
+    "type": "px4_msgs/msg/LandingGear",
+    "direction": "in",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "volatile",
+     "depth": 2
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/register_ext_component_reply",
+    "type": "px4_msgs/msg/RegisterExtComponentReply",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/arming_check_request_v1",
+    "type": "px4_msgs/msg/ArmingCheckRequest",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/mode_completed",
+    "type": "px4_msgs/msg/ModeCompleted",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 42,
+    "bytes": 420,
+    "sample_bytes": 10,
+    "rate_hz": 20.8,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/battery_status_v1",
+    "type": "px4_msgs/msg/BatteryStatus",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 29,
+    "bytes": 5104,
+    "sample_bytes": 176,
+    "rate_hz": 0.8,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/collision_constraints",
+    "type": "px4_msgs/msg/CollisionConstraints",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/estimator_status_flags",
+    "type": "px4_msgs/msg/EstimatorStatusFlags",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 34,
+    "bytes": 3332,
+    "sample_bytes": 98,
+    "rate_hz": 0.9,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/failsafe_flags",
+    "type": "px4_msgs/msg/FailsafeFlags",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 55,
+    "bytes": 5005,
+    "sample_bytes": 91,
+    "rate_hz": 1.5,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/manual_control_setpoint",
+    "type": "px4_msgs/msg/ManualControlSetpoint",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 1,
+    "bytes": 68,
+    "sample_bytes": 68,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/message_format_response",
+    "type": "px4_msgs/msg/MessageFormatResponse",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/position_setpoint_triplet",
+    "type": "px4_msgs/msg/PositionSetpointTriplet",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 19,
+    "bytes": 5168,
+    "sample_bytes": 272,
+    "rate_hz": 0.5,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/sensor_combined",
+    "type": "px4_msgs/msg/SensorCombined",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 2797,
+    "bytes": 134256,
+    "sample_bytes": 48,
+    "rate_hz": 75.7,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/timesync_status",
+    "type": "px4_msgs/msg/TimesyncStatus",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 63,
+    "bytes": 2772,
+    "sample_bytes": 44,
+    "rate_hz": 1.7,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/transponder_report",
+    "type": "px4_msgs/msg/TransponderReport",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 1,
+    "bytes": 86,
+    "sample_bytes": 86,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/vehicle_land_detected",
+    "type": "px4_msgs/msg/VehicleLandDetected",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 38,
+    "bytes": 760,
+    "sample_bytes": 20,
+    "rate_hz": 1.0,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/vehicle_attitude",
+    "type": "px4_msgs/msg/VehicleAttitude",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 2795,
+    "bytes": 136955,
+    "sample_bytes": 49,
+    "rate_hz": 75.7,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/vehicle_control_mode",
+    "type": "px4_msgs/msg/VehicleControlMode",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 61,
+    "bytes": 1403,
+    "sample_bytes": 23,
+    "rate_hz": 1.7,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/vehicle_command_ack",
+    "type": "px4_msgs/msg/VehicleCommandAck",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 4,
+    "bytes": 100,
+    "sample_bytes": 25,
+    "rate_hz": 0.1,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/vehicle_global_position",
+    "type": "px4_msgs/msg/VehicleGlobalPosition",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 1400,
+    "bytes": 98000,
+    "sample_bytes": 70,
+    "rate_hz": 37.9,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/vehicle_gps_position",
+    "type": "px4_msgs/msg/SensorGps",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 849,
+    "bytes": 138387,
+    "sample_bytes": 163,
+    "rate_hz": 23.0,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/vehicle_local_position_v1",
+    "type": "px4_msgs/msg/VehicleLocalPosition",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 1400,
+    "bytes": 302400,
+    "sample_bytes": 216,
+    "rate_hz": 37.9,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/vehicle_odometry",
+    "type": "px4_msgs/msg/VehicleOdometry",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 2792,
+    "bytes": 318288,
+    "sample_bytes": 114,
+    "rate_hz": 75.6,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/vehicle_status_v1",
+    "type": "px4_msgs/msg/VehicleStatus",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 61,
+    "bytes": 4880,
+    "sample_bytes": 80,
+    "rate_hz": 1.7,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/airspeed_validated_v1",
+    "type": "px4_msgs/msg/AirspeedValidated",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/vtol_vehicle_status",
+    "type": "px4_msgs/msg/VtolVehicleStatus",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/home_position_v1",
+    "type": "px4_msgs/msg/HomePosition",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 4,
+    "bytes": 240,
+    "sample_bytes": 60,
+    "rate_hz": 0.2,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/wind",
+    "type": "px4_msgs/msg/Wind",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   },
+   {
+    "topic": "/fmu/out/gimbal_device_attitude_status",
+    "type": "px4_msgs/msg/GimbalDeviceAttitudeStatus",
+    "direction": "out",
+    "qos": {
+     "reliable": false,
+     "history": "keep_last",
+     "durability": "transient_local"
+    },
+    "samples": 0,
+    "bytes": 0,
+    "sample_bytes": null,
+    "rate_hz": null,
+    "created": "OK"
+   }
+  ],
+  "submessages": {
+   "GET_INFO": 11,
+   "INFO": 11,
+   "CREATE_CLIENT": 1,
+   "STATUS_AGENT": 1,
+   "CREATE": 197,
+   "STATUS": 197,
+   "ACKNACK": 265,
+   "TIMESTAMP": 1525,
+   "TIMESTAMP_REPLY": 1525,
+   "READ_DATA": 39,
+   "WRITE_DATA": 12445,
+   "DATA": 940
+  },
+  "bytes": {
+   "px4>agent": 1762609,
+   "agent>px4": 178681
+  },
+  "kbps": {
+   "px4>agent": 324.3,
+   "agent>px4": 32.9
+  }
+ }
+}
