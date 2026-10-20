@@ -14,7 +14,7 @@ All four, on an 8 GB Apple M1, with nothing installed on the Mac but Docker:
 Then the week goes further:
 
 * **Two ways to take off, both measured**: offboard control (the server streams a trapezoidal setpoint profile) and PX4's own takeoff mode (one command, PX4 flies the climb).
-* **Every failure path tested**: a fake PX4 that follows the commander's rules (no offboard without a setpoint stream, no arming before the preflight checks, hold one second after the setpoints stop) runs under six launch tests and 28 unit tests: refusals, a pilot taking over, losing the link, cancel.
+* **Every failure path tested**: a fake PX4 that follows the commander's rules (no offboard without a setpoint stream, no arming before the preflight checks, hold one second after the setpoints stop) runs under six launch tests and 29 unit tests: refusals, a pilot taking over, losing the link, cancel.
 * **Measured against ground truth**: Gazebo's true pose against PX4's estimate.
 * **DDS-XRCE from the specification**, in pure Python: a dissector that rebuilds PX4's session with the agent from a capture, and a client that logs in to the agent itself and flies the same takeoff with **no ROS 2 at all**.
 
@@ -140,7 +140,7 @@ $ python -m week06 xrce decode docs/week06/flights/offboard_5m.xrce.pcap
 
 | Where | What |
 | --- | --- |
-| [`tests/test_week06_takeoff.py`](../tests/test_week06_takeoff.py) | 28 tests of the logic against the PX4 model: both methods, climb rate, the profile, a goal while flying, every refusal, offboard loss, takeover, telemetry loss, timeouts, cancel, landing |
+| [`tests/test_week06_takeoff.py`](../tests/test_week06_takeoff.py) | 29 tests of the logic against the PX4 model: both methods, climb rate, the profile, a goal while flying, every refusal, offboard loss, takeover, telemetry loss, timeouts, cancel, landing |
 | [`tests/test_week06_flight.py`](../tests/test_week06_flight.py) | the measurements on a model flight with exact answers, truth alignment, and every committed SITL flight |
 | [`tests/test_week06_xrce.py`](../tests/test_week06_xrce.py) | the XRCE codec: object ids, headers, every payload this repo encodes, alignment, truncation |
 | [`tests/test_week06_dissect.py`](../tests/test_week06_dissect.py) | the dissector on a synthetic session (fragments included) and on the real capture of PX4's session |

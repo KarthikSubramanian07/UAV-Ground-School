@@ -49,7 +49,7 @@ The logic is a state machine with no ROS in it ([`takeoff.py`](../../ros2_ws/src
 
 ## How it is tested
 
-* 28 unit tests ([`tests/test_week06_takeoff.py`](../../tests/test_week06_takeoff.py)) fly the logic against a model of PX4's commander rules ([`model.py`](../../ros2_ws/src/ugs_px4/ugs_px4/model.py)): the happy paths, every refusal, offboard loss, a pilot takeover, cancel, and landing.
+* 29 unit tests ([`tests/test_week06_takeoff.py`](../../tests/test_week06_takeoff.py)) fly the logic against a model of PX4's commander rules ([`model.py`](../../ros2_ws/src/ugs_px4/ugs_px4/model.py)): the happy paths, every refusal, offboard loss, a pilot takeover, cancel, and landing.
 * Six launch tests in `ugs_px4/test` run the real nodes, in ROS 2, against `fake_px4` (that model behind PX4's exact topic names, types and QoS): offboard, takeoff mode, cancel, arming refused, a takeover, and a goal rejected for its altitude. CI runs them in the `ros` job.
 * `.github/workflows/px4-sitl.yml` builds the PX4 image and flies three real SITL flights on GitHub's runners: offboard, takeoff mode, and the pure Python XRCE client.
 * The flights in [`flights/`](flights) were flown on the M1 and are measured in [`RESULTS.md`](RESULTS.md).
@@ -110,7 +110,7 @@ Problems 1 to 9 are the ones this repo actually hit, in order. Problems 10 to 13
 
 **Symptom:** In the launch tests the fake PX4 dropped out of offboard into hold one second after accepting it, with nothing wrong in the logs; the server's arming retries came 1.8 s apart instead of 1 s.
 
-**Fix:** The 20 Hz loop was an rclpy timer on the MultiThreadedExecutor, beside 50 Hz telemetry and two action servers, and went 0.4 to 1.2 s between calls: longer than PX4's 1 s offboard loss failsafe. Giving the timer its own callback group did not help. The loop now runs in a thread of its own (rclpy publishers are thread safe) and is never more than 0.3 s late; telemetry staleness is judged over 2 s, because `vehicle_status_v1` itself only arrives at about 2 Hz.
+**Fix:** The 20 Hz loop was an rclpy timer on the MultiThreadedExecutor, beside 50 Hz telemetry and two action servers, and went 0.4 to 1.2 s between calls: longer than PX4's 1 s offboard loss failsafe. Giving the timer its own callback group did not help. Three changes, each found by a failure: the loop runs in a thread of its own (rclpy publishers are thread safe) and is never more than 0.3 s late; PX4's telemetry gets its own node on a SingleThreadedExecutor in another thread, after GitHub's runner let it fall 2 s behind; and liveness is judged by the 50 Hz local position (2 s), not `vehicle_status_v1`, which SITL left silent for 2.5 s while Gazebo ran at half speed. All six launch tests now pass with four CPU-burning processes competing on four cores.
 
 ### 10. PX4 refuses offboard mode
 
