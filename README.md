@@ -1,6 +1,6 @@
 # UAV Ground School
 
-**Solutions to the UAVs@Berkeley Software Ground School 2026, written to competition grade: color segmentation, SUAS target shapes and drone video mosaicking (week 2), blob detection, classical game piece detection and YOLOv8 (week 3), a flight controller design verified on real ArduPilot firmware with every protocol on it implemented from scratch (week 4), and ROS 2 from the tutorials down to the bytes, with a pure Python DDS participant that talks to real ROS 2 nodes (week 5), in Python and C++, measured against ground truth.**
+**Solutions to the UAVs@Berkeley Software Ground School 2026, written to competition grade: color segmentation, SUAS target shapes and drone video mosaicking (week 2), blob detection, classical game piece detection and YOLOv8 (week 3), a flight controller design verified on real ArduPilot firmware with every protocol on it implemented from scratch (week 4), ROS 2 from the tutorials down to the bytes, with a pure Python DDS participant that talks to real ROS 2 nodes (week 5), and a ROS 2 takeoff action flying real PX4 SITL in Gazebo over uXRCE-DDS, with DDS-XRCE rebuilt in pure Python (week 6), in Python and C++, measured against ground truth.**
 
 [![CI](https://github.com/KarthikSubramanian07/UAV-Ground-School/actions/workflows/ci.yml/badge.svg)](https://github.com/KarthikSubramanian07/UAV-Ground-School/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.10%2B-3776ab)
@@ -8,9 +8,9 @@
 ![C++17](https://img.shields.io/badge/C%2B%2B-17-00599c)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-`computer-vision` `opencv` `uav` `drones` `image-stitching` `orthomosaic` `bundle-adjustment` `suas` `color-segmentation` `blob-detection` `object-detection` `yolov8` `ardupilot` `mavlink` `dronecan` `can-bus` `flight-controller` `ros2` `dds` `rtps` `cdr` `cpp`
+`computer-vision` `opencv` `uav` `drones` `image-stitching` `orthomosaic` `bundle-adjustment` `suas` `color-segmentation` `blob-detection` `object-detection` `yolov8` `ardupilot` `mavlink` `dronecan` `can-bus` `flight-controller` `ros2` `dds` `rtps` `cdr` `px4` `gazebo` `sitl` `uxrce-dds` `dds-xrce` `ros2-actions` `offboard-control` `cpp`
 
-Live showcase: **[uav-ground-school.pages.dev](https://uav-ground-school.pages.dev/)** (week 2, with an in browser color splitter) **[/week3](https://uav-ground-school.pages.dev/week3)** (with a detector explorer) **[/week4](https://uav-ground-school.pages.dev/week4)** (a clickable wiring diagram, a logic analyser and a PID playground) and **[/week5](https://uav-ground-school.pages.dev/week5)** (a replay of the ROS 2 drone mission, a QoS playground and a packet inspector).
+Live showcase: **[uav-ground-school.pages.dev](https://uav-ground-school.pages.dev/)** (week 2, with an in browser color splitter) **[/week3](https://uav-ground-school.pages.dev/week3)** (with a detector explorer) **[/week4](https://uav-ground-school.pages.dev/week4)** (a clickable wiring diagram, a logic analyser and a PID playground) **[/week5](https://uav-ground-school.pages.dev/week5)** (a replay of the ROS 2 drone mission, a QoS playground and a packet inspector) and **[/week6](https://uav-ground-school.pages.dev/week6)** (the SITL takeoffs replayed against Gazebo's ground truth, a takeoff lab that breaks PX4 on purpose, and an XRCE packet inspector).
 
 <p align="center">
   <img src="docs/week02/rough_path.jpg" alt="A mosaic of a simulated five pass survey flight over a voxel world, with keyframe footprints and the flight path drawn on top" width="100%">
@@ -26,6 +26,7 @@ The ground school hands out a "skill booster" each week: something small that so
 | 3 | Object detection | Blob detection (SimpleBlobDetector, LoG, DoG, DoH, contours), cones, cubes and rings, YOLOv8, the classical parts again in C++ | [`week03/`](week03/README.md), [lecture notes](docs/week03/NOTES.md) |
 | 4 | Flight controllers | Protocol Pro: a drone designed around the Cube Orange+, wired pin by pin, a design rule checker, the ArduPilot parameters, MAVLink, DroneCAN, CAN, RTCM, CRSF, SBUS and DShot from scratch, ArduCopter 4.7.1 in the loop, the codecs again in C++ | [`week04/`](week04/README.md), [lecture notes](docs/week04/NOTES.md) |
 | 5 | ROS 2: nodes and communication | The Jazzy publisher and subscriber and service and client tutorials in Python and C++ with launch tests, the slides' drone as four nodes using topics, services and an action, QoS and callbacks measured, and RTPS, CDR and REP 2011 hashes from scratch, talking to real ROS 2 | [`week05/`](week05/README.md), [`ros2_ws/`](ros2_ws), [lecture notes](docs/week05/NOTES.md), [results](docs/week05/RESULTS.md) |
+| 6 | PX4 SITL and uXRCE-DDS (optional) | PX4 v1.17 SITL in Gazebo Harmonic and the Micro XRCE-DDS Agent in Docker on an M1, a `/takeoff` action server and client (offboard and takeoff mode, cancel, `/land`), every failure path tested against a fake PX4, measured against Gazebo's true pose, and DDS-XRCE from scratch flying the same takeoff with no ROS 2 | [`week06/`](week06/README.md), [`ugs_px4`](ros2_ws/src/ugs_px4), [setup notes and problems](docs/week06/NOTES.md), [results](docs/week06/RESULTS.md) |
 
 ## Week 2 at a glance
 
@@ -80,6 +81,14 @@ Full numbers in [`docs/week02/benchmark.md`](docs/week02/benchmark.md), regenera
 
 **ROS 2 without ROS 2**: RTPS, CDR and REP 2011 type hashes written from the specifications in pure Python. The participant joins a live ROS 2 graph as a peer: the tutorial's talker, listener, service and both clients all work with it, as does a Cyclone DDS talker, and it recorded the whole drone mission (42 MB of camera frames reassembled from fragments). Against ROS 2 itself: 1,210 of 1,210 type hashes, 1,265,625 of 1,265,625 QoS verdicts, and 300 of 300 CDR messages agree.
 
+## Week 6 at a glance
+
+**The assignment, on real PX4**: [`ugs_px4`](ros2_ws/src/ugs_px4)'s `takeoff_server` takes PX4 v1.17.0 SITL off to 5 m in Gazebo through the Micro XRCE-DDS Agent, and `takeoff_client` asks it to: one command, `python -m week06 fly`, from an image that builds PX4, Gazebo Harmonic, the agent and px4_msgs from source. The x500 held 5.03 m by PX4's estimate (5.06 m by Gazebo's true pose), rising in 4.0 s with 6 cm of overshoot. The first version's reference ran on a fixed clock and left PX4 chasing it at 2.6 m/s while the motors spooled up; a reference that waits for the vehicle brought that to 1.2 m/s and the tracking error from 1.22 to 0.30 m RMS. Both flights are in the results, measured in PX4's simulated time.
+
+**Every way it can go wrong**: a fake PX4 that follows the commander's rules runs under six launch tests: arming refused, offboard refused, a pilot taking over, cancel, a goal out of range. The page's takeoff lab runs a JavaScript port of the same logic, identical to the Python on all nine scenarios.
+
+**PX4 without ROS 2**: DDS-XRCE (the protocol between PX4 and the agent) from the OMG specification and eProsima's binary representations. The dissector rebuilds PX4's whole session from a capture (197 objects, 65 topics, 17,157 submessages, every sample decoded with px4_msgs' field names), and a pure Python client logs in to the agent itself and flies the same takeoff and landing with no ROS 2 installed in the loop.
+
 ## Quick start
 
 ```bash
@@ -112,6 +121,11 @@ python -m week04 journey
 python -m week05 docker build && python -m week05 docker test
 python -m week05 docker run ros2 launch ugs_drone drone.launch.py
 python -m week05 decode docs/week05/captures/pubsub.pcap
+
+# Week 6 (PX4 SITL and Gazebo run in Docker too)
+python -m week06 docker build && python -m week06 fly        # take off to 5 m, hover, land
+python -m week06 fly --xrce                                   # the same, from pure Python over XRCE
+python -m week06 xrce session docs/week06/flights/offboard_5m.xrce.pcap
 ```
 
 Using a real flight video works the same way: `python -m week02 stitch your_flight.mp4 --out mosaic.jpg`. Add `--live` to watch the mosaic grow and `--scale 0.5` for large 4K footage.
@@ -178,7 +192,10 @@ flowchart LR
 | [`week05/rtps.py`](week05/rtps.py), [`participant.py`](week05/participant.py) | RTPS from the specification, and a participant that joins a ROS 2 graph |
 | [`week05/cdr.py`](week05/cdr.py), [`idl.py`](week05/idl.py), [`qos.py`](week05/qos.py) | CDR, interface definitions and REP 2011 type hashes, the rmw QoS rules |
 | [`week05/experiments.py`](week05/experiments.py), [`docs.py`](week05/docs.py), [`dissect.py`](week05/dissect.py) | The live experiments in Docker, the docs generator, the packet dissector |
-| [`ros2_ws/src/`](ros2_ws/src) | The tutorial packages, `ugs_interfaces` and `ugs_drone` (Apache 2.0, like the ROS code they build on) |
+| [`week06/flight.py`](week06/flight.py), [`docs.py`](week06/docs.py), [`lab.py`](week06/lab.py), [`truth.py`](week06/truth.py) | Flight measurements, the docs generator and SITL runs, the takeoff lab's reference simulation, Gazebo ground truth |
+| [`week06/xrce.py`](week06/xrce.py), [`dissect.py`](week06/dissect.py), [`xrce_client.py`](week06/xrce_client.py), [`xrce_fly.py`](week06/xrce_fly.py) | DDS-XRCE from the specification, the session dissector, a pure Python client of the agent, the takeoff over it |
+| [`ros2_ws/src/`](ros2_ws/src) | The tutorial packages, `ugs_interfaces`, `ugs_drone` and week 6's `ugs_px4` (Apache 2.0, like the ROS code they build on) |
+| [`ros2_ws/px4/Dockerfile`](ros2_ws/px4/Dockerfile) | PX4 v1.17.0 SITL, Gazebo Harmonic, the Micro XRCE-DDS Agent v2.4.3 and px4_msgs, on the week 5 image |
 | [`site/`](site) | The showcase site, built by [`scripts/build_site.py`](scripts/build_site.py) |
 
 ## Quality
@@ -187,8 +204,9 @@ flowchart LR
 * Week 3 tests cover scale space theory (peak scale and height), polarity, color only blobs, sidelobes, a comparison with scikit-image's `blob_log`, the edge fit on exact synthetic truth, evaluation semantics, object features and invariance, augmentations that move boxes with pixels, tiling, the mAP implementation against Ultralytics, and regression tests on the ground school photos.
 * Week 4 tests compare the protocols with pymavlink, pydronecan and pyrtcm, break the design one rule at a time, validate the parameters against ArduCopter 4.7.1's metadata, check the recorded SITL measurements against the predictions, and hold the page's JavaScript PID simulator to bit for bit agreement with Python.
 * Week 5 tests hold CDR, type hashes and QoS to fixtures recorded from rclpy, decode the committed captures of the tutorial nodes, and run two participants against each other over real sockets, at 30 percent packet loss too. A CI job in the ROS 2 Jazzy container builds the workspace, runs every ament linter and the launch tests, and checks the participant against the tutorial nodes, Fast DDS and Cyclone DDS live.
+* Week 6 tests fly the takeoff logic against a model of PX4's commander (every refusal, offboard loss, takeover, cancel, landing), measure a model flight with exact answers, hold the XRCE codec and dissector to synthetic sessions and the real SITL capture, and hold the page's JavaScript port to identical traces. The ROS 2 job runs `ugs_px4`'s six launch tests against `fake_px4`, and a separate workflow builds PX4 SITL on GitHub's runners and flies three real takeoffs in Gazebo.
 * The C++ binaries are checked for parity with Python in CI (week 2: same colors, centers within 1.5 px, same shapes, stitching accuracy; week 3: the same dots with F1 1.000 and centers within 0.01 px, the same game pieces; week 4: 2,908 protocol cases byte for byte).
-* GitHub Actions: ruff (lint and formatting enforced everywhere), tests on Python 3.10 and 3.12, the C++ build against Ubuntu's OpenCV 4.6, the ROS 2 workspace in the Jazzy container, and the site build. Once every check is green on `main`, CI triggers a Cloudflare Pages deploy hook and the site at uav-ground-school.pages.dev rebuilds from that commit.
+* GitHub Actions: ruff (lint and formatting enforced everywhere), tests on Python 3.10 and 3.12, the C++ build against Ubuntu's OpenCV 4.6, the ROS 2 workspace in the Jazzy container, and the site build; PX4 SITL flights in their own workflow. Once every check is green on `main`, CI triggers a Cloudflare Pages deploy hook and the site at uav-ground-school.pages.dev rebuilds from that commit.
 
 ## License
 

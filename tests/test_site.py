@@ -499,3 +499,106 @@ def test_js_qos_presets_match_python() -> None:
     presets = json.loads(res.stdout)
     for name, profile in presets.items():
         assert qos.QoSProfile(**profile) == qos.PRESETS[name], name
+
+
+# ------------------------------------------------------------------ week 6 ----
+
+DOCS6 = ROOT / "docs" / "week06"
+
+
+@pytest.fixture(scope="module")
+def week6_html(site: Path) -> str:
+    return (site / "week6.html").read_text(encoding="utf-8")
+
+
+def test_week6_page_and_assets(site: Path, week6_html: str) -> None:
+    for path in ("week6.html", "og-week6.jpg", "js/week6.js"):
+        assert (site / path).is_file(), path
+    assert cv2.imread(str(site / "og-week6.jpg")).shape == (630, 1200, 3)
+    for name in build_site.W6_EXPORT:
+        assert json.loads((site / "assets" / "week6" / name).read_text()) == json.loads((DOCS6 / name).read_text())
+    head = _Head()
+    head.feed(week6_html)
+    assert head.links["canonical"] == build_site.CANONICAL + "week6"
+    assert head.meta["og:image"] == build_site.CANONICAL + "og-week6.jpg"
+    assert head.meta["description"] == build_site.W6_DESCRIPTION
+    ld = json.loads("".join(head.json_ld))
+    assert ld["url"] == build_site.CANONICAL + "week6" and ld["codeRepository"] == build_site.REPO
+    assert f"<loc>{build_site.CANONICAL}week6</loc>" in (site / "sitemap.xml").read_text()
+    assert "/og-week6.jpg" in (site / "_headers").read_text()
+    for page in ("index.html", "week3.html", "week4.html", "week5.html"):
+        assert 'href="week6"' in (site / page).read_text(encoding="utf-8"), page
+
+
+def test_week6_links_to_the_repo_folders(week6_html: str) -> None:
+    for path in (
+        "blob/main/week06/README.md",
+        "tree/main/ros2_ws/src/ugs_px4",
+        "blob/main/docs/week06/NOTES.md",
+        "blob/main/docs/week06/RESULTS.md",
+    ):
+        assert f'href="{build_site.REPO}/{path}"' in week6_html, path
+        assert (ROOT / path.split("/", 2)[2]).exists(), path
+
+
+def test_week6_numbers_come_from_json(week6_html: str) -> None:
+    summary = json.loads((DOCS6 / "summary.json").read_text())
+    main = summary["flights"]["offboard_5m"]
+    assert f"{main['target'] + main['hover_mean_error']:.2f} m" in week6_html
+    assert f"{main['rise_time']:.2f} s" in week6_html
+    assert f"{main['hover_rms_error']:.3f} m" in week6_html
+    assert f"{len(summary['xrce']['topics'])} topics" in week6_html
+    for name in summary["flights"]:
+        assert html.escape(summary["titles"][name]) in week6_html
+    busy = [t for t in summary["xrce"]["topics"] if t["samples"]]
+    for topic in busy:
+        assert f"<code>{topic['topic']}</code>" in week6_html
+    assert f"and {len(summary['xrce']['topics']) - len(busy)} more topics" in week6_html
+    notes = (DOCS6 / "NOTES.md").read_text()
+    assert week6_html.count('class="symptom"') == len(re.findall(r"^### ", notes.split("## Problems", 1)[1].split("\n## ", 1)[0], re.M))
+
+
+def test_week6_build_fails_without_its_data(tmp_path: Path) -> None:
+    docs6 = tmp_path / "week06"
+    shutil.copytree(DOCS6, docs6, ignore=shutil.ignore_patterns("flights"))
+    (docs6 / "replay.json").unlink()
+    with pytest.raises(build_site.BuildError) as error:
+        build_site.build(tmp_path / "out", docs6=docs6)
+    assert "replay.json" in str(error.value)
+
+
+LAB_HARNESS = """
+const W = require(process.argv[2]);
+const scenarios = JSON.parse(process.argv[3]);
+const out = {};
+for (const [k, v] of Object.entries(scenarios)) out[k] = W.simulate(v);
+process.stdout.write(JSON.stringify(out));
+"""
+
+
+@needs_node
+def test_js_takeoff_lab_matches_python_exactly(tmp_path: Path) -> None:
+    from week06.lab import SCENARIOS, simulate
+
+    script = tmp_path / "lab.js"
+    script.write_text(LAB_HARNESS)
+    js = json.loads(
+        subprocess.run(
+            [NODE, str(script), str(ROOT / "site" / "js" / "week6.js"), json.dumps(SCENARIOS)],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=120,
+        ).stdout
+    )
+    for name, options in SCENARIOS.items():
+        py = simulate(**options)
+        got = js[name]
+        assert got["t"] == py["t"], name  # same steps, same float arithmetic
+        assert got["altitude"] == py["altitude"], name
+        assert got["setpoint"] == py["setpoint"], name
+        assert got["phase"] == py["phase"], name
+        assert got["nav"] == py["nav"], name
+        assert [e[1:] for e in got["events"]] == [e[1:] for e in py["events"]], name
+        assert got["result"] == py["result"], name
+        assert got["land"] == py["land"], name

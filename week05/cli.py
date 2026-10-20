@@ -52,7 +52,9 @@ def cmd_docker(args) -> int:
     if args.action == "shell":
         return _docker(["bash"], interactive=True)
     if args.action == "test":
-        script = "source /opt/ros/jazzy/setup.bash && colcon build && colcon test && colcon test-result --verbose"
+        # ugs_px4 (week 6) needs px4_msgs, which only the week 6 image has: python -m week06 docker test
+        skip = "--packages-skip ugs_px4"
+        script = f"source /opt/ros/jazzy/setup.bash && colcon build {skip} && colcon test {skip} && colcon test-result --verbose"
         return _docker(["bash", "-c", script])
     command = " ".join(shlex.quote(c) for c in args.command)
     script = "source /opt/ros/jazzy/setup.bash && source install/setup.bash && " + command

@@ -2,8 +2,8 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>ugs_interfaces</name>
-  <version>0.5.0</version>
-  <description>Messages, services and the FlyToWaypoint action for the week 5 drone</description>
+  <version>0.6.0</version>
+  <description>Messages, services and actions for the ground school drone: FlyToWaypoint (week 5), Takeoff and Land (week 6)</description>
   <maintainer email="88288818+KarthikSubramanian07@users.noreply.github.com">Karthik Subramanian</maintainer>
   <license>Apache-2.0</license>
 

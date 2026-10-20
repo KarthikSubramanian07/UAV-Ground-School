@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uav-ground-school"
-version = "0.5.0"
-description = "UAVs@Berkeley Software Ground School 2026 solutions: color segmentation, drone video mosaicking, blob detection, object detection, YOLOv8, a flight controller design with MAVLink, DroneCAN and CAN from scratch, and ROS 2 with a pure Python RTPS participant."
+version = "0.6.0"
+description = "UAVs@Berkeley Software Ground School 2026 solutions: color segmentation, drone video mosaicking, blob detection, object detection, YOLOv8, a flight controller design with MAVLink, DroneCAN and CAN from scratch, ROS 2 with a pure Python RTPS participant, and a PX4 takeoff action over uXRCE-DDS with DDS-XRCE from scratch."
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "Karthik Subramanian" }]
 requires-python = ">=3.10"
-keywords = ["opencv", "computer-vision", "uav", "drone", "image-stitching", "orthomosaic", "suas", "blob-detection", "object-detection", "yolov8", "ardupilot", "mavlink", "dronecan", "can-bus", "flight-controller", "ros2", "dds", "rtps", "cdr"]
+keywords = ["opencv", "computer-vision", "uav", "drone", "image-stitching", "orthomosaic", "suas", "blob-detection", "object-detection", "yolov8", "ardupilot", "mavlink", "dronecan", "can-bus", "flight-controller", "ros2", "dds", "rtps", "cdr", "px4", "gazebo", "dds-xrce", "micro-xrce-dds", "ros2-actions"]
 dependencies = ["opencv-python>=4.8", "numpy>=1.24"]
 
 [project.optional-dependencies]
@@ -23,14 +23,16 @@ week02 = "week02.cli:main"
 week03 = "week03.cli:main"
 week04 = "week04.cli:main"
 week05 = "week05.cli:main"
+week06 = "week06.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["week02*", "week03*", "week04*", "week05*"]
+include = ["week02*", "week03*", "week04*", "week05*", "week06*"]
 
 [tool.setuptools.package-data]
 week03 = ["annotations/*.json"]
 week04 = ["data/*.json", "dsdl/LICENSE", "dsdl/**/*.uavcan"]
 week05 = ["interfaces/README.md", "interfaces/*/msg/*.msg", "interfaces/*/srv/*.srv", "interfaces/*/action/*.action"]
+week06 = ["interfaces/README.md", "interfaces/*/msg/*.msg"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

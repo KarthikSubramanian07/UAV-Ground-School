@@ -1,0 +1,27 @@
+[xrce fly] logged in to the agent at 127.0.0.1:8888: OK
+[xrce fly] created 7 topics with their readers and writers
+[xrce fly] /takeoff to 5.0 m at 1.0 m/s (offboard)
+[xrce fly] [WAIT_FOR_PX4]
+[xrce fly] PX4 now AUTO_LOITER, disarmed
+[xrce fly] <- PX4 ack CMD_211: ACCEPTED
+[xrce fly] [OFFBOARD]
+[xrce fly] -> PX4 DO_SET_MODE
+[xrce fly] <- PX4 ack DO_SET_MODE: ACCEPTED
+[xrce fly] PX4 now OFFBOARD, disarmed
+[xrce fly] -> PX4 COMPONENT_ARM_DISARM
+[xrce fly] [ARMING]
+[xrce fly] <- PX4 ack COMPONENT_ARM_DISARM: ACCEPTED
+[xrce fly] PX4 now OFFBOARD, armed
+[xrce fly] [CLIMB]
+[xrce fly] [SETTLE]
+[xrce fly] succeeded: holding 4.91 m (15.7 s climb)
+[xrce fly] /land
+[xrce fly] -> PX4 NAV_LAND
+[xrce fly] [DESCEND]
+[xrce fly] <- PX4 ack NAV_LAND: ACCEPTED
+[xrce fly] PX4 now AUTO_LAND, armed
+[xrce fly] [TOUCHDOWN]
+[xrce fly] PX4 now OFFBOARD, disarmed
+[xrce fly] [DISARMED]
+[xrce fly] LAND succeeded: landed and disarmed in 11.3 s
+[xrce fly] 895 XRCE messages sent, 1473 received

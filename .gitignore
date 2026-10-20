@@ -22,3 +22,10 @@ runs/
 ros2_ws/build/
 ros2_ws/install/
 ros2_ws/log/
+
+# px4_msgs is cloned into the workspace by CI and python -m week06 (not vendored)
+ros2_ws/src/px4_msgs/
+# raw SITL captures before they are trimmed for docs/week06
+docs/week06/flights/*.pcap
+!docs/week06/flights/*.xrce.pcap
+docs/week06/flights/ci_*
