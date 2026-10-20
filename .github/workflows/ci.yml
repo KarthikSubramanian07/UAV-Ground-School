@@ -120,7 +120,8 @@ jobs:
         working-directory: ros2_ws
         run: |
           source /opt/ros/jazzy/setup.bash
-          colcon test --packages-skip px4_msgs --event-handlers console_direct+
+          # one package at a time: ugs_px4's launch tests fly real time control loops in Python
+          colcon test --executor sequential --packages-skip px4_msgs --event-handlers console_direct+
           colcon test-result --verbose
       - name: week05 against ROS 2
         run: |

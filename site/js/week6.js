@@ -238,7 +238,8 @@
   }
 
   // ------------------------------------------------------ takeoff logic ----
-  const fresh = (s, now, maxAge) => s.status_time !== null && s.position_time !== null && now - s.status_time < maxAge && now - s.position_time < maxAge;
+  const STATUS_MAX_AGE = 5.0;
+  const fresh = (s, now, maxAge) => s.status_time !== null && s.position_time !== null && now - s.position_time < maxAge && now - s.status_time < Math.max(maxAge, STATUS_MAX_AGE);
 
   function limits(changes) {
     return Object.assign(

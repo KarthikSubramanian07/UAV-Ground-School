@@ -80,6 +80,9 @@ def command_name(command: int) -> str:
             CMD_COMPONENT_ARM_DISARM: 'COMPONENT_ARM_DISARM'}.get(command, f'CMD_{command}')
 
 
+STATUS_MAX_AGE = 5.0  # seconds VehicleStatus may be quiet before PX4 counts as lost
+
+
 @dataclass
 class Command:
     """A VehicleCommand to send: the command number and its seven parameters."""
@@ -154,7 +157,14 @@ class Snapshot:
     def armed(self) -> bool:
         return self.arming_state == ARMING_STATE_ARMED
 
-    def fresh(self, now: float, max_age: float = 1.0) -> bool:
-        """Tell whether both the status and the position arrived within max_age seconds."""
+    def fresh(self, now: float, max_age: float = 2.0) -> bool:
+        """
+        Tell whether PX4 is still talking: a position within max_age seconds.
+
+        Liveness comes from vehicle_local_position (50 Hz). VehicleStatus is sent on
+        change and at about 2 Hz, and SITL went 2.5 s without one while Gazebo ran
+        at half real time, so it may be quiet for up to STATUS_MAX_AGE.
+        """
         return (self.status_time is not None and self.position_time is not None
-                and now - self.status_time < max_age and now - self.position_time < max_age)
+                and now - self.position_time < max_age
+                and now - self.status_time < max(max_age, STATUS_MAX_AGE))

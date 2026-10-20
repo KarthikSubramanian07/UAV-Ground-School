@@ -23,6 +23,7 @@ SITL and Gazebo are too heavy. The `faults` parameter injects failures (see
 ugs_px4.model).
 """
 
+import threading
 import time
 
 from px4_msgs.msg import (OffboardControlMode, TrajectorySetpoint, VehicleCommand,
@@ -56,28 +57,57 @@ class FakePx4(Node):
             VehicleLandDetected, '/fmu/out/vehicle_land_detected', out)
         self.ack_pub = self.create_publisher(VehicleCommandAck, '/fmu/out/vehicle_command_ack',
                                              out)
+        self.lock = threading.Lock()  # the model, between the loop and the subscriptions
         self.create_subscription(OffboardControlMode, '/fmu/in/offboard_control_mode',
-                                 lambda m: self.model.offboard_control_mode(), 10)
+                                 self.on_offboard, 10)
         self.create_subscription(TrajectorySetpoint, '/fmu/in/trajectory_setpoint',
                                  self.on_setpoint, 10)
         self.create_subscription(VehicleCommand, '/fmu/in/vehicle_command', self.on_command, 10)
         self.last = time.monotonic()
         self.ticks = 0
+        self.last_status = 0.0
         self.reported = None
-        self.create_timer(0.02, self.tick)  # 50 Hz, PX4's vehicle_local_position rate
+        # The 50 Hz loop (PX4's vehicle_local_position rate) runs in its own thread, as
+        # in takeoff_server: on an executor timer it starved this node's subscriptions on
+        # a busy CI runner, and a missed OffboardControlMode looks like offboard loss.
+        self.running = True
+        self.loop = threading.Thread(target=self.run_loop, daemon=True)
+        self.loop.start()
         self.get_logger().info(f'fake_px4 up (PX4 v1.17 interface), faults: {faults or "none"}')
 
     def stamp(self) -> int:
         return int((time.monotonic() - self.boot) * 1e6)  # PX4: microseconds since boot
 
+    def run_loop(self):
+        next_tick = time.monotonic()
+        while self.running and rclpy.ok():
+            self.tick()
+            next_tick += 0.02
+            time.sleep(max(0.0, next_tick - time.monotonic()))
+            if time.monotonic() - next_tick > 0.5:
+                next_tick = time.monotonic()
+
+    def destroy_node(self):
+        self.running = False
+        if self.loop.is_alive():
+            self.loop.join(timeout=1.0)
+        return super().destroy_node()
+
+    def on_offboard(self, msg):
+        with self.lock:
+            self.model.offboard_control_mode()
+
     def on_setpoint(self, msg):
-        self.model.trajectory_setpoint(float(msg.position[2]), float(msg.velocity[2]))
+        with self.lock:
+            self.model.trajectory_setpoint(float(msg.position[2]), float(msg.velocity[2]))
 
     def on_command(self, msg):
         params = (msg.param1, msg.param2, msg.param3, msg.param4, msg.param5, msg.param6,
                   msg.param7)
-        self.model.vehicle_command(msg.command, params)
-        for _, command, result in self.model.acks:
+        with self.lock:
+            self.model.vehicle_command(msg.command, params)
+            acks, self.model.acks = self.model.acks, []
+        for _, command, result in acks:
             ack = VehicleCommandAck()
             ack.timestamp = self.stamp()
             ack.command = command
@@ -85,16 +115,17 @@ class FakePx4(Node):
             ack.target_system = msg.source_system
             ack.target_component = msg.source_component
             self.ack_pub.publish(ack)
-        self.model.acks = []
 
     def tick(self):
         if not rclpy.ok():
             return
         now = time.monotonic()
-        self.model.step(min(now - self.last, 0.1))
+        with self.lock:
+            self.model.step(min(now - self.last, 0.1))
+            s = self.model.snapshot()
+            offboard_seen = self.model.t - self.model.offboard_seen
         self.last = now
         self.ticks += 1
-        s = self.model.snapshot()
         pos = VehicleLocalPosition()
         pos.timestamp = self.stamp()
         pos.xy_valid = pos.z_valid = pos.v_xy_valid = pos.v_z_valid = s.xy_valid
@@ -106,7 +137,8 @@ class FakePx4(Node):
         pos.dist_bottom = -s.z
         pos.dist_bottom_valid = True
         self.position_pub.publish(pos)
-        if self.ticks % 25 == 0:  # 2 Hz, as measured from PX4 SITL
+        if now - self.last_status >= 0.5:  # 2 Hz of wall clock, as measured from PX4 SITL
+            self.last_status = now
             status = VehicleStatus()
             status.timestamp = self.stamp()
             status.arming_state = s.arming_state
@@ -122,9 +154,8 @@ class FakePx4(Node):
         state = (s.nav_state, s.arming_state)
         if state != self.reported and self.reported is not None and self.reported[0] == 14 \
                 and s.nav_state != 14:
-            since = self.model.t - self.model.offboard_seen
             self.get_logger().warn(
-                f'left offboard {since:.2f} s after the last OffboardControlMode')
+                f'left offboard {offboard_seen:.2f} s after the last OffboardControlMode')
         if state != self.reported:
             armed = 'armed' if s.arming_state == ARMING_STATE_ARMED else 'disarmed'
             self.get_logger().info(f'{nav_state_name(s.nav_state)}, {armed}, '

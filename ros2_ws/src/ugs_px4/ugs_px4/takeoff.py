@@ -58,7 +58,7 @@ class Limits:
     stream_before_switch: float = 1.0  # setpoints streamed before asking for offboard
     retry_every: float = 1.0  # resend a command PX4 has not acted on
     max_tries: int = 5
-    # VehicleStatus arrives at about 2 Hz, with gaps of up to 0.86 s in the SITL capture
+    # vehicle_local_position (50 Hz) silent this long: PX4 is lost (see Snapshot.fresh)
     telemetry_timeout: float = 2.0
     preflight_timeout: float = 60.0  # PX4 SITL needs about 10 s for the estimator and GPS
     timeout: float = 90.0  # the whole goal

@@ -34,7 +34,8 @@ the subscriptions use the sensor data QoS profile; a default (reliable)
 subscription would match nothing.
 
 A 20 Hz loop, in a thread of its own, runs the logic in ugs_px4.takeoff and
-publishes what it asks for. Between goals the server keeps streaming the last
+publishes what it asks for; PX4's telemetry is received on a node and executor
+of its own, so neither waits on the action servers. Between goals the server keeps streaming the last
 setpoint, because PX4 treats a silent offboard link as a failsafe.
 """
 
@@ -47,8 +48,9 @@ from px4_msgs.msg import (OffboardControlMode, TrajectorySetpoint, VehicleComman
                           VehicleStatus)
 import rclpy
 from rclpy.action import ActionServer, CancelResponse, GoalResponse
-from rclpy.callback_groups import MutuallyExclusiveCallbackGroup, ReentrantCallbackGroup
-from rclpy.executors import ExternalShutdownException, MultiThreadedExecutor
+from rclpy.callback_groups import ReentrantCallbackGroup
+from rclpy.executors import (ExternalShutdownException, MultiThreadedExecutor,
+                             SingleThreadedExecutor)
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from ugs_interfaces.action import Land, Takeoff
@@ -79,18 +81,22 @@ class TakeoffServer(Node):
         self.stream = None  # the setpoint streamed to PX4, None for none
         self.last_command = None
 
+        # PX4's telemetry (50 Hz) gets a node and a SingleThreadedExecutor of its own, in
+        # its own thread: on the MultiThreadedExecutor beside the action servers it fell
+        # over 2 s behind on a loaded CI runner, and stale telemetry aborts the goal.
         sensor = qos_profile_sensor_data
-        group = MutuallyExclusiveCallbackGroup()
+        self.px4 = rclpy.create_node('takeoff_server_px4')
+        sub = self.px4.create_subscription
         for name in ('vehicle_status', 'vehicle_status_v1'):
-            self.create_subscription(VehicleStatus, f'/fmu/out/{name}', self.on_status, sensor,
-                                     callback_group=group)
+            sub(VehicleStatus, f'/fmu/out/{name}', self.on_status, sensor)
         for name in ('vehicle_local_position', 'vehicle_local_position_v1'):
-            self.create_subscription(VehicleLocalPosition, f'/fmu/out/{name}', self.on_position,
-                                     sensor, callback_group=group)
-        self.create_subscription(VehicleLandDetected, '/fmu/out/vehicle_land_detected',
-                                 self.on_land_detected, sensor, callback_group=group)
-        self.create_subscription(VehicleCommandAck, '/fmu/out/vehicle_command_ack', self.on_ack,
-                                 sensor, callback_group=group)
+            sub(VehicleLocalPosition, f'/fmu/out/{name}', self.on_position, sensor)
+        sub(VehicleLandDetected, '/fmu/out/vehicle_land_detected', self.on_land_detected, sensor)
+        sub(VehicleCommandAck, '/fmu/out/vehicle_command_ack', self.on_ack, sensor)
+        self.px4_executor = SingleThreadedExecutor()
+        self.px4_executor.add_node(self.px4)
+        self.px4_thread = threading.Thread(target=self.spin_px4, daemon=True)
+        self.px4_thread.start()
         self.offboard_pub = self.create_publisher(
             OffboardControlMode, '/fmu/in/offboard_control_mode', 10)
         self.setpoint_pub = self.create_publisher(
@@ -163,10 +169,18 @@ class TakeoffServer(Node):
             if time.monotonic() - next_tick > 0.5:  # fell far behind: do not burst to catch up
                 next_tick = time.monotonic()
 
+    def spin_px4(self):
+        try:
+            self.px4_executor.spin()
+        except (ExternalShutdownException, RuntimeError):
+            pass  # shutting down
+
     def destroy_node(self):
         self.running = False
         if self.loop.is_alive():
             self.loop.join(timeout=1.0)
+        self.px4_executor.shutdown(timeout_sec=1.0)
+        self.px4.destroy_node()
         return super().destroy_node()
 
     def tick(self):

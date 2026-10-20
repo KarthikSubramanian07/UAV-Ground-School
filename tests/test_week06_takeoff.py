@@ -257,7 +257,7 @@ def test_lost_telemetry_aborts():
     logic = takeoff(f)
     f.run(logic, until=7.0)
     stale = f.model.snapshot(f.t)
-    out = logic.update(f.t + 3.0, stale)  # nothing heard for 3 s
+    out = logic.update(f.t + 3.0, stale)  # no position for 3 s
     assert out.done is False and out.message == "lost PX4 telemetry"
 
 
@@ -355,3 +355,15 @@ def test_names():
     assert px4.nav_state_name(99) == "NAV_STATE_99"
     assert px4.ack_name(2) == "DENIED"
     assert str(px4.Command.land()) == "NAV_LAND"
+
+
+def test_quiet_status_is_not_lost_telemetry():
+    """VehicleStatus may go quiet for seconds in SITL; the 50 Hz position is the heartbeat."""
+    f = Flight()
+    logic = takeoff(f)
+    f.run(logic, until=7.0)
+    s = f.model.snapshot(f.t)
+    s.status_time = f.t - 3.0  # status 3 s old, position current
+    assert logic.update(f.t, s).message != "lost PX4 telemetry"
+    s.status_time = f.t - 6.0
+    assert logic.update(f.t, s).message == "lost PX4 telemetry"
