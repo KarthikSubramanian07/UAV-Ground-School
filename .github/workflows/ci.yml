@@ -138,9 +138,9 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Build showcase site
+        # exactly as Cloudflare Pages builds it: a regular (not editable) install
         run: |
-          pip install opencv-python-headless numpy
-          pip install -e . --no-deps
+          pip install . opencv-python-headless numpy
           python scripts/build_site.py --out build/site
 
   deploy:

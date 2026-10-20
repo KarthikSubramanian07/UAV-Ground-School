@@ -877,7 +877,7 @@ def week6(docs6: Path) -> tuple[dict[str, str], dict[str, str]]:
     xlog = (docs6 / "flights" / "xrce_5m.log").read_text() if (docs6 / "flights" / "xrce_5m.log").is_file() else ""
     sent = re.search(r"(\d+) XRCE messages sent, (\d+) received", xlog)
     created = re.search(r"created (\d+) topics", xlog)
-    from week06.lab import SCENARIOS
+    from week06.scenarios import SCENARIOS
 
     stats = {
         "w6_px4": summary["versions"]["px4"],
