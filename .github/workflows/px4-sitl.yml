@@ -1,0 +1,72 @@
+name: PX4 SITL
+
+# Week 6 against the real thing: PX4 v1.17.0 SITL flying the x500 in Gazebo
+# Harmonic, the Micro XRCE-DDS Agent v2.4.3, and the takeoff action server and
+# client from ros2_ws/src/ugs_px4, all in the ugs-px4 image. Three flights:
+# offboard to 5 m, PX4's takeoff mode to 5 m, and week06's pure Python XRCE
+# client with no ROS 2. Kept out of ci.yml (and the deploy gate): the image takes
+# half an hour to build the first time, and a simulator should not block a deploy.
+
+on:
+  push:
+    branches: [main]
+    paths: ["ros2_ws/px4/**", "ros2_ws/src/ugs_px4/**", "ros2_ws/src/ugs_interfaces/**", "week06/**", ".github/workflows/px4-sitl.yml"]
+  pull_request:
+    paths: ["ros2_ws/px4/**", "ros2_ws/src/ugs_px4/**", "ros2_ws/src/ugs_interfaces/**", "week06/**", ".github/workflows/px4-sitl.yml"]
+  schedule:
+    - cron: "17 7 * * 1"  # weekly, to notice when an upstream download moves
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: px4-sitl-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sitl:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build ugs-px4:jazzy (PX4, Gazebo, agent, px4_msgs)
+        uses: docker/build-push-action@v6
+        with:
+          context: ros2_ws/px4
+          build-args: |
+            BASE=ros:jazzy-ros-base
+            JOBS=4
+          tags: ugs-px4:jazzy
+          load: true
+          cache-from: type=gha,scope=ugs-px4
+          cache-to: type=gha,mode=min,scope=ugs-px4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Take off to 5 m in offboard mode, hover, land
+        run: python -m week06 fly --name ci_offboard_5m --truth
+      - name: Take off to 5 m in PX4's takeoff mode
+        run: python -m week06 fly --method takeoff_mode --name ci_takeoff_mode_5m
+      - name: Take off to 5 m from pure Python over DDS-XRCE, no ROS 2
+        run: python -m week06 fly --xrce --name ci_xrce_5m
+      - name: Every flight reached 5 m and landed
+        run: |
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          from week06.flight import Flight, analyze
+          ok = True
+          for name in ("ci_offboard_5m", "ci_takeoff_mode_5m", "ci_xrce_5m"):
+              r = analyze(Flight.load(Path("docs/week06/flights") / f"{name}.jsonl"))
+              good = r["succeeded"] and r["landed"] and abs(r["peak_altitude"] - 5.0) < 0.6
+              print(f"{name}: {'ok' if good else 'FAILED'}: {r['result']}, peak {r['peak_altitude']} m, rise {r['rise_time']} s")
+              ok &= good
+          sys.exit(0 if ok else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sitl-flights
+          path: docs/week06/flights/ci_*

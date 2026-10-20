@@ -275,7 +275,7 @@ def generate(out: Path, ros: bool = False) -> None:
     out = Path(out)
     if ros:
         script = (
-            "source /opt/ros/jazzy/setup.bash && cd /ugs/ros2_ws && colcon build && source install/setup.bash && "
+            "source /opt/ros/jazzy/setup.bash && cd /ugs/ros2_ws && colcon build --packages-skip ugs_px4 && source install/setup.bash && "
             f"cd /ugs && python3 -m week05.experiments /ugs/{out.resolve().relative_to(ROOT)}"
         )
         subprocess.run(["docker", "run", "--rm", "-v", f"{ROOT}:/ugs", "ugs-ros:jazzy", "bash", "-c", script], check=True)
