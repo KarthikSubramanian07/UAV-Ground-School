@@ -30,6 +30,11 @@ jobs:
     timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
+      - name: Free disk space (the image is 8 GB, and buildx holds it twice while loading)
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          docker system prune -af >/dev/null
+          df -h /
       - uses: docker/setup-buildx-action@v3
       - name: Build ugs-px4:jazzy (PX4, Gazebo, agent, px4_msgs)
         uses: docker/build-push-action@v6
