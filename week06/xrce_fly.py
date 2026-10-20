@@ -12,17 +12,14 @@ from __future__ import annotations
 
 import json
 import math
-import sys
 import threading
 import time
-from pathlib import Path
-
-from .xrce_client import XrceClient
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ros2_ws" / "src" / "ugs_px4"))
 
 from ugs_px4.px4 import Snapshot, ack_name, command_name, nav_state_name  # noqa: E402
 from ugs_px4.takeoff import Land, Takeoff  # noqa: E402
+
+from . import _ugs_px4  # noqa: F401, E402  (puts ugs_px4 on the path)
+from .xrce_client import XrceClient
 
 RATE_HZ = 20.0
 

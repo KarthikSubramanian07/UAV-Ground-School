@@ -9,28 +9,14 @@ same scenarios and requires identical traces.
 
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ros2_ws" / "src" / "ugs_px4"))
-
 from ugs_px4.model import Px4Model  # noqa: E402
 from ugs_px4.px4 import ack_name, command_name  # noqa: E402
 from ugs_px4.takeoff import Land, Limits, Takeoff  # noqa: E402
 
-DT = 0.02
+from . import _ugs_px4  # noqa: F401  (puts ugs_px4 on the path)
+from .scenarios import SCENARIOS  # noqa: F401  (re-exported for the tests)
 
-SCENARIOS = {
-    "takeoff": {},
-    "takeoff_mode": {"method": "takeoff_mode"},
-    "fast": {"altitude": 20, "climb_rate": 3},
-    "cancel": {"altitude": 10, "cancel_at": 12},
-    "deny_arm": {"faults": "deny_arm"},
-    "no_offboard": {"faults": "no_offboard"},
-    "takeover": {"altitude": 10, "faults": "takeover_at=6"},
-    "link_drop": {"altitude": 10, "link_drop_at": 6},
-    "no_preflight": {"faults": "no_preflight", "until": 70},
-}
+DT = 0.02
 
 
 def simulate(
