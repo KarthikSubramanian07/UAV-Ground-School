@@ -35,6 +35,7 @@ DOCS = ROOT / "docs" / "week02"
 DOCS3 = ROOT / "docs" / "week03"
 DOCS4 = ROOT / "docs" / "week04"
 DOCS5 = ROOT / "docs" / "week05"
+DOCS6 = ROOT / "docs" / "week06"
 CANONICAL = "https://uav-ground-school.pages.dev/"
 REPO = "https://github.com/KarthikSubramanian07/UAV-Ground-School"
 DESCRIPTION = (
@@ -767,6 +768,228 @@ def week5_json_ld() -> str:
     return json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
 
 
+# ------------------------------------------------------------------ week 6 ----
+
+W6_DESCRIPTION = (
+    "UAVs@Berkeley Ground School Week 6, solved: a ROS 2 action server and client that take a PX4 v1.17 quadcopter off to "
+    "5 m in Gazebo through the Micro XRCE-DDS Agent, measured against Gazebo's ground truth, with DDS-XRCE rebuilt in pure Python."
+)
+W6_DATA = ("summary.json", "replay.json", "xrce.json", "NOTES.md")
+W6_EXPORT = ("replay.json", "xrce.json")
+W6_MAIN = "offboard_5m"
+
+
+def required_week6(docs6: Path) -> list[Path]:
+    return [docs6 / name for name in W6_DATA]
+
+
+def _num(value, digits: int = 2) -> str:
+    return "n/a" if value is None else f"{value:.{digits}f}"
+
+
+def week6_flight_rows(summary: dict) -> str:
+    rows = []
+    for name, r in summary["flights"].items():
+        title = summary["titles"].get(name, name)
+        outcome = "succeeded" if r["succeeded"] else ("canceled" if r["result"] and "canceled" in r["result"] else "aborted")
+        cells = [
+            _cell(title, "name"),
+            _cell(outcome, "ok" if r["succeeded"] else ""),
+            _cell(f"{_num(r.get('peak_altitude'))} m", "num"),
+            _cell(f"{_num(r.get('rise_time'))} s", "num"),
+            _cell(f"{_num(r.get('max_climb_rate'))} m/s", "num"),
+            _cell(f"{_num(r.get('overshoot'))} m", "num"),
+            _cell(f"{_num(r.get('settling_time'), 1)} s", "num"),
+            _cell(f"{_num(r.get('hover_rms_error'), 3)} m", "num"),
+            _cell(f"{_num(r.get('max_drift'))} m", "num"),
+            _cell("yes" if r.get("landed") else "no"),
+        ]
+        rows.append("<tr>" + "".join(cells) + "</tr>")
+    return "\n".join(rows)
+
+
+def week6_topic_rows(session: dict) -> str:
+    rows = []
+    busy = [t for t in session["topics"] if t["samples"]]
+    for t in sorted(busy, key=lambda t: (t["direction"] != "out", -t["samples"])):
+        q = t["qos"]
+        qos = f"{'reliable' if q.get('reliable') else 'best effort'}, {q.get('durability', '?')}"
+        rate = f"{t['rate_hz']:.1f} Hz" if t["rate_hz"] else "n/a"
+        rows.append(
+            "<tr>"
+            f"<td><code>{html.escape(t['topic'])}</code></td><td><code>{html.escape(t['type'].split('/')[-1])}</code></td>"
+            + _cell("publishes" if t["direction"] == "out" else "subscribes")
+            + _cell(qos)
+            + _cell(f"{t['samples']:,}", "num")
+            + _cell(rate, "num")
+            + _cell(t["sample_bytes"] if t["sample_bytes"] is not None else "n/a", "num")
+            + "</tr>"
+        )
+    idle = len(session["topics"]) - len(busy)
+    if idle:
+        rows.append(f'<tr><td colspan="7" class="muted">and {idle} more topics PX4 created that carried nothing in this flight</td></tr>')
+    return "\n".join(rows)
+
+
+def week6_problems(notes: str) -> str:
+    """The "### N. Title" entries of NOTES.md's problems section, with their symptom and fix."""
+    part = notes.split("## Problems", 1)
+    if len(part) < 2:
+        raise BuildError("docs/week06/NOTES.md has no '## Problems' section")
+    body = part[1].split("\n## ", 1)[0]
+    items = []
+    for block in re.split(r"\n### ", "\n" + body)[1:]:
+        title, _, text = block.partition("\n")
+        symptom = re.search(r"\*\*Symptom:\*\*\s*(.+)", text)
+        fix = re.search(r"\*\*Fix:\*\*\s*(.+)", text)
+        if not symptom or not fix:
+            raise BuildError(f"NOTES.md problem {title!r} needs a **Symptom:** and a **Fix:** line")
+
+        def inline(s: str) -> str:
+            s = html.escape(s.strip())
+            return re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
+
+        items.append(
+            f"<li><b>{inline(re.sub(r'^[0-9]+[.] ', '', title))}</b>"
+            f'<span class="symptom">{inline(symptom.group(1))}</span><span class="fix">{inline(fix.group(1))}</span></li>'
+        )
+    if not items:
+        raise BuildError("docs/week06/NOTES.md lists no problems")
+    return "\n".join(items)
+
+
+def week6(docs6: Path) -> tuple[dict[str, str], dict[str, str]]:
+    """Stats and HTML fragments for week6.html."""
+    summary = load_json(docs6 / "summary.json")
+    xr = load_json(docs6 / "xrce.json")
+    replay = load_json(docs6 / "replay.json")
+    flights = summary.get("flights", {})
+    for name in (W6_MAIN, "xrce_5m"):
+        if name not in flights:
+            raise BuildError(f"{docs6 / 'summary.json'} has no {name!r} flight")
+    if not isinstance(replay, list) or not all({"id", "rows", "events", "metrics"} <= set(f) for f in replay):
+        raise BuildError(f"{docs6 / 'replay.json'} must be a list of flights with rows, events and metrics")
+    if not xr.get("packets") or not all({"hex", "spans", "title"} <= set(p) for p in xr["packets"]):
+        raise BuildError(f"{docs6 / 'xrce.json'} must carry packets with hex, spans and title")
+    main = flights[W6_MAIN]
+    pure = flights["xrce_5m"]
+    session = summary["xrce"]
+    xlog = (docs6 / "flights" / "xrce_5m.log").read_text() if (docs6 / "flights" / "xrce_5m.log").is_file() else ""
+    sent = re.search(r"(\d+) XRCE messages sent, (\d+) received", xlog)
+    created = re.search(r"created (\d+) topics", xlog)
+    from week06.lab import SCENARIOS
+
+    stats = {
+        "w6_px4": summary["versions"]["px4"],
+        "w6_agent": summary["versions"]["agent"],
+        "w6_hold": f"{main['target'] + main['hover_mean_error']:.2f}",
+        "w6_hover_rms": f"{main['hover_rms_error']:.3f}",
+        "w6_rise": f"{main['rise_time']:.2f}",
+        "w6_overshoot": f"{main['overshoot']:.2f}",
+        "w6_settle": f"{main['settling_time']:.1f}",
+        "w6_truth": _num(main.get("estimate_vs_truth_rms"), 2),
+        "w6_true_hold": _num(main.get("hover_truth_mean"), 2),
+        "w6_topics": str(len(session["topics"])),
+        "w6_created": str(session["created"]),
+        "w6_kbps_out": f"{session['kbps']['px4>agent']:.0f}",
+        "w6_kbps_in": f"{session['kbps']['agent>px4']:.0f}",
+        "w6_lab_scenarios": str(len(SCENARIOS)),
+        "w6_xrce_hold": f"{pure['target'] + pure['hover_mean_error']:.2f}"
+        if pure.get("hover_mean_error") is not None
+        else _num(pure.get("peak_altitude")),
+        "w6_xrce_msgs": f"{int(sent.group(1)) + int(sent.group(2)):,}" if sent else "n/a",
+        "w6_xrce_topics": created.group(1) if created else "7",
+        "w6_px4_msgs": str(len(list((ROOT / "week06" / "interfaces" / "px4_msgs" / "msg").glob("*.msg")))),
+    }
+    tokens = {
+        "W6_DESCRIPTION": html.escape(W6_DESCRIPTION),
+        "W6_JSON_LD": week6_json_ld(),
+        "W6_FLIGHT_ROWS": week6_flight_rows(summary),
+        "W6_TOPIC_ROWS": week6_topic_rows(session),
+        "W6_PROBLEMS": week6_problems((docs6 / "NOTES.md").read_text(encoding="utf-8")),
+    }
+    return stats, tokens
+
+
+def export_week6(docs6: Path, out_dir: Path) -> None:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for name in W6_EXPORT:
+        shutil.copyfile(docs6 / name, out_dir / name)
+
+
+def make_og_week6(path: Path, replay: list[dict], stats: dict[str, str]) -> None:
+    """The 5 m climb itself: altitude against time, over the setpoint profile."""
+    width, height = 1200, 630
+    card = np.zeros((height, width, 3), np.uint8)
+    card[:] = (29, 25, 18)
+    for x in range(0, width, 40):
+        cv2.line(card, (x, 0), (x, height), (42, 37, 27), 1)
+    for y in range(0, height, 40):
+        cv2.line(card, (0, y), (width, y), (42, 37, 27), 1)
+    orange, white, muted, green = (60, 138, 240), (242, 240, 236), (200, 196, 190), (138, 211, 106)
+    aa = cv2.LINE_AA
+    flight = next(f for f in replay if f["id"] == W6_MAIN)
+    rows = [r for r in flight["rows"] if r[4] in ("ARMING", "CLIMB", "SETTLE")] or flight["rows"]
+    t0 = rows[0][0] - 2.0
+    t1 = rows[-1][0] + 6.0
+    x0, x1, y0, y1 = 640, 1140, 540, 120
+    top = 6.0
+    pts = lambda vals: np.array(  # noqa: E731
+        [
+            (int(x0 + (x1 - x0) * (r[0] - t0) / (t1 - t0)), int(y0 - (y0 - y1) * v / top))
+            for r, v in vals
+            if v is not None and t0 <= r[0] <= t1
+        ],
+        np.int32,
+    )
+    window = [r for r in flight["rows"] if t0 <= r[0] <= t1]
+    cv2.line(card, (x0, y0), (x1, y0), (110, 100, 88), 2, aa)
+    goal_y = int(y0 - (y0 - y1) * flight["target"] / top)
+    for x in range(x0, x1, 14):
+        cv2.line(card, (x, goal_y), (x + 6, goal_y), green, 2, aa)
+    sp = pts([(r, r[2]) for r in window])
+    for a, b in zip(sp[:-1:2], sp[1::2]):
+        cv2.line(card, tuple(a), tuple(b), orange, 4, aa)
+    cv2.polylines(card, [pts([(r, r[1]) for r in window])], False, white, 4, aa)
+    cv2.putText(card, f"{flight['target']:.0f} m", (x1 - 70, goal_y - 14), cv2.FONT_HERSHEY_DUPLEX, 0.8, green, 2, aa)
+    cv2.rectangle(card, (72, 150), (152, 156), orange, -1)
+    cv2.putText(card, "Take off,", (66, 238), cv2.FONT_HERSHEY_TRIPLEX, 2.0, white, 3, aa)
+    cv2.putText(card, "for real.", (66, 318), cv2.FONT_HERSHEY_TRIPLEX, 2.0, orange, 3, aa)
+    for i, line in enumerate(("A ROS 2 action flying PX4 SITL", "in Gazebo, over uXRCE-DDS")):
+        cv2.putText(card, line, (72, 392 + i * 46), cv2.FONT_HERSHEY_DUPLEX, 1.0, muted, 2, aa)
+    cv2.putText(
+        card,
+        f"{stats['w6_hold']} m held, {stats['w6_rise']} s rise, {stats['w6_overshoot']} m overshoot",
+        (72, 512),
+        cv2.FONT_HERSHEY_DUPLEX,
+        0.72,
+        orange,
+        2,
+        aa,
+    )
+    cv2.putText(card, "UAVs@Berkeley Software Ground School 2026, Week 6", (72, 575), cv2.FONT_HERSHEY_SIMPLEX, 0.72, muted, 1, aa)
+    if not cv2.imwrite(str(path), card, [cv2.IMWRITE_JPEG_QUALITY, 88]):
+        raise BuildError(f"could not write {path}")
+
+
+def week6_json_ld() -> str:
+    data = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "UAV Ground School Week 6: a ROS 2 takeoff action for PX4 SITL over uXRCE-DDS",
+        "description": W6_DESCRIPTION,
+        "url": CANONICAL + "week6",
+        "image": CANONICAL + "og-week6.jpg",
+        "codeRepository": REPO,
+        "programmingLanguage": ["Python", "JavaScript"],
+        "runtimePlatform": "ROS 2 Jazzy, PX4 v1.17, Gazebo Harmonic",
+        "license": "https://opensource.org/licenses/MIT",
+        "keywords": "PX4, SITL, Gazebo, uXRCE-DDS, Micro XRCE-DDS Agent, DDS-XRCE, ROS 2 actions, offboard control, px4_msgs, takeoff",
+        "author": {"@type": "Person", "name": "Karthik Subramanian"},
+    }
+    return json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+
+
 def week3_json_ld() -> str:
     data = {
         "@context": "https://schema.org",
@@ -1153,10 +1376,16 @@ def verify(out: Path) -> None:
 
 
 def build(
-    out: Path, docs: Path = DOCS, today: dt.date | None = None, docs3: Path = DOCS3, docs4: Path = DOCS4, docs5: Path = DOCS5
+    out: Path,
+    docs: Path = DOCS,
+    today: dt.date | None = None,
+    docs3: Path = DOCS3,
+    docs4: Path = DOCS4,
+    docs5: Path = DOCS5,
+    docs6: Path = DOCS6,
 ) -> Path:
     out = out.resolve()
-    for protected in (ROOT, SITE, docs.resolve(), docs3.resolve(), docs4.resolve(), docs5.resolve(), Path.home()):
+    for protected in (ROOT, SITE, docs.resolve(), docs3.resolve(), docs4.resolve(), docs5.resolve(), docs6.resolve(), Path.home()):
         if out == protected or out in protected.parents:
             raise BuildError(f"refusing to overwrite {out}")
     missing3 = [str(p) for p in required_week3(docs3) if not p.is_file()]
@@ -1168,6 +1397,9 @@ def build(
     missing5 = [str(p) for p in required_week5(docs5) if not p.is_file()]
     if missing5:
         raise BuildError("missing week 5 build inputs:\n  " + "\n  ".join(missing5))
+    missing6 = [str(p) for p in required_week6(docs6) if not p.is_file()]
+    if missing6:
+        raise BuildError("missing week 6 build inputs:\n  " + "\n  ".join(missing6))
     inputs = check_inputs(docs)
     rows = inputs["rows"]
     today = today or dt.date.today()
@@ -1199,7 +1431,9 @@ def build(
     export_week4(docs4, out / "assets" / "week4")
     w5_numbers, w5_tokens = week5(docs5)
     export_week5(docs5, out / "assets" / "week5")
-    numbers = {**stats(rows), **w3_numbers, **piece_numbers, **yolo_numbers, **w4_numbers, **w5_numbers}
+    w6_numbers, w6_tokens = week6(docs6)
+    export_week6(docs6, out / "assets" / "week6")
+    numbers = {**stats(rows), **w3_numbers, **piece_numbers, **yolo_numbers, **w4_numbers, **w5_numbers, **w6_numbers}
     sentence, figures = stitcher_copy(rows, images)
     ctx = Context(
         tokens={
@@ -1221,6 +1455,7 @@ def build(
             "W3_YOLO_NOTES": yolo_notes,
             **w4_tokens,
             **w5_tokens,
+            **w6_tokens,
         },
         stats=numbers,
         images=images,
@@ -1232,6 +1467,7 @@ def build(
     make_og_week3(read_image(docs3 / "hero.jpg"), out / "og-week3.jpg", numbers["w3_best_f1"])
     make_og_week4(None, out / "og-week4.jpg", w4_numbers)
     make_og_week5(out / "og-week5.jpg", w5_numbers)
+    make_og_week6(out / "og-week6.jpg", load_json(docs6 / "replay.json"), w6_numbers)
     (out / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {CANONICAL}sitemap.xml\n")
     (out / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -1240,6 +1476,7 @@ def build(
         f"  <url>\n    <loc>{CANONICAL}week3</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
         f"  <url>\n    <loc>{CANONICAL}week4</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
         f"  <url>\n    <loc>{CANONICAL}week5</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
+        f"  <url>\n    <loc>{CANONICAL}week6</loc>\n    <lastmod>{today.isoformat()}</lastmod>\n  </url>\n"
         "</urlset>\n"
     )
     (out / "_headers").write_text(HEADERS)
@@ -1270,6 +1507,9 @@ HEADERS = """/*
 /og-week5.jpg
   Cache-Control: public, max-age=86400
 
+/og-week6.jpg
+  Cache-Control: public, max-age=86400
+
 /css/*
   Cache-Control: public, max-age=0, must-revalidate
 
@@ -1285,9 +1525,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--docs3", default=str(DOCS3), help="week 3 docs directory")
     parser.add_argument("--docs4", default=str(DOCS4), help="week 4 docs directory")
     parser.add_argument("--docs5", default=str(DOCS5), help="week 5 docs directory")
+    parser.add_argument("--docs6", default=str(DOCS6), help="week 6 docs directory")
     args = parser.parse_args(argv)
     try:
-        out = build(Path(args.out), Path(args.docs), docs3=Path(args.docs3), docs4=Path(args.docs4), docs5=Path(args.docs5))
+        out = build(
+            Path(args.out), Path(args.docs), docs3=Path(args.docs3), docs4=Path(args.docs4), docs5=Path(args.docs5), docs6=Path(args.docs6)
+        )
     except BuildError as error:
         print(f"build_site: error: {error}", file=sys.stderr)
         return 1

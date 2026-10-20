@@ -3936,3 +3936,387 @@ th.num {
     display: none;
   }
 }
+
+/* ============================================================ week 6 == */
+
+.w6-flight {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.w6-flight > .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.w6-views {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 900px) {
+  .w6-views {
+    grid-template-columns: minmax(0, 3.3fr) minmax(0, 1fr);
+  }
+}
+
+.w6-views > * {
+  min-width: 0;
+}
+
+.w6-chart,
+.w6-side {
+  margin: 0;
+  border: 1px solid var(--night-line);
+  border-radius: var(--radius);
+  background: #12191d;
+  padding: 0.8rem;
+  color: var(--night-ink);
+}
+
+.w6-chart svg,
+.w6-side svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.w6-grid line {
+  stroke: oklch(0.3 0.012 220);
+  stroke-width: 1;
+}
+
+.w6-grid text,
+.w6-tick {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--night-ink-2);
+}
+
+.w6-goal {
+  stroke: oklch(0.7 0.12 150 / 0.7);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 5;
+}
+
+.w6-setpoint {
+  fill: none;
+  stroke: var(--signal);
+  stroke-width: 2;
+  stroke-dasharray: 7 4;
+}
+
+.w6-altitude {
+  fill: none;
+  stroke: var(--night-ink);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+
+.w6-truth {
+  fill: none;
+  stroke: var(--steel-bright);
+  stroke-width: 1.2;
+}
+
+.w6-head {
+  stroke: oklch(0.95 0 0 / 0.35);
+  stroke-width: 1;
+}
+
+.w6-dot {
+  fill: var(--signal);
+  stroke: #12191d;
+  stroke-width: 2;
+}
+
+.w6-band rect {
+  rx: 2;
+}
+
+.w6-ground {
+  fill: oklch(0.32 0.04 140);
+}
+
+.w6-sp-mark {
+  stroke: var(--signal);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+  transition: opacity 0.2s;
+}
+
+.w6-drone rect {
+  fill: oklch(0.36 0.01 220);
+  stroke: var(--night-ink);
+  stroke-width: 1.4;
+}
+
+.w6-drone line {
+  stroke: var(--night-ink);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.w6-drone .rotor {
+  fill: oklch(0.8 0.01 220 / 0.25);
+  stroke: var(--night-ink-2);
+  stroke-width: 1;
+}
+
+.w6-drone.armed .rotor {
+  fill: var(--signal-soft);
+  stroke: var(--signal);
+}
+
+.motion .w6-drone.armed .rotor {
+  animation: w6-spin 0.18s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes w6-spin {
+  50% {
+    transform: scaleX(0.55);
+  }
+}
+
+@media (min-width: 1100px) {
+  .w6-panels {
+    grid-template-columns: minmax(13rem, 0.8fr) minmax(13rem, 0.8fr) minmax(0, 1.8fr);
+  }
+}
+
+#fr-phase {
+  color: var(--signal);
+}
+
+.w6-lab {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1000px) {
+  .w6-lab {
+    grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 2.2fr);
+  }
+
+  .w6-lab .w6-lab-out {
+    grid-column: 1 / -1;
+  }
+}
+
+.w6-lab > * {
+  min-width: 0;
+}
+
+.w6-lab-controls {
+  display: grid;
+  gap: 1.1rem;
+  align-content: start;
+}
+
+.w6-lab-controls label {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.35rem 1rem;
+  font-weight: 500;
+}
+
+.w6-lab-controls input[type="range"] {
+  grid-column: 1 / -1;
+  accent-color: var(--signal-ink);
+}
+
+.w6-lab-controls input:disabled {
+  opacity: 0.4;
+}
+
+.w6-lab-controls fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.w6-lab-controls legend {
+  font-weight: 500;
+  margin-bottom: 0.45rem;
+  width: 100%;
+}
+
+.w6-lab-out {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.w6-verdict {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-weight: 500;
+}
+
+.w6-verdict.ok {
+  border-color: oklch(0.7 0.12 150 / 0.6);
+  background: oklch(0.7 0.12 150 / 0.1);
+}
+
+.w6-verdict.warn {
+  border-color: oklch(0.72 0.17 30 / 0.6);
+  background: oklch(0.72 0.17 30 / 0.08);
+}
+
+.w6 .event-log li.ok span:last-child {
+  color: oklch(0.8 0.12 150);
+}
+
+.w6 .event-log li.warn span:last-child {
+  color: oklch(0.76 0.16 40);
+}
+
+.w6 .event-log li.muted span:last-child {
+  color: var(--night-ink-2);
+}
+
+#lab-log {
+  height: 13rem;
+  color: var(--night-ink);
+}
+
+#lab-log li {
+  grid-template-columns: 3.6rem minmax(0, 1fr);
+}
+
+.w6-stack {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  counter-reset: hop;
+}
+
+.w6-stack li {
+  counter-increment: hop;
+  display: grid;
+  grid-template-columns: 2.6rem minmax(9rem, 14rem) minmax(0, 1fr);
+  gap: 0.4rem 1.2rem;
+  align-items: baseline;
+  padding: 1rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.w6-stack li::before {
+  content: counter(hop, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--signal);
+}
+
+.w6-stack b {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.w6-stack span {
+  color: var(--ink-2);
+}
+
+.w6-stack li::before {
+  color: var(--signal-ink);
+}
+
+@media (max-width: 700px) {
+  .w6-stack li {
+    grid-template-columns: 2.2rem minmax(0, 1fr);
+  }
+
+  .w6-stack span {
+    grid-column: 2;
+  }
+}
+
+.w6-problems {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+}
+
+.w6-problems li {
+  border: 1px solid var(--night-line);
+  border-radius: var(--radius);
+  background: var(--night-2);
+  padding: 1.1rem 1.2rem;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+
+.w6-problems b {
+  font-weight: 600;
+}
+
+.w6-problems .symptom {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: oklch(0.76 0.16 40);
+  overflow-wrap: anywhere;
+}
+
+.w6-problems .fix {
+  color: var(--night-ink-2);
+  font-size: var(--step--1);
+}
+
+.night .metrics {
+  color: var(--night-ink-2);
+}
+
+.night .metrics dt {
+  color: var(--night-ink);
+}
+
+.w6-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+  margin-top: 0.5rem;
+  color: var(--night-ink-2);
+}
+
+.w6-legend .lg::before {
+  content: "";
+  display: inline-block;
+  width: 1.3rem;
+  height: 0;
+  margin-right: 0.45rem;
+  vertical-align: middle;
+  border-top: 2px solid currentColor;
+}
+
+.w6-legend .lg.sp::before {
+  border-top: 2px dashed var(--signal);
+}
+
+.w6-legend .lg.est::before {
+  border-color: var(--night-ink);
+}
+
+.w6-legend .lg.tr::before {
+  border-color: var(--steel-bright);
+}
+
+.w6-legend [hidden] {
+  display: none;
+}
