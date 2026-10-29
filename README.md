@@ -12,6 +12,8 @@
 
 Live showcase: **[uav-ground-school.pages.dev](https://uav-ground-school.pages.dev/)** (week 2, with an in browser color splitter) **[/week3](https://uav-ground-school.pages.dev/week3)** (with a detector explorer) **[/week4](https://uav-ground-school.pages.dev/week4)** (a clickable wiring diagram, a logic analyser and a PID playground) **[/week5](https://uav-ground-school.pages.dev/week5)** (a replay of the ROS 2 drone mission, a QoS playground and a packet inspector) and **[/week6](https://uav-ground-school.pages.dev/week6)** (the SITL takeoffs replayed against Gazebo's ground truth, a takeoff lab that breaks PX4 on purpose, and an XRCE packet inspector).
 
+Agent entry points: **[/llms.txt](https://uav-ground-school.pages.dev/llms.txt)** (when to use this project and how to fetch it), Markdown via `Accept: text/markdown` on the same page URLs, plus **[/about](https://uav-ground-school.pages.dev/about)**, **[/contact](https://uav-ground-school.pages.dev/contact)**, and **[/privacy](https://uav-ground-school.pages.dev/privacy)**.
+
 <p align="center">
   <img src="docs/week02/rough_path.jpg" alt="A mosaic of a simulated five pass survey flight over a voxel world, with keyframe footprints and the flight path drawn on top" width="100%">
 </p>
