@@ -1,0 +1,102 @@
+[
+ {
+  "title": "Python publisher and subscriber",
+  "terminals": [
+   {
+    "command": "ros2 run py_pubsub talker",
+    "output": [
+     "[INFO] [1791453655.322132765] [minimal_publisher]: Publishing: \"Hello World: 0\"",
+     "[INFO] [1791453655.793275863] [minimal_publisher]: Publishing: \"Hello World: 1\"",
+     "[INFO] [1791453656.293566002] [minimal_publisher]: Publishing: \"Hello World: 2\"",
+     "[INFO] [1791453656.790751232] [minimal_publisher]: Publishing: \"Hello World: 3\"",
+     "[INFO] [1791453657.289835813] [minimal_publisher]: Publishing: \"Hello World: 4\"",
+     "[INFO] [1791453657.790507140] [minimal_publisher]: Publishing: \"Hello World: 5\"",
+     "[INFO] [1791453658.290440483] [minimal_publisher]: Publishing: \"Hello World: 6\"",
+     "[INFO] [1791453658.789300099] [minimal_publisher]: Publishing: \"Hello World: 7\"",
+     "[INFO] [1791453659.293271916] [minimal_publisher]: Publishing: \"Hello World: 8\"",
+     "[INFO] [1791453659.789386692] [minimal_publisher]: Publishing: \"Hello World: 9\""
+    ]
+   },
+   {
+    "command": "ros2 run py_pubsub listener",
+    "output": [
+     "[INFO] [1791453658.827121219] [minimal_subscriber]: I heard: \"Hello World: 7\"",
+     "[INFO] [1791453659.294193846] [minimal_subscriber]: I heard: \"Hello World: 8\"",
+     "[INFO] [1791453659.789361251] [minimal_subscriber]: I heard: \"Hello World: 9\""
+    ]
+   }
+  ]
+ },
+ {
+  "title": "C++ publisher and subscriber",
+  "terminals": [
+   {
+    "command": "ros2 run cpp_pubsub talker",
+    "output": [
+     "[INFO] [1791453662.295314204] [minimal_publisher]: Publishing: 'Hello, world! 0'",
+     "[INFO] [1791453662.794442358] [minimal_publisher]: Publishing: 'Hello, world! 1'",
+     "[INFO] [1791453663.296214788] [minimal_publisher]: Publishing: 'Hello, world! 2'",
+     "[INFO] [1791453663.794429471] [minimal_publisher]: Publishing: 'Hello, world! 3'",
+     "[INFO] [1791453664.300196873] [minimal_publisher]: Publishing: 'Hello, world! 4'",
+     "[INFO] [1791453664.803686898] [minimal_publisher]: Publishing: 'Hello, world! 5'",
+     "[INFO] [1791453665.358817095] [minimal_publisher]: Publishing: 'Hello, world! 6'",
+     "[INFO] [1791453665.800605722] [minimal_publisher]: Publishing: 'Hello, world! 7'",
+     "[INFO] [1791453666.294541520] [minimal_publisher]: Publishing: 'Hello, world! 8'",
+     "[INFO] [1791453666.795882821] [minimal_publisher]: Publishing: 'Hello, world! 9'",
+     "[INFO] [1791453667.294731294] [minimal_publisher]: Publishing: 'Hello, world! 10'",
+     "[INFO] [1791453667.796901255] [minimal_publisher]: Publishing: 'Hello, world! 11'",
+     "[INFO] [1791453668.294770488] [minimal_publisher]: Publishing: 'Hello, world! 12'",
+     "[INFO] [1791453668.550617175] [rclcpp]: signal_handler(SIGINT/SIGTERM)"
+    ]
+   },
+   {
+    "command": "ros2 run cpp_pubsub listener",
+    "output": [
+     "[INFO] [1791453667.296619829] [minimal_subscriber]: I heard: 'Hello, world! 10'",
+     "[INFO] [1791453667.798144009] [minimal_subscriber]: I heard: 'Hello, world! 11'",
+     "[INFO] [1791453668.297059478] [minimal_subscriber]: I heard: 'Hello, world! 12'",
+     "[INFO] [1791453669.285844633] [rclcpp]: signal_handler(SIGINT/SIGTERM)"
+    ]
+   }
+  ]
+ },
+ {
+  "title": "Python service and client",
+  "terminals": [
+   {
+    "command": "ros2 run py_srvcli service",
+    "output": [
+     "[INFO] [1791453674.228579964] [minimal_service]: Incoming request",
+     "a: 2 b: 3"
+    ]
+   },
+   {
+    "command": "ros2 run py_srvcli client 2 3",
+    "output": [
+     "[INFO] [1791453674.295977509] [minimal_client_async]: Result of add_two_ints: for 2 + 3 = 5"
+    ]
+   }
+  ]
+ },
+ {
+  "title": "C++ service and client",
+  "terminals": [
+   {
+    "command": "ros2 run cpp_srvcli server",
+    "output": [
+     "[INFO] [1791453678.141454767] [rclcpp]: Ready to add two ints.",
+     "[INFO] [1791453679.521176122] [rclcpp]: Incoming request",
+     "a: 2 b: 3",
+     "[INFO] [1791453679.521353770] [rclcpp]: sending back response: [5]",
+     "[INFO] [1791453680.314121896] [rclcpp]: signal_handler(SIGINT/SIGTERM)"
+    ]
+   },
+   {
+    "command": "ros2 run cpp_srvcli client 2 3",
+    "output": [
+     "[INFO] [1791453679.521816238] [rclcpp]: Sum: 5"
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,172 @@
+{
+ "reliability": [
+  {
+   "publisher": "reliable",
+   "subscription": "reliable",
+   "matched": true,
+   "sent": 20,
+   "received": 20,
+   "publisher_event": [],
+   "subscription_event": [],
+   "rclpy_check": "WARNING: Publisher liveliness is system_default and subscription liveliness is system_default;"
+  },
+  {
+   "publisher": "reliable",
+   "subscription": "best_effort",
+   "matched": true,
+   "sent": 20,
+   "received": 20,
+   "publisher_event": [],
+   "subscription_event": [],
+   "rclpy_check": "WARNING: Publisher liveliness is system_default and subscription liveliness is system_default;"
+  },
+  {
+   "publisher": "best_effort",
+   "subscription": "reliable",
+   "matched": false,
+   "sent": 20,
+   "received": 0,
+   "publisher_event": [
+    "reliability"
+   ],
+   "subscription_event": [
+    "reliability"
+   ],
+   "rclpy_check": "ERROR: Best effort publisher and reliable subscription;"
+  },
+  {
+   "publisher": "best_effort",
+   "subscription": "best_effort",
+   "matched": true,
+   "sent": 20,
+   "received": 20,
+   "publisher_event": [],
+   "subscription_event": [],
+   "rclpy_check": "WARNING: Publisher liveliness is system_default and subscription liveliness is system_default;"
+  }
+ ],
+ "durability": [
+  {
+   "publisher": "transient_local",
+   "late_subscription": "volatile",
+   "received": 0,
+   "rclpy_check": "WARNING: Publisher liveliness is system_default and subscription liveliness is system_default;"
+  },
+  {
+   "publisher": "transient_local",
+   "late_subscription": "transient_local",
+   "received": 1,
+   "rclpy_check": "WARNING: Publisher liveliness is system_default and subscription liveliness is system_default;"
+  },
+  {
+   "publisher": "volatile",
+   "late_subscription": "volatile",
+   "received": 0,
+   "rclpy_check": "WARNING: Publisher liveliness is system_default and subscription liveliness is system_default;"
+  },
+  {
+   "publisher": "volatile",
+   "late_subscription": "transient_local",
+   "received": 0,
+   "rclpy_check": "ERROR: Volatile publisher and transient local subscription;"
+  }
+ ],
+ "depth": [
+  {
+   "history": "keep_last 1",
+   "reliability": "reliable",
+   "sent": 300,
+   "received": 28,
+   "in_order": true
+  },
+  {
+   "history": "keep_last 1",
+   "reliability": "best_effort",
+   "sent": 300,
+   "received": 27,
+   "in_order": true
+  },
+  {
+   "history": "keep_last 10",
+   "reliability": "reliable",
+   "sent": 300,
+   "received": 35,
+   "in_order": true
+  },
+  {
+   "history": "keep_last 10",
+   "reliability": "best_effort",
+   "sent": 300,
+   "received": 35,
+   "in_order": true
+  },
+  {
+   "history": "keep_last 100",
+   "reliability": "reliable",
+   "sent": 300,
+   "received": 126,
+   "in_order": true
+  },
+  {
+   "history": "keep_last 100",
+   "reliability": "best_effort",
+   "sent": 300,
+   "received": 125,
+   "in_order": true
+  },
+  {
+   "history": "keep_all",
+   "reliability": "reliable",
+   "sent": 300,
+   "received": 300,
+   "in_order": true
+  },
+  {
+   "history": "keep_all",
+   "reliability": "best_effort",
+   "sent": 300,
+   "received": 300,
+   "in_order": true
+  }
+ ],
+ "blocking": [
+  {
+   "executor": "SingleThreadedExecutor",
+   "timer_period_ms": 50,
+   "ticks": 30,
+   "mean_gap_ms": 92.9,
+   "max_gap_ms": 317.8
+  },
+  {
+   "executor": "MultiThreadedExecutor, one group",
+   "timer_period_ms": 50,
+   "ticks": 30,
+   "mean_gap_ms": 92.9,
+   "max_gap_ms": 341.7
+  },
+  {
+   "executor": "MultiThreadedExecutor, separate groups",
+   "timer_period_ms": 50,
+   "ticks": 60,
+   "mean_gap_ms": 50.1,
+   "max_gap_ms": 86.6
+  }
+ ],
+ "deadlock": [
+  {
+   "setup": "call() in a callback, SingleThreadedExecutor",
+   "outcome": "deadlock (killed after 6 s)",
+   "ms": null
+  },
+  {
+   "setup": "call_async() with a done callback, SingleThreadedExecutor",
+   "outcome": "returned",
+   "ms": 2.16
+  },
+  {
+   "setup": "call() in a callback, MultiThreadedExecutor, reentrant group",
+   "outcome": "returned",
+   "ms": 8.2
+  }
+ ]
+}

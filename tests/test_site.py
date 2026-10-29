@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import html
 import importlib.util
 import json
 import re
@@ -417,3 +418,229 @@ def test_week4_numbers_come_from_json(week4_html: str) -> None:
         assert f'<td class="mono">{row["message"]}</td>' in week4_html
     bom = json.loads((DOCS4 / "bom.json").read_text())
     assert f"${bom['total_usd']:,.2f}" in week4_html
+
+
+# ---------------------------------------------------------------- week 5 ----
+
+DOCS5 = ROOT / "docs" / "week05"
+
+
+@pytest.fixture(scope="module")
+def week5_html(site: Path) -> str:
+    return (site / "week5.html").read_text(encoding="utf-8")
+
+
+def test_week5_page_and_assets(site: Path, week5_html: str) -> None:
+    for path in ("week5.html", "og-week5.jpg", "js/week5.js"):
+        assert (site / path).is_file(), path
+    assert cv2.imread(str(site / "og-week5.jpg")).shape == (630, 1200, 3)
+    for name in build_site.W5_EXPORT:
+        assert json.loads((site / "assets" / "week5" / name).read_text()) == json.loads((DOCS5 / name).read_text())
+    head = _Head()
+    head.feed(week5_html)
+    assert head.links["canonical"] == build_site.CANONICAL + "week5"
+    assert head.meta["og:image"] == build_site.CANONICAL + "og-week5.jpg"
+    assert head.meta["twitter:image"] == build_site.CANONICAL + "og-week5.jpg"
+    assert head.meta["description"] == build_site.W5_DESCRIPTION
+    ld = json.loads("".join(head.json_ld))
+    assert ld["url"] == build_site.CANONICAL + "week5" and ld["codeRepository"] == build_site.REPO
+    assert f"<loc>{build_site.CANONICAL}week5</loc>" in (site / "sitemap.xml").read_text()
+    assert "/og-week5.jpg" in (site / "_headers").read_text()
+    assert 'href="week5"' in (site / "index.html").read_text(encoding="utf-8")
+
+
+def test_week5_links_to_the_repo_folders(week5_html: str) -> None:
+    for path in ("blob/main/week05/README.md", "tree/main/ros2_ws", "blob/main/docs/week05/NOTES.md", "blob/main/docs/week05/RESULTS.md"):
+        assert f'href="{build_site.REPO}/{path}"' in week5_html, path
+        assert (ROOT / path.split("/", 2)[2]).exists(), path
+
+
+def test_week5_numbers_come_from_json(week5_html: str) -> None:
+    summary = json.loads((DOCS5 / "summary.json").read_text())
+    lab = json.loads((DOCS5 / "lab.json").read_text())
+    assert f"{summary['type_hashes'][0]:,} of {summary['type_hashes'][1]:,}" in week5_html
+    assert f"{summary['qos_pairs'][0]:,}" in week5_html
+    assert f"{summary['cdr'][0]} of {summary['cdr'][1]}" in week5_html
+    assert f"{summary['interop_directions']} directions" in week5_html
+    assert f"{summary['client_round_trip_ms']:.2f} ms" in week5_html
+    for row in lab["blocking"]:
+        assert f'<td class="num">{row["max_gap_ms"]:.1f}</td>' in week5_html
+    for row in lab["depth"]:
+        assert f"{row['received']} of {row['sent']}" in week5_html
+    for row in lab["deadlock"]:
+        assert row["outcome"] in week5_html
+    transcripts = json.loads((DOCS5 / "transcripts.json").read_text())
+    for item in transcripts:
+        for term in item["terminals"]:
+            assert html.escape(term["output"][0]) in week5_html
+
+
+def test_week5_build_fails_without_its_data(tmp_path: Path) -> None:
+    docs5 = tmp_path / "week05"
+    shutil.copytree(DOCS5, docs5, ignore=shutil.ignore_patterns("captures", "*.md"))
+    (docs5 / "wire.json").unlink()
+    with pytest.raises(build_site.BuildError) as error:
+        build_site.build(tmp_path / "out", docs5=docs5)
+    assert "wire.json" in str(error.value)
+
+
+QOS_HARNESS = """
+const fs = require("fs");
+const Q = require(process.argv[2]);
+const cases = JSON.parse(fs.readFileSync(process.argv[3], "utf8"));
+const out = cases.map(([p, s]) => Q.checkCompatible(Q.profile(p), Q.profile(s)));
+process.stdout.write(JSON.stringify(out));
+"""
+
+
+@needs_node
+def test_js_qos_check_matches_python_exactly(tmp_path: Path) -> None:
+    import itertools
+
+    from week05 import qos
+
+    durations = (0, 10**8, 10**9)
+    policies = list(itertools.product(qos.RELIABILITY, qos.DURABILITY, qos.LIVELINESS))
+    timing = list(itertools.product(durations, durations, durations, durations))
+    cases = []
+    # every policy pair, each with one of the 81 deadline and lease combinations in turn
+    for i, (p, s) in enumerate(itertools.product(policies, policies)):
+        pd, sd, pl, sl = timing[i % len(timing)]
+        pub = {"reliability": p[0], "durability": p[1], "liveliness": p[2], "deadline_ns": pd, "lease_ns": pl}
+        sub = {"reliability": s[0], "durability": s[1], "liveliness": s[2], "deadline_ns": sd, "lease_ns": sl}
+        cases.append((pub, sub))
+    names = list(qos.PRESETS)
+    cases += [(dict(vars(qos.PRESETS[p])), dict(vars(qos.PRESETS[s]))) for p in names for s in names]
+    path = tmp_path / "cases.json"
+    path.write_text(json.dumps(cases))
+    script = tmp_path / "qos_harness.js"
+    script.write_text(QOS_HARNESS)
+    res = subprocess.run(
+        [NODE, str(script), str(ROOT / "site" / "js" / "week5.js"), str(path)], capture_output=True, text=True, timeout=120
+    )
+    assert res.returncode == 0, res.stderr
+    got = json.loads(res.stdout)
+    assert len(got) == len(cases) > 15000
+    mismatches = []
+    for (pub, sub), js in zip(cases, got):
+        want = qos.check_compatible(qos.QoSProfile(**pub), qos.QoSProfile(**sub))
+        if tuple(js) != want:
+            mismatches.append((pub, sub, js, want))
+    assert not mismatches, mismatches[:3]
+    levels = {tuple(js)[0] for js in got}
+    assert levels == {"ok", "warning", "error"}
+
+
+@needs_node
+def test_js_qos_presets_match_python() -> None:
+    from week05 import qos
+
+    script = "const Q = require(process.argv[1]); process.stdout.write(JSON.stringify(Q.PRESETS));"
+    res = subprocess.run([NODE, "-e", script, str(ROOT / "site" / "js" / "week5.js")], capture_output=True, text=True, timeout=60)
+    assert res.returncode == 0, res.stderr
+    presets = json.loads(res.stdout)
+    for name, profile in presets.items():
+        assert qos.QoSProfile(**profile) == qos.PRESETS[name], name
+
+
+# ------------------------------------------------------------------ week 6 ----
+
+DOCS6 = ROOT / "docs" / "week06"
+
+
+@pytest.fixture(scope="module")
+def week6_html(site: Path) -> str:
+    return (site / "week6.html").read_text(encoding="utf-8")
+
+
+def test_week6_page_and_assets(site: Path, week6_html: str) -> None:
+    for path in ("week6.html", "og-week6.jpg", "js/week6.js"):
+        assert (site / path).is_file(), path
+    assert cv2.imread(str(site / "og-week6.jpg")).shape == (630, 1200, 3)
+    for name in build_site.W6_EXPORT:
+        assert json.loads((site / "assets" / "week6" / name).read_text()) == json.loads((DOCS6 / name).read_text())
+    head = _Head()
+    head.feed(week6_html)
+    assert head.links["canonical"] == build_site.CANONICAL + "week6"
+    assert head.meta["og:image"] == build_site.CANONICAL + "og-week6.jpg"
+    assert head.meta["description"] == build_site.W6_DESCRIPTION
+    ld = json.loads("".join(head.json_ld))
+    assert ld["url"] == build_site.CANONICAL + "week6" and ld["codeRepository"] == build_site.REPO
+    assert f"<loc>{build_site.CANONICAL}week6</loc>" in (site / "sitemap.xml").read_text()
+    assert "/og-week6.jpg" in (site / "_headers").read_text()
+    for page in ("index.html", "week3.html", "week4.html", "week5.html"):
+        assert 'href="week6"' in (site / page).read_text(encoding="utf-8"), page
+
+
+def test_week6_links_to_the_repo_folders(week6_html: str) -> None:
+    for path in (
+        "blob/main/week06/README.md",
+        "tree/main/ros2_ws/src/ugs_px4",
+        "blob/main/docs/week06/NOTES.md",
+        "blob/main/docs/week06/RESULTS.md",
+    ):
+        assert f'href="{build_site.REPO}/{path}"' in week6_html, path
+        assert (ROOT / path.split("/", 2)[2]).exists(), path
+
+
+def test_week6_numbers_come_from_json(week6_html: str) -> None:
+    summary = json.loads((DOCS6 / "summary.json").read_text())
+    main = summary["flights"]["offboard_5m"]
+    assert f"{main['target'] + main['hover_mean_error']:.2f} m" in week6_html
+    assert f"{main['rise_time']:.2f} s" in week6_html
+    assert f"{main['hover_rms_error']:.3f} m" in week6_html
+    assert f"{len(summary['xrce']['topics'])} topics" in week6_html
+    for name in summary["flights"]:
+        assert html.escape(summary["titles"][name]) in week6_html
+    busy = [t for t in summary["xrce"]["topics"] if t["samples"]]
+    for topic in busy:
+        assert f"<code>{topic['topic']}</code>" in week6_html
+    assert f"and {len(summary['xrce']['topics']) - len(busy)} more topics" in week6_html
+    notes = (DOCS6 / "NOTES.md").read_text()
+    assert week6_html.count('class="symptom"') == len(re.findall(r"^### ", notes.split("## Problems", 1)[1].split("\n## ", 1)[0], re.M))
+
+
+def test_week6_build_fails_without_its_data(tmp_path: Path) -> None:
+    docs6 = tmp_path / "week06"
+    shutil.copytree(DOCS6, docs6, ignore=shutil.ignore_patterns("flights"))
+    (docs6 / "replay.json").unlink()
+    with pytest.raises(build_site.BuildError) as error:
+        build_site.build(tmp_path / "out", docs6=docs6)
+    assert "replay.json" in str(error.value)
+
+
+LAB_HARNESS = """
+const W = require(process.argv[2]);
+const scenarios = JSON.parse(process.argv[3]);
+const out = {};
+for (const [k, v] of Object.entries(scenarios)) out[k] = W.simulate(v);
+process.stdout.write(JSON.stringify(out));
+"""
+
+
+@needs_node
+def test_js_takeoff_lab_matches_python_exactly(tmp_path: Path) -> None:
+    from week06.lab import SCENARIOS, simulate
+
+    script = tmp_path / "lab.js"
+    script.write_text(LAB_HARNESS)
+    js = json.loads(
+        subprocess.run(
+            [NODE, str(script), str(ROOT / "site" / "js" / "week6.js"), json.dumps(SCENARIOS)],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=120,
+        ).stdout
+    )
+    for name, options in SCENARIOS.items():
+        py = simulate(**options)
+        got = js[name]
+        assert got["t"] == py["t"], name  # same steps, same float arithmetic
+        assert got["altitude"] == py["altitude"], name
+        assert got["setpoint"] == py["setpoint"], name
+        assert got["phase"] == py["phase"], name
+        assert got["nav"] == py["nav"], name
+        assert [e[1:] for e in got["events"]] == [e[1:] for e in py["events"]], name
+        assert got["result"] == py["result"], name
+        assert got["land"] == py["land"], name

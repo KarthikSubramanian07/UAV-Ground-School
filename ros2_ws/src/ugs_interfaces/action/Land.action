@@ -1,0 +1,9 @@
+# Land where the drone is and wait until PX4 has detected the landing and disarmed.
+---
+bool success                        # result
+float32 descent_time                # seconds
+string message
+---
+string phase                        # feedback: DESCEND, TOUCHDOWN, DISARMED
+float32 altitude                    # metres above the takeoff point
+float32 vertical_speed              # m/s, up positive

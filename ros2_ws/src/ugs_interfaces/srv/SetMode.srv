@@ -1,0 +1,5 @@
+# Switch the flight controller's mode (ArduPilot style names).
+string mode          # STABILIZE, GUIDED, LOITER, LAND or RTL
+---
+bool accepted
+string message

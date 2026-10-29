@@ -22,12 +22,13 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install "ruff==0.16.10"  # pinned so a ruff release cannot change formatting under us
-      - run: ruff check week02 week03 week04 tests scripts
+      - run: ruff check week02 week03 week04 week05 week06 tests scripts
       - name: Formatting
-        run: ruff format --check week02 week03 week04 tests scripts
+        run: ruff format --check week02 week03 week04 week05 week06 tests scripts
       - name: No em or en dashes in tracked text
         run: |
-          if git grep -nIP '[\x{2013}\x{2014}]' -- . ':!*.pdf'; then
+          # week06/interfaces holds px4_msgs files copied unchanged (one uses an en dash)
+          if git grep -nIP '[\x{2013}\x{2014}]' -- . ':!*.pdf' ':!week06/interfaces'; then
             echo "Found an em or en dash"; exit 1
           fi
 
@@ -56,7 +57,7 @@ jobs:
       - name: Test
         env:
           MAVLINK_XML_DIR: build/mavlink
-        run: pytest --cov=week02 --cov=week03 --cov=week04 --cov-report=term-missing --cov-report=xml
+        run: pytest --cov=week02 --cov=week03 --cov=week04 --cov=week05 --cov=week06 --cov-report=term-missing --cov-report=xml
       - uses: actions/upload-artifact@v4
         if: matrix.python-version == '3.12'
         with:
@@ -91,6 +92,43 @@ jobs:
           pip install -e . --no-deps
           pytest tests/test_cpp_parity.py tests/test_week03_cpp_parity.py tests/test_week04_cpp_parity.py -v
 
+  ros:
+    # ROS 2 Jazzy itself: build the workspace, run every package's linters and
+    # launch tests, then hold week05 to the real middleware (interop with the
+    # tutorial nodes over Fast DDS and Cyclone DDS, CDR, type hashes, QoS).
+    # ugs_px4's launch tests fly the takeoff action against its fake PX4; the
+    # real PX4 SITL in Gazebo runs in px4-sitl.yml.
+    runs-on: ubuntu-24.04
+    container: ros:jazzy-ros-base
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the workspace's dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends ros-jazzy-example-interfaces ros-jazzy-vision-msgs ros-jazzy-rmw-cyclonedds-cpp python3-numpy python3-pytest
+      - name: px4_msgs, matching PX4 v1.17.0
+        run: git clone --depth 1 --branch v1.17.0 https://github.com/PX4/px4_msgs.git ros2_ws/src/px4_msgs
+      - name: colcon build
+        working-directory: ros2_ws
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          colcon build --event-handlers console_cohesion+
+      - name: colcon test (linters, unit tests, launch tests)
+        working-directory: ros2_ws
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          # one package at a time: ugs_px4's launch tests fly real time control loops in Python
+          colcon test --executor sequential --packages-skip px4_msgs --event-handlers console_direct+
+          colcon test-result --verbose
+      - name: week05 against ROS 2
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          source ros2_ws/install/setup.bash
+          python3 -m pytest -v -p no:cacheprovider --noconftest tests/test_week05_ros.py
+
   site:
     runs-on: ubuntu-latest
     steps:
@@ -100,9 +138,9 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Build showcase site
+        # exactly as Cloudflare Pages builds it: a regular (not editable) install
         run: |
-          pip install opencv-python-headless numpy
-          pip install -e . --no-deps
+          pip install . opencv-python-headless numpy
           python scripts/build_site.py --out build/site
 
   deploy:
@@ -110,7 +148,7 @@ jobs:
     # repo, so CI asks it to build main through a Deploy Hook once every check
     # above is green. The hook URL is the CLOUDFLARE_DEPLOY_HOOK secret.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [lint, test, cpp, site]
+    needs: [lint, test, cpp, ros, site]
     runs-on: ubuntu-latest
     steps:
       - name: Trigger the Cloudflare Pages production build

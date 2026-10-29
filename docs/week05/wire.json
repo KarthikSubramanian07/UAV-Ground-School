@@ -1,0 +1,3505 @@
+[
+{
+"id": "spdp",
+"title": "A participant announces itself",
+"text": "SPDP, sent to the multicast group 239.255.0.1 on port 7400 (domain 0). It says who this participant is (its GUID prefix and vendor), where to reach it (unicast locators), which builtin endpoints it has, and how long to consider it alive (the lease). ROS 2 adds the enclave in the user data.",
+"from": "127.0.0.1:33317",
+"to": "239.255.0.1:7400",
+"port": "domain 0 discovery multicast",
+"summary": [
+"SPDP: participant 010feb7d (eProsima Fast DDS) at udpv4:172.17.0.2:7411"
+],
+"hex": "525450530203010f010feb7df619b7490000000009010800406bc76ade53ff201505840100001000000100c7000100c2000000000100000000030000150004000203000016000400010f000050001000010feb7df619b74900000000000001c107800400010000003200180001000000f21c0000000000000000000000000000ac1100023100180001000000f31c0000000000000000000000000000ac110002020008001400000000000000580004003f0c0f0062000800020000002f0000002c0010000b000000656e636c6176653d2f3b00005900cc0004000000110000005041525449434950414e545f54595045000000000700000053494d504c4500001b000000666173746464732e706879736963616c5f646174612e686f73740000220000003361323839353766343831623a31343934343539393336343330393232313337360000001b000000666173746464732e706879736963616c5f646174612e75736572000005000000726f6f74000000001e000000666173746464732e706879736963616c5f646174612e70726f63657373000000050000003636343600000000010000008001380001000000e81c0000000000000000000000000000efff0001406bc76a08dd06210100000000000000e4010000000000000000000000000000",
+"spans": [
+{
+"start": 0,
+"end": 4,
+"label": "magic",
+"value": "RTPS",
+"depth": 0
+},
+{
+"start": 4,
+"end": 6,
+"label": "protocol version",
+"value": "2.3",
+"depth": 0
+},
+{
+"start": 6,
+"end": 8,
+"label": "vendor",
+"value": "eProsima Fast DDS",
+"depth": 0
+},
+{
+"start": 8,
+"end": 20,
+"label": "GUID prefix",
+"value": "010feb7df619b74900000000",
+"depth": 0
+},
+{
+"start": 20,
+"end": 24,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 24,
+"end": 32,
+"label": "timestamp",
+"value": "1791454016.128896",
+"depth": 1
+},
+{
+"start": 32,
+"end": 36,
+"label": "DATA header",
+"value": "flags 0x05, 388 bytes",
+"depth": 0
+},
+{
+"start": 40,
+"end": 44,
+"label": "reader",
+"value": "SPDP reader",
+"depth": 1
+},
+{
+"start": 44,
+"end": 48,
+"label": "writer",
+"value": "SPDP writer",
+"depth": 1
+},
+{
+"start": 48,
+"end": 56,
+"label": "sequence number",
+"value": "1",
+"depth": 1
+},
+{
+"start": 56,
+"end": 60,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 60,
+"end": 68,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 68,
+"end": 76,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 76,
+"end": 96,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 96,
+"end": 104,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 104,
+"end": 132,
+"label": "METATRAFFIC_UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7410",
+"depth": 2
+},
+{
+"start": 132,
+"end": 160,
+"label": "DEFAULT_UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 160,
+"end": 172,
+"label": "PARTICIPANT_LEASE_DURATION",
+"value": "20 s",
+"depth": 2
+},
+{
+"start": 172,
+"end": 180,
+"label": "BUILTIN_ENDPOINT_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 180,
+"end": 192,
+"label": "ENTITY_NAME",
+"value": "/",
+"depth": 2
+},
+{
+"start": 192,
+"end": 212,
+"label": "USER_DATA",
+"value": "enclave=/;",
+"depth": 2
+},
+{
+"start": 212,
+"end": 420,
+"label": "PROPERTY_LIST",
+"value": "",
+"depth": 2
+},
+{
+"start": 420,
+"end": 424,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 424,
+"end": 428,
+"label": "0x80 header",
+"value": "flags 0x01, 56 bytes",
+"depth": 0
+},
+{
+"start": 428,
+"end": 484,
+"label": "vendor specific submessage",
+"value": "skipped, as the spec requires",
+"depth": 1
+}
+]
+},
+{
+"id": "sedp_pub",
+"title": "The talker announces its publisher",
+"text": "SEDP, sent reliably to each participant that SPDP found. The topic is rt/topic (ROS 2 prefixes rt/ to every topic), the type is std_msgs::msg::dds_::String_, the QoS is reliable and volatile, and Jazzy adds the REP 2011 type hash in the user data.",
+"from": "127.0.0.1:33317",
+"to": "127.0.0.1:7412",
+"port": "domain 0 participant 1 discovery unicast",
+"summary": [
+"SEDP: publication ros_discovery_info [rmw_dds_common/msg/ParticipantEntitiesInfo] reliable, transient_local",
+"SEDP: publication rt/rosout [rcl_interfaces/msg/Log] reliable, transient_local",
+"SEDP: publication rt/parameter_events [rcl_interfaces/msg/ParameterEvent] reliable, volatile",
+"SEDP: publication rr/minimal_publisher/describe_parametersReply [rcl_interfaces/srv/DescribeParameters_Response] reliable, volatile",
+"SEDP: publication rr/minimal_publisher/get_parametersReply [rcl_interfaces/srv/GetParameters_Response] reliable, volatile",
+"SEDP: publication rr/minimal_publisher/get_parameter_typesReply [rcl_interfaces/srv/GetParameterTypes_Response] reliable, volatile",
+"SEDP: publication rr/minimal_publisher/list_parametersReply [rcl_interfaces/srv/ListParameters_Response] reliable, volatile",
+"SEDP: publication rr/minimal_publisher/set_parametersReply [rcl_interfaces/srv/SetParameters_Response] reliable, volatile",
+"SEDP: publication rr/minimal_publisher/set_parameters_atomicallyReply [rcl_interfaces/srv/SetParametersAtomically_Response] reliable, volatile",
+"SEDP: publication rr/minimal_publisher/get_type_descriptionReply [type_description_interfaces/srv/GetTypeDescription_Response] reliable, volatile",
+"SEDP: publication rt/topic [std_msgs/msg/String] reliable, volatile"
+],
+"hex": "525450530203010f010feb7df619b749000000000e010c00010feb7d061ae10a0000000009010800406bc76a5e89112b1505000200001000000003c7000003c20000000001000000000300005a001000010feb7df619b749000000000000010307800400010000002f00180001000000f31c0000000000000000000000000000ac11000250001000010feb7df619b74900000000000001c10500180013000000726f735f646973636f766572795f696e666f00000700380034000000726d775f6464735f636f6d6d6f6e3a3a6d73673a3a6464735f3a3a5061727469636970616e74456e746974696573496e666f5f0070001000010feb7df619b74900000000000001036000040018000000150004000203000016000400010f00001d000400010000001e001c0000000000000000000000000001000000ffffffffffffffffffffffff23000800ffffff7fffffffff2700080000000000000000001b000c0000000000ffffff7fffffffff1a000c0002000000000000009a9999192b000800ffffff7fffffffff2c0058005100000074797065686173683d5249485330315f393161303539336261636463633530656139626463663834396139333862313238343132636331656138323132343563363633626364323666383363323935653b0000000400080000000000000000001f00040000000000250004000000000021000800000000000000000029000400000000002e000400000000002d000400000000007300080001000000000000000100000009010800406bc76a8adbe1331505e40100001000000003c7000003c20000000002000000000300005a001000010feb7df619b749000000000000030307800400010000002f00180001000000f31c0000000000000000000000000000ac11000250001000010feb7df619b74900000000000001c1050010000a00000072742f726f736f7574000000070024002000000072636c5f696e74657266616365733a3a6d73673a3a6464735f3a3a4c6f675f0070001000010feb7df619b74900000000000003036000040034000000150004000203000016000400010f00001d000400010000001e001c0000000000000000000000000001000000ffffffffffffffffffffffff23000800ffffff7fffffffff2700080000000000000000001b000c0000000000ffffff7fffffffff1a000c0002000000000000009a9999192b0008000a000000000000002c0058005100000074797065686173683d5249485330315f653238636532353463613861626330366162663932373733623734363032636462663131366564333466626166323934666239663831646139663331386561633b0000000400080000000000000000001f00040000000000250004000000000021000800000000000000000029000400000000002e000400000000002d000400000000007300080001000000000000000100000009010800406bc76a7f8f4c6f1505f80100001000000003c7000003c20000000003000000000300005a001000010feb7df619b749000000000000040307800400010000002f00180001000000f31c0000000000000000000000000000ac11000250001000010feb7df619b74900000000000001c1050018001400000072742f706172616d657465725f6576656e747300070030002b00000072636c5f696e74657266616365733a3a6d73673a3a6464735f3a3a506172616d657465724576656e745f000070001000010feb7df619b74900000000000004036000040020000000150004000203000016000400010f00001d000400000000001e001c0000000000000000000000000001000000ffffffffffffffffffffffff23000800ffffff7fffffffff2700080000000000000000001b000c0000000000ffffff7fffffffff1a000c0002000000000000009a9999192b000800ffffff7fffffffff2c0058005100000074797065686173683d5249485330315f303433653632373738306663616438376132326432323562633261303337333631646261373133666361366136623966346238363961356161303339333230343b0000000400080000000000000000001f00040000000000250004000000000021000800000000000000000029000400000000002e000400000000002d000400000000007300080001000000000000000100000009010800406bc76ab02a44731505200200001000000003c7000003c20000000004000000000300005a001000010feb7df619b749000000000000060307800400010000002f00180001000000f31c0000000000000000000000000000ac11000250001000010feb7df619b74900000000000001c1050034002e00000072722f6d696e696d616c5f7075626c69736865722f64657363726962655f706172616d65746572735265706c7900000007003c003800000072636c5f696e74657266616365733a3a7372763a3a6464735f3a3a4465736372696265506172616d65746572735f526573706f6e73655f0070001000010feb7df619b74900000000000006036000040008000000150004000203000016000400010f00001d000400000000001e001c0000000000000000000000000001000000ffffffffffffffffffffffff23000800ffffff7fffffffff2700080000000000000000001b000c0000000000ffffff7fffffffff1a000c0002000000000000009a9999192b000800ffffff7fffffffff2c0058005100000074797065686173683d5249485330315f616436373437333139363133633631333135383965303632653039356234363961343663633736346637643066313261303031613439653663643839333939353b0000000400080000000000000000001f00040000000000250004000000000021000800000000000000000029000400000000002e000400000000002d000400000000007300080001000000000000000100000009010800406bc76a54d8f2731505180200001000000003c7000003c20000000005000000000300005a001000010feb7df619b749000000000000080307800400010000002f00180001000000f31c0000000000000000000000000000ac11000250001000010feb7df619b74900000000000001c1050030002900000072722f6d696e696d616c5f7075626c69736865722f6765745f706172616d65746572735265706c7900000000070038003300000072636c5f696e74657266616365733a3a7372763a3a6464735f3a3a476574506172616d65746572735f526573706f6e73655f000070001000010feb7df619b74900000000000008036000040008000000150004000203000016000400010f00001d000400000000001e001c0000000000000000000000000001000000ffffffffffffffffffffffff23000800ffffff7fffffffff2700080000000000000000001b000c0000000000ffffff7fffffffff1a000c0002000000000000009a9999192b000800ffffff7fffffffff2c0058005100000074797065686173683d5249485330315f396661373733623436653339636335643032646236323234643866643532306262396361656566666332623237633936633165353934333162616261396632613b0000000400080000000000000000001f00040000000000250004000000000021000800000000000000000029000400000000002e000400000000002d000400000000007300080001000000000000000100000009010800406bc76a7efa4e741505200200001000000003c7000003c20000000006000000000300005a001000010feb7df619b7490000000000000a0307800400010000002f00180001000000f31c0000000000000000000000000000ac11000250001000010feb7df619b74900000000000001c1050034002e00000072722f6d696e696d616c5f7075626c69736865722f6765745f706172616d657465725f74797065735265706c7900000007003c003700000072636c5f696e74657266616365733a3a7372763a3a6464735f3a3a476574506172616d6574657254797065735f526573706f6e73655f000070001000010feb7df619b7490000000000000a036000040008000000150004000203000016000400010f00001d000400000000001e001c0000000000000000000000000001000000ffffffffffffffffffffffff23000800ffffff7fffffffff2700080000000000000000001b000c0000000000ffffff7fffffffff1a000c0002000000000000009a9999192b000800ffffff7fffffffff2c0058005100000074797065686173683d5249485330315f616331333335646365363763343738653636393433346636616332666266663334666364353239353830663237326433303036373835626138623534653437663b0000000400080000000000000000001f00040000000000250004000000000021000800000000000000000029000400000000002e000400000000002d000400000000007300080001000000000000000100000009010800406bc76a6ecd95741505180200001000000003c7000003c20000000007000000000300005a001000010feb7df619b7490000000000000c0307800400010000002f00180001000000f31c0000000000000000000000000000ac11000250001000010feb7df619b74900000000000001c1050030002a00000072722f6d696e696d616c5f7075626c69736865722f6c6973745f706172616d65746572735265706c79000000070038003400000072636c5f696e74657266616365733a3a7372763a3a6464735f3a3a4c697374506172616d65746572735f526573706f6e73655f0070001000010feb7df619b7490000000000000c03600004000c000000150004000203000016000400010f00001d000400000000001e001c0000000000000000000000000001000000ffffffffffffffffffffffff23000800ffffff7fffffffff2700080000000000000000001b000c0000000000ffffff7fffffffff1a000c0002000000000000009a9999192b000800ffffff7fffffffff2c0058005100000074797065686173683d5249485330315f333162393337623832646533363132343236626537396632333165333836323539663937653864633834336533663238343532383862346266613239366264643b0000000400080000000000000000001f00040000000000250004000000000021000800000000000000000029000400000000002e000400000000002d000400000000007300080001000000000000000100000009010800406bc76a3d80dc741505180200001000000003c7000003c20000000008000000000300005a001000010feb7df619b7490000000000000e0307800400010000002f00180001000000f31c0000000000000000000000000000ac11000250001000010feb7df619b74900000000000001c1050030002900000072722f6d696e696d616c5f7075626c69736865722f7365745f706172616d65746572735265706c7900000000070038003300000072636c5f696e74657266616365733a3a7372763a3a6464735f3a3a536574506172616d65746572735f526573706f6e73655f000070001000010feb7df619b7490000000000000e036000040008000000150004000203000016000400010f00001d000400000000001e001c0000000000000000000000000001000000ffffffffffffffffffffffff23000800ffffff7fffffffff2700080000000000000000001b000c0000000000ffffff7fffffffff1a000c0002000000000000009a9999192b000800ffffff7fffffffff2c0058005100000074797065686173683d5249485330315f376130653831343061306238643938333038666138316135343033613736366536313061663239613233396361663534623735353332323739303666633236363b0000000400080000000000000000001f00040000000000250004000000000021000800000000000000000029000400000000002e000400000000002d000400000000007300080001000000000000000100000009010800406bc76ac044207515052c0200001000000003c7000003c20000000009000000000300005a001000010feb7df619b749000000000000100307800400010000002f00180001000000f31c0000000000000000000000000000ac11000250001000010feb7df619b74900000000000001c1050038003400000072722f6d696e696d616c5f7075626c69736865722f7365745f706172616d65746572735f61746f6d6963616c6c795265706c7900070044003d00000072636c5f696e74657266616365733a3a7372763a3a6464735f3a3a536574506172616d657465727341746f6d6963616c6c795f526573706f6e73655f0000000070001000010feb7df619b74900000000000010036000040010000000150004000203000016000400010f00001d000400000000001e001c0000000000000000000000000001000000ffffffffffffffffffffffff23000800ffffff7fffffffff2700080000000000000000001b000c0000000000ffffff7fffffffff1a000c0002000000000000009a9999192b000800ffffff7fffffffff2c0058005100000074797065686173683d5249485330315f333162316133386335623062396438393365653234646134356636393633386634353631633738343631643832643532373530663432396235333435303262383b0000000400080000000000000000001f00040000000000250004000000000021000800000000000000000029000400000000002e000400000000002d000400000000007300080001000000000000000100000009010800406bc76aa06612761505300200001000000003c7000003c2000000000a000000000300005a001000010feb7df619b749000000000000120307800400010000002f00180001000000f31c0000000000000000000000000000ac11000250001000010feb7df619b74900000000000001c1050034002f00000072722f6d696e696d616c5f7075626c69736865722f6765745f747970655f6465736372697074696f6e5265706c79000007004c0045000000747970655f6465736372697074696f6e5f696e74657266616365733a3a7372763a3a6464735f3a3a476574547970654465736372697074696f6e5f526573706f6e73655f0000000070001000010feb7df619b74900000000000012036000040024010000150004000203000016000400010f00001d000400000000001e001c0000000000000000000000000001000000ffffffffffffffffffffffff23000800ffffff7fffffffff2700080000000000000000001b000c0000000000ffffff7fffffffff1a000c0002000000000000009a9999192b000800ffffff7fffffffff2c0058005100000074797065686173683d5249485330315f363438633439643937363234303836316134383266393631633536323164646430643231333564386363653666323937613736643466363337366439336237353b0000000400080000000000000000001f00040000000000250004000000000021000800000000000000000029000400000000002e000400000000002d000400000000007300080001000000000000000100000009010800406bc76af7b5e77c1505e40100001000000003c7000003c2000000000b000000000300005a001000010feb7df619b749000000000000130307800400010000002f00180001000000f31c0000000000000000000000000000ac11000250001000010feb7df619b74900000000000001c1050010000900000072742f746f70696300000000070024001d0000007374645f6d7367733a3a6d73673a3a6464735f3a3a537472696e675f0000000070001000010feb7df619b7490000000000001303600004000c000000150004000203000016000400010f00001d000400000000001e001c0000000000000000000000000001000000ffffffffffffffffffffffff23000800ffffff7fffffffff2700080000000000000000001b000c0000000000ffffff7fffffffff1a000c0002000000000000009a9999192b000800ffffff7fffffffff2c0058005100000074797065686173683d5249485330315f646636363863373430343832626264343866623339643736613730646664346264353964623132383830323137343335303332353965393438663662316131383b0000000400080000000000000000001f00040000000000250004000000000021000800000000000000000029000400000000002e000400000000002d00040000000000730008000100000000000000010000008001380001000000f41c00000000000000000000000000007f000001436bc76a0572980b08000000000000008c1c0000000000000000000000000000",
+"spans": [
+{
+"start": 0,
+"end": 4,
+"label": "magic",
+"value": "RTPS",
+"depth": 0
+},
+{
+"start": 4,
+"end": 6,
+"label": "protocol version",
+"value": "2.3",
+"depth": 0
+},
+{
+"start": 6,
+"end": 8,
+"label": "vendor",
+"value": "eProsima Fast DDS",
+"depth": 0
+},
+{
+"start": 8,
+"end": 20,
+"label": "GUID prefix",
+"value": "010feb7df619b74900000000",
+"depth": 0
+},
+{
+"start": 20,
+"end": 24,
+"label": "INFO_DST header",
+"value": "flags 0x01, 12 bytes",
+"depth": 0
+},
+{
+"start": 24,
+"end": 36,
+"label": "destination GUID prefix",
+"value": "010feb7d061ae10a00000000",
+"depth": 1
+},
+{
+"start": 36,
+"end": 40,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 40,
+"end": 48,
+"label": "timestamp",
+"value": "1791454016.168236",
+"depth": 1
+},
+{
+"start": 48,
+"end": 52,
+"label": "DATA header",
+"value": "flags 0x05, 512 bytes",
+"depth": 0
+},
+{
+"start": 56,
+"end": 60,
+"label": "reader",
+"value": "SEDP publications reader",
+"depth": 1
+},
+{
+"start": 60,
+"end": 64,
+"label": "writer",
+"value": "SEDP publications writer",
+"depth": 1
+},
+{
+"start": 64,
+"end": 72,
+"label": "sequence number",
+"value": "1",
+"depth": 1
+},
+{
+"start": 72,
+"end": 76,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 76,
+"end": 96,
+"label": "ENDPOINT_GUID",
+"value": "010feb7d.f619b749.00000000|00000103",
+"depth": 2
+},
+{
+"start": 96,
+"end": 104,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 104,
+"end": 132,
+"label": "UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 132,
+"end": 152,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 152,
+"end": 180,
+"label": "TOPIC_NAME",
+"value": "ros_discovery_info",
+"depth": 2
+},
+{
+"start": 180,
+"end": 240,
+"label": "TYPE_NAME",
+"value": "rmw_dds_common::msg::dds_::ParticipantEntitiesInfo_",
+"depth": 2
+},
+{
+"start": 240,
+"end": 260,
+"label": "KEY_HASH",
+"value": "010feb7d.f619b749.00000000|00000103",
+"depth": 2
+},
+{
+"start": 260,
+"end": 268,
+"label": "TYPE_MAX_SIZE_SERIALIZED",
+"value": "",
+"depth": 2
+},
+{
+"start": 268,
+"end": 276,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 276,
+"end": 284,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 284,
+"end": 292,
+"label": "DURABILITY",
+"value": "transient_local",
+"depth": 2
+},
+{
+"start": 292,
+"end": 324,
+"label": "DURABILITY_SERVICE",
+"value": "",
+"depth": 2
+},
+{
+"start": 324,
+"end": 336,
+"label": "DEADLINE",
+"value": "",
+"depth": 2
+},
+{
+"start": 336,
+"end": 348,
+"label": "LATENCY_BUDGET",
+"value": "",
+"depth": 2
+},
+{
+"start": 348,
+"end": 364,
+"label": "LIVELINESS",
+"value": "",
+"depth": 2
+},
+{
+"start": 364,
+"end": 380,
+"label": "RELIABILITY",
+"value": "reliable",
+"depth": 2
+},
+{
+"start": 380,
+"end": 392,
+"label": "LIFESPAN",
+"value": "",
+"depth": 2
+},
+{
+"start": 392,
+"end": 484,
+"label": "USER_DATA",
+"value": "typehash=RIHS01_91a0593bacdcc50ea9bdcf849a938b128412cc1ea821245c663bcd26f83c295e;",
+"depth": 2
+},
+{
+"start": 484,
+"end": 496,
+"label": "TIME_BASED_FILTER",
+"value": "",
+"depth": 2
+},
+{
+"start": 496,
+"end": 504,
+"label": "OWNERSHIP",
+"value": "",
+"depth": 2
+},
+{
+"start": 504,
+"end": 512,
+"label": "DESTINATION_ORDER",
+"value": "",
+"depth": 2
+},
+{
+"start": 512,
+"end": 524,
+"label": "PRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 524,
+"end": 532,
+"label": "PARTITION",
+"value": "",
+"depth": 2
+},
+{
+"start": 532,
+"end": 540,
+"label": "TOPIC_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 540,
+"end": 548,
+"label": "GROUP_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 548,
+"end": 560,
+"label": "DATA_REPRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 560,
+"end": 564,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 564,
+"end": 568,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 568,
+"end": 576,
+"label": "timestamp",
+"value": "1791454016.202665",
+"depth": 1
+},
+{
+"start": 576,
+"end": 580,
+"label": "DATA header",
+"value": "flags 0x05, 484 bytes",
+"depth": 0
+},
+{
+"start": 584,
+"end": 588,
+"label": "reader",
+"value": "SEDP publications reader",
+"depth": 1
+},
+{
+"start": 588,
+"end": 592,
+"label": "writer",
+"value": "SEDP publications writer",
+"depth": 1
+},
+{
+"start": 592,
+"end": 600,
+"label": "sequence number",
+"value": "2",
+"depth": 1
+},
+{
+"start": 600,
+"end": 604,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 604,
+"end": 624,
+"label": "ENDPOINT_GUID",
+"value": "010feb7d.f619b749.00000000|00000303",
+"depth": 2
+},
+{
+"start": 624,
+"end": 632,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 632,
+"end": 660,
+"label": "UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 660,
+"end": 680,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 680,
+"end": 700,
+"label": "TOPIC_NAME",
+"value": "rt/rosout",
+"depth": 2
+},
+{
+"start": 700,
+"end": 740,
+"label": "TYPE_NAME",
+"value": "rcl_interfaces::msg::dds_::Log_",
+"depth": 2
+},
+{
+"start": 740,
+"end": 760,
+"label": "KEY_HASH",
+"value": "010feb7d.f619b749.00000000|00000303",
+"depth": 2
+},
+{
+"start": 760,
+"end": 768,
+"label": "TYPE_MAX_SIZE_SERIALIZED",
+"value": "",
+"depth": 2
+},
+{
+"start": 768,
+"end": 776,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 776,
+"end": 784,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 784,
+"end": 792,
+"label": "DURABILITY",
+"value": "transient_local",
+"depth": 2
+},
+{
+"start": 792,
+"end": 824,
+"label": "DURABILITY_SERVICE",
+"value": "",
+"depth": 2
+},
+{
+"start": 824,
+"end": 836,
+"label": "DEADLINE",
+"value": "",
+"depth": 2
+},
+{
+"start": 836,
+"end": 848,
+"label": "LATENCY_BUDGET",
+"value": "",
+"depth": 2
+},
+{
+"start": 848,
+"end": 864,
+"label": "LIVELINESS",
+"value": "",
+"depth": 2
+},
+{
+"start": 864,
+"end": 880,
+"label": "RELIABILITY",
+"value": "reliable",
+"depth": 2
+},
+{
+"start": 880,
+"end": 892,
+"label": "LIFESPAN",
+"value": "",
+"depth": 2
+},
+{
+"start": 892,
+"end": 984,
+"label": "USER_DATA",
+"value": "typehash=RIHS01_e28ce254ca8abc06abf92773b74602cdbf116ed34fbaf294fb9f81da9f318eac;",
+"depth": 2
+},
+{
+"start": 984,
+"end": 996,
+"label": "TIME_BASED_FILTER",
+"value": "",
+"depth": 2
+},
+{
+"start": 996,
+"end": 1004,
+"label": "OWNERSHIP",
+"value": "",
+"depth": 2
+},
+{
+"start": 1004,
+"end": 1012,
+"label": "DESTINATION_ORDER",
+"value": "",
+"depth": 2
+},
+{
+"start": 1012,
+"end": 1024,
+"label": "PRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 1024,
+"end": 1032,
+"label": "PARTITION",
+"value": "",
+"depth": 2
+},
+{
+"start": 1032,
+"end": 1040,
+"label": "TOPIC_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 1040,
+"end": 1048,
+"label": "GROUP_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 1048,
+"end": 1060,
+"label": "DATA_REPRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 1060,
+"end": 1064,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 1064,
+"end": 1068,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 1068,
+"end": 1076,
+"label": "timestamp",
+"value": "1791454016.434762",
+"depth": 1
+},
+{
+"start": 1076,
+"end": 1080,
+"label": "DATA header",
+"value": "flags 0x05, 504 bytes",
+"depth": 0
+},
+{
+"start": 1084,
+"end": 1088,
+"label": "reader",
+"value": "SEDP publications reader",
+"depth": 1
+},
+{
+"start": 1088,
+"end": 1092,
+"label": "writer",
+"value": "SEDP publications writer",
+"depth": 1
+},
+{
+"start": 1092,
+"end": 1100,
+"label": "sequence number",
+"value": "3",
+"depth": 1
+},
+{
+"start": 1100,
+"end": 1104,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 1104,
+"end": 1124,
+"label": "ENDPOINT_GUID",
+"value": "010feb7d.f619b749.00000000|00000403",
+"depth": 2
+},
+{
+"start": 1124,
+"end": 1132,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 1132,
+"end": 1160,
+"label": "UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 1160,
+"end": 1180,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 1180,
+"end": 1208,
+"label": "TOPIC_NAME",
+"value": "rt/parameter_events",
+"depth": 2
+},
+{
+"start": 1208,
+"end": 1260,
+"label": "TYPE_NAME",
+"value": "rcl_interfaces::msg::dds_::ParameterEvent_",
+"depth": 2
+},
+{
+"start": 1260,
+"end": 1280,
+"label": "KEY_HASH",
+"value": "010feb7d.f619b749.00000000|00000403",
+"depth": 2
+},
+{
+"start": 1280,
+"end": 1288,
+"label": "TYPE_MAX_SIZE_SERIALIZED",
+"value": "",
+"depth": 2
+},
+{
+"start": 1288,
+"end": 1296,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 1296,
+"end": 1304,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 1304,
+"end": 1312,
+"label": "DURABILITY",
+"value": "volatile",
+"depth": 2
+},
+{
+"start": 1312,
+"end": 1344,
+"label": "DURABILITY_SERVICE",
+"value": "",
+"depth": 2
+},
+{
+"start": 1344,
+"end": 1356,
+"label": "DEADLINE",
+"value": "",
+"depth": 2
+},
+{
+"start": 1356,
+"end": 1368,
+"label": "LATENCY_BUDGET",
+"value": "",
+"depth": 2
+},
+{
+"start": 1368,
+"end": 1384,
+"label": "LIVELINESS",
+"value": "",
+"depth": 2
+},
+{
+"start": 1384,
+"end": 1400,
+"label": "RELIABILITY",
+"value": "reliable",
+"depth": 2
+},
+{
+"start": 1400,
+"end": 1412,
+"label": "LIFESPAN",
+"value": "",
+"depth": 2
+},
+{
+"start": 1412,
+"end": 1504,
+"label": "USER_DATA",
+"value": "typehash=RIHS01_043e627780fcad87a22d225bc2a037361dba713fca6a6b9f4b869a5aa0393204;",
+"depth": 2
+},
+{
+"start": 1504,
+"end": 1516,
+"label": "TIME_BASED_FILTER",
+"value": "",
+"depth": 2
+},
+{
+"start": 1516,
+"end": 1524,
+"label": "OWNERSHIP",
+"value": "",
+"depth": 2
+},
+{
+"start": 1524,
+"end": 1532,
+"label": "DESTINATION_ORDER",
+"value": "",
+"depth": 2
+},
+{
+"start": 1532,
+"end": 1544,
+"label": "PRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 1544,
+"end": 1552,
+"label": "PARTITION",
+"value": "",
+"depth": 2
+},
+{
+"start": 1552,
+"end": 1560,
+"label": "TOPIC_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 1560,
+"end": 1568,
+"label": "GROUP_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 1568,
+"end": 1580,
+"label": "DATA_REPRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 1580,
+"end": 1584,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 1584,
+"end": 1588,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 1588,
+"end": 1596,
+"label": "timestamp",
+"value": "1791454016.450259",
+"depth": 1
+},
+{
+"start": 1596,
+"end": 1600,
+"label": "DATA header",
+"value": "flags 0x05, 544 bytes",
+"depth": 0
+},
+{
+"start": 1604,
+"end": 1608,
+"label": "reader",
+"value": "SEDP publications reader",
+"depth": 1
+},
+{
+"start": 1608,
+"end": 1612,
+"label": "writer",
+"value": "SEDP publications writer",
+"depth": 1
+},
+{
+"start": 1612,
+"end": 1620,
+"label": "sequence number",
+"value": "4",
+"depth": 1
+},
+{
+"start": 1620,
+"end": 1624,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 1624,
+"end": 1644,
+"label": "ENDPOINT_GUID",
+"value": "010feb7d.f619b749.00000000|00000603",
+"depth": 2
+},
+{
+"start": 1644,
+"end": 1652,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 1652,
+"end": 1680,
+"label": "UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 1680,
+"end": 1700,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 1700,
+"end": 1756,
+"label": "TOPIC_NAME",
+"value": "rr/minimal_publisher/describe_parametersReply",
+"depth": 2
+},
+{
+"start": 1756,
+"end": 1820,
+"label": "TYPE_NAME",
+"value": "rcl_interfaces::srv::dds_::DescribeParameters_Response_",
+"depth": 2
+},
+{
+"start": 1820,
+"end": 1840,
+"label": "KEY_HASH",
+"value": "010feb7d.f619b749.00000000|00000603",
+"depth": 2
+},
+{
+"start": 1840,
+"end": 1848,
+"label": "TYPE_MAX_SIZE_SERIALIZED",
+"value": "",
+"depth": 2
+},
+{
+"start": 1848,
+"end": 1856,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 1856,
+"end": 1864,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 1864,
+"end": 1872,
+"label": "DURABILITY",
+"value": "volatile",
+"depth": 2
+},
+{
+"start": 1872,
+"end": 1904,
+"label": "DURABILITY_SERVICE",
+"value": "",
+"depth": 2
+},
+{
+"start": 1904,
+"end": 1916,
+"label": "DEADLINE",
+"value": "",
+"depth": 2
+},
+{
+"start": 1916,
+"end": 1928,
+"label": "LATENCY_BUDGET",
+"value": "",
+"depth": 2
+},
+{
+"start": 1928,
+"end": 1944,
+"label": "LIVELINESS",
+"value": "",
+"depth": 2
+},
+{
+"start": 1944,
+"end": 1960,
+"label": "RELIABILITY",
+"value": "reliable",
+"depth": 2
+},
+{
+"start": 1960,
+"end": 1972,
+"label": "LIFESPAN",
+"value": "",
+"depth": 2
+},
+{
+"start": 1972,
+"end": 2064,
+"label": "USER_DATA",
+"value": "typehash=RIHS01_ad6747319613c6131589e062e095b469a46cc764f7d0f12a001a49e6cd893995;",
+"depth": 2
+},
+{
+"start": 2064,
+"end": 2076,
+"label": "TIME_BASED_FILTER",
+"value": "",
+"depth": 2
+},
+{
+"start": 2076,
+"end": 2084,
+"label": "OWNERSHIP",
+"value": "",
+"depth": 2
+},
+{
+"start": 2084,
+"end": 2092,
+"label": "DESTINATION_ORDER",
+"value": "",
+"depth": 2
+},
+{
+"start": 2092,
+"end": 2104,
+"label": "PRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 2104,
+"end": 2112,
+"label": "PARTITION",
+"value": "",
+"depth": 2
+},
+{
+"start": 2112,
+"end": 2120,
+"label": "TOPIC_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 2120,
+"end": 2128,
+"label": "GROUP_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 2128,
+"end": 2140,
+"label": "DATA_REPRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 2140,
+"end": 2144,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 2144,
+"end": 2148,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 2148,
+"end": 2156,
+"label": "timestamp",
+"value": "1791454016.452924",
+"depth": 1
+},
+{
+"start": 2156,
+"end": 2160,
+"label": "DATA header",
+"value": "flags 0x05, 536 bytes",
+"depth": 0
+},
+{
+"start": 2164,
+"end": 2168,
+"label": "reader",
+"value": "SEDP publications reader",
+"depth": 1
+},
+{
+"start": 2168,
+"end": 2172,
+"label": "writer",
+"value": "SEDP publications writer",
+"depth": 1
+},
+{
+"start": 2172,
+"end": 2180,
+"label": "sequence number",
+"value": "5",
+"depth": 1
+},
+{
+"start": 2180,
+"end": 2184,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 2184,
+"end": 2204,
+"label": "ENDPOINT_GUID",
+"value": "010feb7d.f619b749.00000000|00000803",
+"depth": 2
+},
+{
+"start": 2204,
+"end": 2212,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 2212,
+"end": 2240,
+"label": "UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 2240,
+"end": 2260,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 2260,
+"end": 2312,
+"label": "TOPIC_NAME",
+"value": "rr/minimal_publisher/get_parametersReply",
+"depth": 2
+},
+{
+"start": 2312,
+"end": 2372,
+"label": "TYPE_NAME",
+"value": "rcl_interfaces::srv::dds_::GetParameters_Response_",
+"depth": 2
+},
+{
+"start": 2372,
+"end": 2392,
+"label": "KEY_HASH",
+"value": "010feb7d.f619b749.00000000|00000803",
+"depth": 2
+},
+{
+"start": 2392,
+"end": 2400,
+"label": "TYPE_MAX_SIZE_SERIALIZED",
+"value": "",
+"depth": 2
+},
+{
+"start": 2400,
+"end": 2408,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 2408,
+"end": 2416,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 2416,
+"end": 2424,
+"label": "DURABILITY",
+"value": "volatile",
+"depth": 2
+},
+{
+"start": 2424,
+"end": 2456,
+"label": "DURABILITY_SERVICE",
+"value": "",
+"depth": 2
+},
+{
+"start": 2456,
+"end": 2468,
+"label": "DEADLINE",
+"value": "",
+"depth": 2
+},
+{
+"start": 2468,
+"end": 2480,
+"label": "LATENCY_BUDGET",
+"value": "",
+"depth": 2
+},
+{
+"start": 2480,
+"end": 2496,
+"label": "LIVELINESS",
+"value": "",
+"depth": 2
+},
+{
+"start": 2496,
+"end": 2512,
+"label": "RELIABILITY",
+"value": "reliable",
+"depth": 2
+},
+{
+"start": 2512,
+"end": 2524,
+"label": "LIFESPAN",
+"value": "",
+"depth": 2
+},
+{
+"start": 2524,
+"end": 2616,
+"label": "USER_DATA",
+"value": "typehash=RIHS01_9fa773b46e39cc5d02db6224d8fd520bb9caeeffc2b27c96c1e59431baba9f2a;",
+"depth": 2
+},
+{
+"start": 2616,
+"end": 2628,
+"label": "TIME_BASED_FILTER",
+"value": "",
+"depth": 2
+},
+{
+"start": 2628,
+"end": 2636,
+"label": "OWNERSHIP",
+"value": "",
+"depth": 2
+},
+{
+"start": 2636,
+"end": 2644,
+"label": "DESTINATION_ORDER",
+"value": "",
+"depth": 2
+},
+{
+"start": 2644,
+"end": 2656,
+"label": "PRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 2656,
+"end": 2664,
+"label": "PARTITION",
+"value": "",
+"depth": 2
+},
+{
+"start": 2664,
+"end": 2672,
+"label": "TOPIC_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 2672,
+"end": 2680,
+"label": "GROUP_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 2680,
+"end": 2692,
+"label": "DATA_REPRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 2692,
+"end": 2696,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 2696,
+"end": 2700,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 2700,
+"end": 2708,
+"label": "timestamp",
+"value": "1791454016.454330",
+"depth": 1
+},
+{
+"start": 2708,
+"end": 2712,
+"label": "DATA header",
+"value": "flags 0x05, 544 bytes",
+"depth": 0
+},
+{
+"start": 2716,
+"end": 2720,
+"label": "reader",
+"value": "SEDP publications reader",
+"depth": 1
+},
+{
+"start": 2720,
+"end": 2724,
+"label": "writer",
+"value": "SEDP publications writer",
+"depth": 1
+},
+{
+"start": 2724,
+"end": 2732,
+"label": "sequence number",
+"value": "6",
+"depth": 1
+},
+{
+"start": 2732,
+"end": 2736,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 2736,
+"end": 2756,
+"label": "ENDPOINT_GUID",
+"value": "010feb7d.f619b749.00000000|00000a03",
+"depth": 2
+},
+{
+"start": 2756,
+"end": 2764,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 2764,
+"end": 2792,
+"label": "UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 2792,
+"end": 2812,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 2812,
+"end": 2868,
+"label": "TOPIC_NAME",
+"value": "rr/minimal_publisher/get_parameter_typesReply",
+"depth": 2
+},
+{
+"start": 2868,
+"end": 2932,
+"label": "TYPE_NAME",
+"value": "rcl_interfaces::srv::dds_::GetParameterTypes_Response_",
+"depth": 2
+},
+{
+"start": 2932,
+"end": 2952,
+"label": "KEY_HASH",
+"value": "010feb7d.f619b749.00000000|00000a03",
+"depth": 2
+},
+{
+"start": 2952,
+"end": 2960,
+"label": "TYPE_MAX_SIZE_SERIALIZED",
+"value": "",
+"depth": 2
+},
+{
+"start": 2960,
+"end": 2968,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 2968,
+"end": 2976,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 2976,
+"end": 2984,
+"label": "DURABILITY",
+"value": "volatile",
+"depth": 2
+},
+{
+"start": 2984,
+"end": 3016,
+"label": "DURABILITY_SERVICE",
+"value": "",
+"depth": 2
+},
+{
+"start": 3016,
+"end": 3028,
+"label": "DEADLINE",
+"value": "",
+"depth": 2
+},
+{
+"start": 3028,
+"end": 3040,
+"label": "LATENCY_BUDGET",
+"value": "",
+"depth": 2
+},
+{
+"start": 3040,
+"end": 3056,
+"label": "LIVELINESS",
+"value": "",
+"depth": 2
+},
+{
+"start": 3056,
+"end": 3072,
+"label": "RELIABILITY",
+"value": "reliable",
+"depth": 2
+},
+{
+"start": 3072,
+"end": 3084,
+"label": "LIFESPAN",
+"value": "",
+"depth": 2
+},
+{
+"start": 3084,
+"end": 3176,
+"label": "USER_DATA",
+"value": "typehash=RIHS01_ac1335dce67c478e669434f6ac2fbff34fcd529580f272d3006785ba8b54e47f;",
+"depth": 2
+},
+{
+"start": 3176,
+"end": 3188,
+"label": "TIME_BASED_FILTER",
+"value": "",
+"depth": 2
+},
+{
+"start": 3188,
+"end": 3196,
+"label": "OWNERSHIP",
+"value": "",
+"depth": 2
+},
+{
+"start": 3196,
+"end": 3204,
+"label": "DESTINATION_ORDER",
+"value": "",
+"depth": 2
+},
+{
+"start": 3204,
+"end": 3216,
+"label": "PRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 3216,
+"end": 3224,
+"label": "PARTITION",
+"value": "",
+"depth": 2
+},
+{
+"start": 3224,
+"end": 3232,
+"label": "TOPIC_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 3232,
+"end": 3240,
+"label": "GROUP_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 3240,
+"end": 3252,
+"label": "DATA_REPRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 3252,
+"end": 3256,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 3256,
+"end": 3260,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 3260,
+"end": 3268,
+"label": "timestamp",
+"value": "1791454016.455411",
+"depth": 1
+},
+{
+"start": 3268,
+"end": 3272,
+"label": "DATA header",
+"value": "flags 0x05, 536 bytes",
+"depth": 0
+},
+{
+"start": 3276,
+"end": 3280,
+"label": "reader",
+"value": "SEDP publications reader",
+"depth": 1
+},
+{
+"start": 3280,
+"end": 3284,
+"label": "writer",
+"value": "SEDP publications writer",
+"depth": 1
+},
+{
+"start": 3284,
+"end": 3292,
+"label": "sequence number",
+"value": "7",
+"depth": 1
+},
+{
+"start": 3292,
+"end": 3296,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 3296,
+"end": 3316,
+"label": "ENDPOINT_GUID",
+"value": "010feb7d.f619b749.00000000|00000c03",
+"depth": 2
+},
+{
+"start": 3316,
+"end": 3324,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 3324,
+"end": 3352,
+"label": "UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 3352,
+"end": 3372,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 3372,
+"end": 3424,
+"label": "TOPIC_NAME",
+"value": "rr/minimal_publisher/list_parametersReply",
+"depth": 2
+},
+{
+"start": 3424,
+"end": 3484,
+"label": "TYPE_NAME",
+"value": "rcl_interfaces::srv::dds_::ListParameters_Response_",
+"depth": 2
+},
+{
+"start": 3484,
+"end": 3504,
+"label": "KEY_HASH",
+"value": "010feb7d.f619b749.00000000|00000c03",
+"depth": 2
+},
+{
+"start": 3504,
+"end": 3512,
+"label": "TYPE_MAX_SIZE_SERIALIZED",
+"value": "",
+"depth": 2
+},
+{
+"start": 3512,
+"end": 3520,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 3520,
+"end": 3528,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 3528,
+"end": 3536,
+"label": "DURABILITY",
+"value": "volatile",
+"depth": 2
+},
+{
+"start": 3536,
+"end": 3568,
+"label": "DURABILITY_SERVICE",
+"value": "",
+"depth": 2
+},
+{
+"start": 3568,
+"end": 3580,
+"label": "DEADLINE",
+"value": "",
+"depth": 2
+},
+{
+"start": 3580,
+"end": 3592,
+"label": "LATENCY_BUDGET",
+"value": "",
+"depth": 2
+},
+{
+"start": 3592,
+"end": 3608,
+"label": "LIVELINESS",
+"value": "",
+"depth": 2
+},
+{
+"start": 3608,
+"end": 3624,
+"label": "RELIABILITY",
+"value": "reliable",
+"depth": 2
+},
+{
+"start": 3624,
+"end": 3636,
+"label": "LIFESPAN",
+"value": "",
+"depth": 2
+},
+{
+"start": 3636,
+"end": 3728,
+"label": "USER_DATA",
+"value": "typehash=RIHS01_31b937b82de3612426be79f231e386259f97e8dc843e3f2845288b4bfa296bdd;",
+"depth": 2
+},
+{
+"start": 3728,
+"end": 3740,
+"label": "TIME_BASED_FILTER",
+"value": "",
+"depth": 2
+},
+{
+"start": 3740,
+"end": 3748,
+"label": "OWNERSHIP",
+"value": "",
+"depth": 2
+},
+{
+"start": 3748,
+"end": 3756,
+"label": "DESTINATION_ORDER",
+"value": "",
+"depth": 2
+},
+{
+"start": 3756,
+"end": 3768,
+"label": "PRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 3768,
+"end": 3776,
+"label": "PARTITION",
+"value": "",
+"depth": 2
+},
+{
+"start": 3776,
+"end": 3784,
+"label": "TOPIC_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 3784,
+"end": 3792,
+"label": "GROUP_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 3792,
+"end": 3804,
+"label": "DATA_REPRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 3804,
+"end": 3808,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 3808,
+"end": 3812,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 3812,
+"end": 3820,
+"label": "timestamp",
+"value": "1791454016.456490",
+"depth": 1
+},
+{
+"start": 3820,
+"end": 3824,
+"label": "DATA header",
+"value": "flags 0x05, 536 bytes",
+"depth": 0
+},
+{
+"start": 3828,
+"end": 3832,
+"label": "reader",
+"value": "SEDP publications reader",
+"depth": 1
+},
+{
+"start": 3832,
+"end": 3836,
+"label": "writer",
+"value": "SEDP publications writer",
+"depth": 1
+},
+{
+"start": 3836,
+"end": 3844,
+"label": "sequence number",
+"value": "8",
+"depth": 1
+},
+{
+"start": 3844,
+"end": 3848,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 3848,
+"end": 3868,
+"label": "ENDPOINT_GUID",
+"value": "010feb7d.f619b749.00000000|00000e03",
+"depth": 2
+},
+{
+"start": 3868,
+"end": 3876,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 3876,
+"end": 3904,
+"label": "UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 3904,
+"end": 3924,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 3924,
+"end": 3976,
+"label": "TOPIC_NAME",
+"value": "rr/minimal_publisher/set_parametersReply",
+"depth": 2
+},
+{
+"start": 3976,
+"end": 4036,
+"label": "TYPE_NAME",
+"value": "rcl_interfaces::srv::dds_::SetParameters_Response_",
+"depth": 2
+},
+{
+"start": 4036,
+"end": 4056,
+"label": "KEY_HASH",
+"value": "010feb7d.f619b749.00000000|00000e03",
+"depth": 2
+},
+{
+"start": 4056,
+"end": 4064,
+"label": "TYPE_MAX_SIZE_SERIALIZED",
+"value": "",
+"depth": 2
+},
+{
+"start": 4064,
+"end": 4072,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 4072,
+"end": 4080,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 4080,
+"end": 4088,
+"label": "DURABILITY",
+"value": "volatile",
+"depth": 2
+},
+{
+"start": 4088,
+"end": 4120,
+"label": "DURABILITY_SERVICE",
+"value": "",
+"depth": 2
+},
+{
+"start": 4120,
+"end": 4132,
+"label": "DEADLINE",
+"value": "",
+"depth": 2
+},
+{
+"start": 4132,
+"end": 4144,
+"label": "LATENCY_BUDGET",
+"value": "",
+"depth": 2
+},
+{
+"start": 4144,
+"end": 4160,
+"label": "LIVELINESS",
+"value": "",
+"depth": 2
+},
+{
+"start": 4160,
+"end": 4176,
+"label": "RELIABILITY",
+"value": "reliable",
+"depth": 2
+},
+{
+"start": 4176,
+"end": 4188,
+"label": "LIFESPAN",
+"value": "",
+"depth": 2
+},
+{
+"start": 4188,
+"end": 4280,
+"label": "USER_DATA",
+"value": "typehash=RIHS01_7a0e8140a0b8d98308fa81a5403a766e610af29a239caf54b7553227906fc266;",
+"depth": 2
+},
+{
+"start": 4280,
+"end": 4292,
+"label": "TIME_BASED_FILTER",
+"value": "",
+"depth": 2
+},
+{
+"start": 4292,
+"end": 4300,
+"label": "OWNERSHIP",
+"value": "",
+"depth": 2
+},
+{
+"start": 4300,
+"end": 4308,
+"label": "DESTINATION_ORDER",
+"value": "",
+"depth": 2
+},
+{
+"start": 4308,
+"end": 4320,
+"label": "PRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 4320,
+"end": 4328,
+"label": "PARTITION",
+"value": "",
+"depth": 2
+},
+{
+"start": 4328,
+"end": 4336,
+"label": "TOPIC_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 4336,
+"end": 4344,
+"label": "GROUP_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 4344,
+"end": 4356,
+"label": "DATA_REPRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 4356,
+"end": 4360,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 4360,
+"end": 4364,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 4364,
+"end": 4372,
+"label": "timestamp",
+"value": "1791454016.457524",
+"depth": 1
+},
+{
+"start": 4372,
+"end": 4376,
+"label": "DATA header",
+"value": "flags 0x05, 556 bytes",
+"depth": 0
+},
+{
+"start": 4380,
+"end": 4384,
+"label": "reader",
+"value": "SEDP publications reader",
+"depth": 1
+},
+{
+"start": 4384,
+"end": 4388,
+"label": "writer",
+"value": "SEDP publications writer",
+"depth": 1
+},
+{
+"start": 4388,
+"end": 4396,
+"label": "sequence number",
+"value": "9",
+"depth": 1
+},
+{
+"start": 4396,
+"end": 4400,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 4400,
+"end": 4420,
+"label": "ENDPOINT_GUID",
+"value": "010feb7d.f619b749.00000000|00001003",
+"depth": 2
+},
+{
+"start": 4420,
+"end": 4428,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 4428,
+"end": 4456,
+"label": "UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 4456,
+"end": 4476,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 4476,
+"end": 4536,
+"label": "TOPIC_NAME",
+"value": "rr/minimal_publisher/set_parameters_atomicallyReply",
+"depth": 2
+},
+{
+"start": 4536,
+"end": 4608,
+"label": "TYPE_NAME",
+"value": "rcl_interfaces::srv::dds_::SetParametersAtomically_Response_",
+"depth": 2
+},
+{
+"start": 4608,
+"end": 4628,
+"label": "KEY_HASH",
+"value": "010feb7d.f619b749.00000000|00001003",
+"depth": 2
+},
+{
+"start": 4628,
+"end": 4636,
+"label": "TYPE_MAX_SIZE_SERIALIZED",
+"value": "",
+"depth": 2
+},
+{
+"start": 4636,
+"end": 4644,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 4644,
+"end": 4652,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 4652,
+"end": 4660,
+"label": "DURABILITY",
+"value": "volatile",
+"depth": 2
+},
+{
+"start": 4660,
+"end": 4692,
+"label": "DURABILITY_SERVICE",
+"value": "",
+"depth": 2
+},
+{
+"start": 4692,
+"end": 4704,
+"label": "DEADLINE",
+"value": "",
+"depth": 2
+},
+{
+"start": 4704,
+"end": 4716,
+"label": "LATENCY_BUDGET",
+"value": "",
+"depth": 2
+},
+{
+"start": 4716,
+"end": 4732,
+"label": "LIVELINESS",
+"value": "",
+"depth": 2
+},
+{
+"start": 4732,
+"end": 4748,
+"label": "RELIABILITY",
+"value": "reliable",
+"depth": 2
+},
+{
+"start": 4748,
+"end": 4760,
+"label": "LIFESPAN",
+"value": "",
+"depth": 2
+},
+{
+"start": 4760,
+"end": 4852,
+"label": "USER_DATA",
+"value": "typehash=RIHS01_31b1a38c5b0b9d893ee24da45f69638f4561c78461d82d52750f429b534502b8;",
+"depth": 2
+},
+{
+"start": 4852,
+"end": 4864,
+"label": "TIME_BASED_FILTER",
+"value": "",
+"depth": 2
+},
+{
+"start": 4864,
+"end": 4872,
+"label": "OWNERSHIP",
+"value": "",
+"depth": 2
+},
+{
+"start": 4872,
+"end": 4880,
+"label": "DESTINATION_ORDER",
+"value": "",
+"depth": 2
+},
+{
+"start": 4880,
+"end": 4892,
+"label": "PRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 4892,
+"end": 4900,
+"label": "PARTITION",
+"value": "",
+"depth": 2
+},
+{
+"start": 4900,
+"end": 4908,
+"label": "TOPIC_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 4908,
+"end": 4916,
+"label": "GROUP_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 4916,
+"end": 4928,
+"label": "DATA_REPRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 4928,
+"end": 4932,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 4932,
+"end": 4936,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 4936,
+"end": 4944,
+"label": "timestamp",
+"value": "1791454016.461218",
+"depth": 1
+},
+{
+"start": 4944,
+"end": 4948,
+"label": "DATA header",
+"value": "flags 0x05, 560 bytes",
+"depth": 0
+},
+{
+"start": 4952,
+"end": 4956,
+"label": "reader",
+"value": "SEDP publications reader",
+"depth": 1
+},
+{
+"start": 4956,
+"end": 4960,
+"label": "writer",
+"value": "SEDP publications writer",
+"depth": 1
+},
+{
+"start": 4960,
+"end": 4968,
+"label": "sequence number",
+"value": "10",
+"depth": 1
+},
+{
+"start": 4968,
+"end": 4972,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 4972,
+"end": 4992,
+"label": "ENDPOINT_GUID",
+"value": "010feb7d.f619b749.00000000|00001203",
+"depth": 2
+},
+{
+"start": 4992,
+"end": 5000,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 5000,
+"end": 5028,
+"label": "UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 5028,
+"end": 5048,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 5048,
+"end": 5104,
+"label": "TOPIC_NAME",
+"value": "rr/minimal_publisher/get_type_descriptionReply",
+"depth": 2
+},
+{
+"start": 5104,
+"end": 5184,
+"label": "TYPE_NAME",
+"value": "type_description_interfaces::srv::dds_::GetTypeDescription_Response_",
+"depth": 2
+},
+{
+"start": 5184,
+"end": 5204,
+"label": "KEY_HASH",
+"value": "010feb7d.f619b749.00000000|00001203",
+"depth": 2
+},
+{
+"start": 5204,
+"end": 5212,
+"label": "TYPE_MAX_SIZE_SERIALIZED",
+"value": "",
+"depth": 2
+},
+{
+"start": 5212,
+"end": 5220,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 5220,
+"end": 5228,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 5228,
+"end": 5236,
+"label": "DURABILITY",
+"value": "volatile",
+"depth": 2
+},
+{
+"start": 5236,
+"end": 5268,
+"label": "DURABILITY_SERVICE",
+"value": "",
+"depth": 2
+},
+{
+"start": 5268,
+"end": 5280,
+"label": "DEADLINE",
+"value": "",
+"depth": 2
+},
+{
+"start": 5280,
+"end": 5292,
+"label": "LATENCY_BUDGET",
+"value": "",
+"depth": 2
+},
+{
+"start": 5292,
+"end": 5308,
+"label": "LIVELINESS",
+"value": "",
+"depth": 2
+},
+{
+"start": 5308,
+"end": 5324,
+"label": "RELIABILITY",
+"value": "reliable",
+"depth": 2
+},
+{
+"start": 5324,
+"end": 5336,
+"label": "LIFESPAN",
+"value": "",
+"depth": 2
+},
+{
+"start": 5336,
+"end": 5428,
+"label": "USER_DATA",
+"value": "typehash=RIHS01_648c49d976240861a482f961c5621ddd0d2135d8cce6f297a76d4f6376d93b75;",
+"depth": 2
+},
+{
+"start": 5428,
+"end": 5440,
+"label": "TIME_BASED_FILTER",
+"value": "",
+"depth": 2
+},
+{
+"start": 5440,
+"end": 5448,
+"label": "OWNERSHIP",
+"value": "",
+"depth": 2
+},
+{
+"start": 5448,
+"end": 5456,
+"label": "DESTINATION_ORDER",
+"value": "",
+"depth": 2
+},
+{
+"start": 5456,
+"end": 5468,
+"label": "PRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 5468,
+"end": 5476,
+"label": "PARTITION",
+"value": "",
+"depth": 2
+},
+{
+"start": 5476,
+"end": 5484,
+"label": "TOPIC_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 5484,
+"end": 5492,
+"label": "GROUP_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 5492,
+"end": 5504,
+"label": "DATA_REPRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 5504,
+"end": 5508,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 5508,
+"end": 5512,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 5512,
+"end": 5520,
+"label": "timestamp",
+"value": "1791454016.487911",
+"depth": 1
+},
+{
+"start": 5520,
+"end": 5524,
+"label": "DATA header",
+"value": "flags 0x05, 484 bytes",
+"depth": 0
+},
+{
+"start": 5528,
+"end": 5532,
+"label": "reader",
+"value": "SEDP publications reader",
+"depth": 1
+},
+{
+"start": 5532,
+"end": 5536,
+"label": "writer",
+"value": "SEDP publications writer",
+"depth": 1
+},
+{
+"start": 5536,
+"end": 5544,
+"label": "sequence number",
+"value": "11",
+"depth": 1
+},
+{
+"start": 5544,
+"end": 5548,
+"label": "encapsulation",
+"value": "0003",
+"depth": 1
+},
+{
+"start": 5548,
+"end": 5568,
+"label": "ENDPOINT_GUID",
+"value": "010feb7d.f619b749.00000000|00001303",
+"depth": 2
+},
+{
+"start": 5568,
+"end": 5576,
+"label": "FASTDDS_NETWORK_CONFIGURATION_SET",
+"value": "",
+"depth": 2
+},
+{
+"start": 5576,
+"end": 5604,
+"label": "UNICAST_LOCATOR",
+"value": "udpv4:172.17.0.2:7411",
+"depth": 2
+},
+{
+"start": 5604,
+"end": 5624,
+"label": "PARTICIPANT_GUID",
+"value": "010feb7d.f619b749.00000000|000001c1",
+"depth": 2
+},
+{
+"start": 5624,
+"end": 5644,
+"label": "TOPIC_NAME",
+"value": "rt/topic",
+"depth": 2
+},
+{
+"start": 5644,
+"end": 5684,
+"label": "TYPE_NAME",
+"value": "std_msgs::msg::dds_::String_",
+"depth": 2
+},
+{
+"start": 5684,
+"end": 5704,
+"label": "KEY_HASH",
+"value": "010feb7d.f619b749.00000000|00001303",
+"depth": 2
+},
+{
+"start": 5704,
+"end": 5712,
+"label": "TYPE_MAX_SIZE_SERIALIZED",
+"value": "",
+"depth": 2
+},
+{
+"start": 5712,
+"end": 5720,
+"label": "PROTOCOL_VERSION",
+"value": "2.3",
+"depth": 2
+},
+{
+"start": 5720,
+"end": 5728,
+"label": "VENDORID",
+"value": "eProsima Fast DDS",
+"depth": 2
+},
+{
+"start": 5728,
+"end": 5736,
+"label": "DURABILITY",
+"value": "volatile",
+"depth": 2
+},
+{
+"start": 5736,
+"end": 5768,
+"label": "DURABILITY_SERVICE",
+"value": "",
+"depth": 2
+},
+{
+"start": 5768,
+"end": 5780,
+"label": "DEADLINE",
+"value": "",
+"depth": 2
+},
+{
+"start": 5780,
+"end": 5792,
+"label": "LATENCY_BUDGET",
+"value": "",
+"depth": 2
+},
+{
+"start": 5792,
+"end": 5808,
+"label": "LIVELINESS",
+"value": "",
+"depth": 2
+},
+{
+"start": 5808,
+"end": 5824,
+"label": "RELIABILITY",
+"value": "reliable",
+"depth": 2
+},
+{
+"start": 5824,
+"end": 5836,
+"label": "LIFESPAN",
+"value": "",
+"depth": 2
+},
+{
+"start": 5836,
+"end": 5928,
+"label": "USER_DATA",
+"value": "typehash=RIHS01_df668c740482bbd48fb39d76a70dfd4bd59db1288021743503259e948f6b1a18;",
+"depth": 2
+},
+{
+"start": 5928,
+"end": 5940,
+"label": "TIME_BASED_FILTER",
+"value": "",
+"depth": 2
+},
+{
+"start": 5940,
+"end": 5948,
+"label": "OWNERSHIP",
+"value": "",
+"depth": 2
+},
+{
+"start": 5948,
+"end": 5956,
+"label": "DESTINATION_ORDER",
+"value": "",
+"depth": 2
+},
+{
+"start": 5956,
+"end": 5968,
+"label": "PRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 5968,
+"end": 5976,
+"label": "PARTITION",
+"value": "",
+"depth": 2
+},
+{
+"start": 5976,
+"end": 5984,
+"label": "TOPIC_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 5984,
+"end": 5992,
+"label": "GROUP_DATA",
+"value": "",
+"depth": 2
+},
+{
+"start": 5992,
+"end": 6004,
+"label": "DATA_REPRESENTATION",
+"value": "",
+"depth": 2
+},
+{
+"start": 6004,
+"end": 6008,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 6008,
+"end": 6012,
+"label": "0x80 header",
+"value": "flags 0x01, 56 bytes",
+"depth": 0
+},
+{
+"start": 6012,
+"end": 6068,
+"label": "vendor specific submessage",
+"value": "skipped, as the spec requires",
+"depth": 1
+}
+]
+},
+{
+"id": "hello",
+"title": "Hello World on the wire",
+"text": "A DATA submessage carrying one sample. INFO_DST says which participant it is for, INFO_TS when it was written. The payload is CDR: 00 01 00 00 (little endian, plain CDR), a uint32 length that counts the terminating NUL, then the characters.",
+"from": "127.0.0.1:33317",
+"to": "127.0.0.1:7413",
+"port": "domain 0 participant 1 user unicast",
+"summary": [
+"DATA std_msgs/msg/String #6: {'data': 'Hello World: 5'}"
+],
+"hex": "525450530203010f010feb7df619b749000000000e010c00010feb7d061ae10a0000000009010800436bc76a384b0b8015052c000000100000001304000013030000000006000000000100000f00000048656c6c6f20576f726c643a203500008001380001000000f51c00000000000000000000000000007f000001436bc76a4c8513800c00000000000000f8050000000000000000000000000000",
+"spans": [
+{
+"start": 0,
+"end": 4,
+"label": "magic",
+"value": "RTPS",
+"depth": 0
+},
+{
+"start": 4,
+"end": 6,
+"label": "protocol version",
+"value": "2.3",
+"depth": 0
+},
+{
+"start": 6,
+"end": 8,
+"label": "vendor",
+"value": "eProsima Fast DDS",
+"depth": 0
+},
+{
+"start": 8,
+"end": 20,
+"label": "GUID prefix",
+"value": "010feb7df619b74900000000",
+"depth": 0
+},
+{
+"start": 20,
+"end": 24,
+"label": "INFO_DST header",
+"value": "flags 0x01, 12 bytes",
+"depth": 0
+},
+{
+"start": 24,
+"end": 36,
+"label": "destination GUID prefix",
+"value": "010feb7d061ae10a00000000",
+"depth": 1
+},
+{
+"start": 36,
+"end": 40,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 40,
+"end": 48,
+"label": "timestamp",
+"value": "1791454019.500172",
+"depth": 1
+},
+{
+"start": 48,
+"end": 52,
+"label": "DATA header",
+"value": "flags 0x05, 44 bytes",
+"depth": 0
+},
+{
+"start": 56,
+"end": 60,
+"label": "reader",
+"value": "user reader 0x13",
+"depth": 1
+},
+{
+"start": 60,
+"end": 64,
+"label": "writer",
+"value": "user writer 0x13",
+"depth": 1
+},
+{
+"start": 64,
+"end": 72,
+"label": "sequence number",
+"value": "6",
+"depth": 1
+},
+{
+"start": 72,
+"end": 76,
+"label": "encapsulation",
+"value": "0001",
+"depth": 1
+},
+{
+"start": 76,
+"end": 96,
+"label": "serialized payload (CDR)",
+"value": "{'data': 'Hello World: 5'}",
+"depth": 1
+},
+{
+"start": 96,
+"end": 100,
+"label": "0x80 header",
+"value": "flags 0x01, 56 bytes",
+"depth": 0
+},
+{
+"start": 100,
+"end": 156,
+"label": "vendor specific submessage",
+"value": "skipped, as the spec requires",
+"depth": 1
+}
+]
+},
+{
+"id": "heartbeat",
+"title": "The writer: 'I have samples first to last'",
+"text": "Reliable delivery is a conversation. The writer's HEARTBEAT lists the sequence numbers it still holds; a reader that is missing any asks for them.",
+"from": "127.0.0.1:33317",
+"to": "127.0.0.1:7413",
+"port": "domain 0 participant 1 user unicast",
+"summary": [
+"HEARTBEAT user writer 0x13 has [6, 5]"
+],
+"hex": "525450530203010f010feb7df619b749000000000e010c00010feb7d061ae10a0000000007011c00000013040000130300000000060000000000000005000000010000008001380001000000f51c00000000000000000000000000007f000001436bc76a6537dd670a00000000000000e0040000000000000000000000000000",
+"spans": [
+{
+"start": 0,
+"end": 4,
+"label": "magic",
+"value": "RTPS",
+"depth": 0
+},
+{
+"start": 4,
+"end": 6,
+"label": "protocol version",
+"value": "2.3",
+"depth": 0
+},
+{
+"start": 6,
+"end": 8,
+"label": "vendor",
+"value": "eProsima Fast DDS",
+"depth": 0
+},
+{
+"start": 8,
+"end": 20,
+"label": "GUID prefix",
+"value": "010feb7df619b74900000000",
+"depth": 0
+},
+{
+"start": 20,
+"end": 24,
+"label": "INFO_DST header",
+"value": "flags 0x01, 12 bytes",
+"depth": 0
+},
+{
+"start": 24,
+"end": 36,
+"label": "destination GUID prefix",
+"value": "010feb7d061ae10a00000000",
+"depth": 1
+},
+{
+"start": 36,
+"end": 40,
+"label": "HEARTBEAT header",
+"value": "flags 0x01, 28 bytes",
+"depth": 0
+},
+{
+"start": 40,
+"end": 48,
+"label": "reader, writer",
+"value": "user reader 0x13, user writer 0x13",
+"depth": 1
+},
+{
+"start": 48,
+"end": 64,
+"label": "first, last",
+"value": "6, 5",
+"depth": 1
+},
+{
+"start": 64,
+"end": 68,
+"label": "count",
+"value": "1",
+"depth": 1
+},
+{
+"start": 68,
+"end": 72,
+"label": "0x80 header",
+"value": "flags 0x01, 56 bytes",
+"depth": 0
+},
+{
+"start": 72,
+"end": 128,
+"label": "vendor specific submessage",
+"value": "skipped, as the spec requires",
+"depth": 1
+}
+]
+},
+{
+"id": "acknack",
+"title": "The reader: 'I have everything below base'",
+"text": "The ACKNACK answers with a sequence number set: everything below the base has arrived, and the bitmap lists what is missing. An empty set is a pure acknowledgement.",
+"from": "127.0.0.1:52700",
+"to": "127.0.0.1:7411",
+"port": "domain 0 participant 0 user unicast",
+"summary": [
+"ACKNACK user reader 0x13: have everything below 6"
+],
+"hex": "525450530203010f010feb7d061ae10a000000000e010c00010feb7df619b74900000000060318000000130400001303000000000600000000000000010000008001380001000000f31c00000000000000000000000000007f000001436bc76a7c2491690400000000000000f4010000000000000000000000000000",
+"spans": [
+{
+"start": 0,
+"end": 4,
+"label": "magic",
+"value": "RTPS",
+"depth": 0
+},
+{
+"start": 4,
+"end": 6,
+"label": "protocol version",
+"value": "2.3",
+"depth": 0
+},
+{
+"start": 6,
+"end": 8,
+"label": "vendor",
+"value": "eProsima Fast DDS",
+"depth": 0
+},
+{
+"start": 8,
+"end": 20,
+"label": "GUID prefix",
+"value": "010feb7d061ae10a00000000",
+"depth": 0
+},
+{
+"start": 20,
+"end": 24,
+"label": "INFO_DST header",
+"value": "flags 0x01, 12 bytes",
+"depth": 0
+},
+{
+"start": 24,
+"end": 36,
+"label": "destination GUID prefix",
+"value": "010feb7df619b74900000000",
+"depth": 1
+},
+{
+"start": 36,
+"end": 40,
+"label": "ACKNACK header",
+"value": "flags 0x03, 24 bytes",
+"depth": 0
+},
+{
+"start": 40,
+"end": 48,
+"label": "reader, writer",
+"value": "user reader 0x13, user writer 0x13",
+"depth": 1
+},
+{
+"start": 48,
+"end": 60,
+"label": "sequence number set",
+"value": "base 6, missing []",
+"depth": 1
+},
+{
+"start": 60,
+"end": 64,
+"label": "count",
+"value": "1",
+"depth": 1
+},
+{
+"start": 64,
+"end": 68,
+"label": "0x80 header",
+"value": "flags 0x01, 56 bytes",
+"depth": 0
+},
+{
+"start": 68,
+"end": 124,
+"label": "vendor specific submessage",
+"value": "skipped, as the spec requires",
+"depth": 1
+}
+]
+},
+{
+"id": "request",
+"title": "A service request",
+"text": "Services are two topics: rq/add_two_intsRequest and rr/add_two_intsReply. The request carries a RELATED_SAMPLE_IDENTITY naming the client's reply reader, twice: in the standard parameter (0x0083) and in Fast DDS's own (0x800f).",
+"from": "127.0.0.1:42638",
+"to": "127.0.0.1:7411",
+"port": "domain 0 participant 0 user unicast",
+"summary": [
+"DATA example_interfaces/srv/AddTwoInts_Request #1: {'a': 2, 'b': 3}"
+],
+"hex": "525450530203010f010feb7d271a82d5000000000e010c00010feb7d171a8b9e00000000090108004b6bc76ad8041f9c15076400000010000000130400001403000000000100000083001800010feb7d271a82d50000000000001304ffffffff000000000f801800010feb7d271a82d50000000000001304ffffffff000000000100000000010000020000000000000003000000000000008001380001000000f31c00000000000000000000000000007f0000014b6bc76a896f219c0500000000000000cc020000000000000000000000000000",
+"spans": [
+{
+"start": 0,
+"end": 4,
+"label": "magic",
+"value": "RTPS",
+"depth": 0
+},
+{
+"start": 4,
+"end": 6,
+"label": "protocol version",
+"value": "2.3",
+"depth": 0
+},
+{
+"start": 6,
+"end": 8,
+"label": "vendor",
+"value": "eProsima Fast DDS",
+"depth": 0
+},
+{
+"start": 8,
+"end": 20,
+"label": "GUID prefix",
+"value": "010feb7d271a82d500000000",
+"depth": 0
+},
+{
+"start": 20,
+"end": 24,
+"label": "INFO_DST header",
+"value": "flags 0x01, 12 bytes",
+"depth": 0
+},
+{
+"start": 24,
+"end": 36,
+"label": "destination GUID prefix",
+"value": "010feb7d171a8b9e00000000",
+"depth": 1
+},
+{
+"start": 36,
+"end": 40,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 40,
+"end": 48,
+"label": "timestamp",
+"value": "1791454027.609848",
+"depth": 1
+},
+{
+"start": 48,
+"end": 52,
+"label": "DATA header",
+"value": "flags 0x07, 100 bytes",
+"depth": 0
+},
+{
+"start": 56,
+"end": 60,
+"label": "reader",
+"value": "user reader 0x13",
+"depth": 1
+},
+{
+"start": 60,
+"end": 64,
+"label": "writer",
+"value": "user writer 0x14",
+"depth": 1
+},
+{
+"start": 64,
+"end": 72,
+"label": "sequence number",
+"value": "1",
+"depth": 1
+},
+{
+"start": 72,
+"end": 100,
+"label": "RELATED_SAMPLE_IDENTITY",
+"value": "010feb7d.271a82d5.00000000|00001304 seq unknown",
+"depth": 2
+},
+{
+"start": 100,
+"end": 128,
+"label": "FASTDDS_RELATED_SAMPLE_IDENTITY",
+"value": "010feb7d.271a82d5.00000000|00001304 seq unknown",
+"depth": 2
+},
+{
+"start": 128,
+"end": 132,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 132,
+"end": 136,
+"label": "encapsulation",
+"value": "0001",
+"depth": 1
+},
+{
+"start": 136,
+"end": 152,
+"label": "serialized payload (CDR)",
+"value": "{'a': 2, 'b': 3}",
+"depth": 1
+},
+{
+"start": 152,
+"end": 156,
+"label": "0x80 header",
+"value": "flags 0x01, 56 bytes",
+"depth": 0
+},
+{
+"start": 156,
+"end": 212,
+"label": "vendor specific submessage",
+"value": "skipped, as the spec requires",
+"depth": 1
+}
+]
+},
+{
+"id": "reply",
+"title": "Its reply",
+"text": "The reply quotes the same identity with the request's sequence number filled in, which is how the client matches it to the request it sent.",
+"from": "127.0.0.1:54557",
+"to": "127.0.0.1:7413",
+"port": "domain 0 participant 1 user unicast",
+"summary": [
+"DATA example_interfaces/srv/AddTwoInts_Response #1: {'sum': 5}"
+],
+"hex": "525450530203010f010feb7d171a8b9e000000000e010c00010feb7d271a82d500000000090108004b6bc76a127b79c315075c00000010000000130400001403000000000100000083001800010feb7d271a82d5000000000000130400000000010000000f801800010feb7d271a82d500000000000013040000000001000000010000000001000005000000000000008001380001000000f51c00000000000000000000000000007f0000014b6bc76a401b80c30d00000000000000a4060000000000000000000000000000",
+"spans": [
+{
+"start": 0,
+"end": 4,
+"label": "magic",
+"value": "RTPS",
+"depth": 0
+},
+{
+"start": 4,
+"end": 6,
+"label": "protocol version",
+"value": "2.3",
+"depth": 0
+},
+{
+"start": 6,
+"end": 8,
+"label": "vendor",
+"value": "eProsima Fast DDS",
+"depth": 0
+},
+{
+"start": 8,
+"end": 20,
+"label": "GUID prefix",
+"value": "010feb7d171a8b9e00000000",
+"depth": 0
+},
+{
+"start": 20,
+"end": 24,
+"label": "INFO_DST header",
+"value": "flags 0x01, 12 bytes",
+"depth": 0
+},
+{
+"start": 24,
+"end": 36,
+"label": "destination GUID prefix",
+"value": "010feb7d271a82d500000000",
+"depth": 1
+},
+{
+"start": 36,
+"end": 40,
+"label": "INFO_TS header",
+"value": "flags 0x01, 8 bytes",
+"depth": 0
+},
+{
+"start": 40,
+"end": 48,
+"label": "timestamp",
+"value": "1791454027.763572",
+"depth": 1
+},
+{
+"start": 48,
+"end": 52,
+"label": "DATA header",
+"value": "flags 0x07, 92 bytes",
+"depth": 0
+},
+{
+"start": 56,
+"end": 60,
+"label": "reader",
+"value": "user reader 0x13",
+"depth": 1
+},
+{
+"start": 60,
+"end": 64,
+"label": "writer",
+"value": "user writer 0x14",
+"depth": 1
+},
+{
+"start": 64,
+"end": 72,
+"label": "sequence number",
+"value": "1",
+"depth": 1
+},
+{
+"start": 72,
+"end": 100,
+"label": "RELATED_SAMPLE_IDENTITY",
+"value": "010feb7d.271a82d5.00000000|00001304 seq 1",
+"depth": 2
+},
+{
+"start": 100,
+"end": 128,
+"label": "FASTDDS_RELATED_SAMPLE_IDENTITY",
+"value": "010feb7d.271a82d5.00000000|00001304 seq 1",
+"depth": 2
+},
+{
+"start": 128,
+"end": 132,
+"label": "SENTINEL",
+"value": "",
+"depth": 2
+},
+{
+"start": 132,
+"end": 136,
+"label": "encapsulation",
+"value": "0001",
+"depth": 1
+},
+{
+"start": 136,
+"end": 144,
+"label": "serialized payload (CDR)",
+"value": "{'sum': 5}",
+"depth": 1
+},
+{
+"start": 144,
+"end": 148,
+"label": "0x80 header",
+"value": "flags 0x01, 56 bytes",
+"depth": 0
+},
+{
+"start": 148,
+"end": 204,
+"label": "vendor specific submessage",
+"value": "skipped, as the spec requires",
+"depth": 1
+}
+]
+}
+]

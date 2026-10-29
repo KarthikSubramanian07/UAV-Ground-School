@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UAV Ground School Week 6: a ROS 2 takeoff action flying PX4 SITL in Gazebo over uXRCE-DDS</title>
+  <meta name="description" content="{{W6_DESCRIPTION}}">
+  <meta name="author" content="Karthik Subramanian">
+  <meta name="theme-color" content="#15191c">
+  <link rel="canonical" href="{{CANONICAL}}week6">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="UAV Ground School">
+  <meta property="og:title" content="Week 6: take off, for real">
+  <meta property="og:description" content="{{W6_DESCRIPTION}}">
+  <meta property="og:url" content="{{CANONICAL}}week6">
+  <meta property="og:image" content="{{CANONICAL}}og-week6.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The altitude of a simulated x500 quadcopter climbing to 5 m under a ROS 2 takeoff action, against the server's setpoint profile">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Week 6: take off, for real">
+  <meta name="twitter:description" content="{{W6_DESCRIPTION}}">
+  <meta name="twitter:image" content="{{CANONICAL}}og-week6.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500&amp;family=Schibsted+Grotesk:wght@400;500;600&amp;family=Young+Serif&amp;display=swap">
+  <link rel="stylesheet" href="css/site.css">
+
+  <script>
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("motion");
+  </script>
+  <script type="application/ld+json">{{W6_JSON_LD}}</script>
+</head>
+<body class="w4 w5 w6">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="wordmark" href="./" aria-label="UAV Ground School, home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#232a2e"/><path d="M14 20h36v12H14v12h36" fill="none" stroke="#f08a3c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="44" r="5.5" fill="#f08a3c"/></svg>
+        UAV Ground School
+      </a>
+      <nav class="site-nav" aria-label="Sections">
+        <ul>
+          <li><a href="#flight">Flight</a></li>
+          <li><a href="#lab">Lab</a></li>
+          <li><a href="#xrce">XRCE</a></li>
+          <li><a href="#stack">Stack</a></li>
+          <li><a href="#problems">Problems</a></li>
+          <li><a href="#run">Run it</a></li>
+          <li class="keep"><a href="week5">Week 5</a></li>
+          <li class="keep"><a class="gh" href="{{REPO}}">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero night" aria-labelledby="hero-title">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div>
+            <p class="kicker">Week 6 (optional): PX4 SITL, Gazebo and uXRCE-DDS</p>
+            <h1 id="hero-title">Take off, <em>for real.</em></h1>
+            <p class="lede">A ROS 2 action server that takes a PX4 quadcopter off to 5 m, and an action client that asks it to. The drone is PX4 {{STAT:w6_px4}} itself, flying the x500 in Gazebo Harmonic, reached through the Micro XRCE-DDS Agent exactly as the PX4 guides set it up, on an 8 GB M1 in Docker. Then the link between them, DDS-XRCE, rebuilt in pure Python, flies the same takeoff with no ROS 2 at all.</p>
+            <div class="actions">
+              <a class="button" href="{{REPO}}/tree/main/week06">
+                <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                Week 6 source
+              </a>
+              <a class="text-link" href="#flight">Watch the takeoff</a>
+            </div>
+          </div>
+          <dl class="spec">
+            <dt>simulator</dt><dd>PX4 {{STAT:w6_px4}} SITL, gz_x500 in Gazebo Harmonic, headless</dd>
+            <dt>bridge</dt><dd>Micro XRCE-DDS Agent {{STAT:w6_agent}} on UDP 8888, px4_msgs {{STAT:w6_px4}}</dd>
+            <dt>action</dt><dd><code>/takeoff</code> and <code>/land</code>: goal, 10 Hz feedback, result, cancel, in offboard or takeoff mode</dd>
+            <dt>from scratch</dt><dd>DDS-XRCE: a dissector and a client in pure Python</dd>
+          </dl>
+        </div>
+        <ul class="tiles" aria-label="The 5 m offboard takeoff in PX4 SITL">
+          <li><b>{{STAT:w6_hold}} m</b><span>held after the 5 m goal by PX4's estimate; Gazebo's true pose says {{STAT:w6_true_hold}} m</span></li>
+          <li><b>{{STAT:w6_rise}} s</b><span>rise time, 10 to 90 percent, on a 1 m/s profile</span></li>
+          <li><b>{{STAT:w6_overshoot}} m</b><span>overshoot; settled within 0.25 m {{STAT:w6_settle}} s after lift off</span></li>
+          <li><b>{{STAT:w6_truth}} m</b><span>RMS between PX4's altitude estimate and Gazebo's true pose, over the whole flight</span></li>
+          <li><b>{{STAT:w6_topics}} topics</b><span>PX4 created on the agent, dissected byte by byte</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section night" id="flight" aria-labelledby="flight-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="flight-title">The takeoff, <em>replayed.</em></h2>
+          <p class="lede">Recorded off ROS 2 by <code>flight_recorder</code> while <code>ros2 launch ugs_px4 sitl.launch.py</code> flew PX4 in Gazebo: PX4's estimate, the server's setpoints, the action's feedback and every log line. Pick a flight. The orange line is where the server asked PX4 to be, the white one is where PX4 says it was, and the blue one, when Gazebo's pose was recorded, is where it really was.</p>
+        </div>
+        <div class="w6-flight" id="flight-app">
+          <div class="chips" role="group" aria-label="Flight" id="flight-pick"></div>
+          <div class="w6-views">
+            <figure class="w6-chart">
+              <svg id="flight-chart" viewBox="0 0 720 340" role="img" aria-label="Altitude against time for the selected flight, with the setpoint profile and the action's phases"></svg>
+              <figcaption class="w6-legend small">
+                <span class="lg sp">setpoint</span><span class="lg est">PX4 estimate</span><span class="lg tr" id="flight-legend">Gazebo truth</span>
+                <span class="muted">Bar: the action's phase.</span>
+              </figcaption>
+            </figure>
+            <figure class="w6-side">
+              <svg id="flight-side" viewBox="0 0 220 340" role="img" aria-label="Side view of the drone at the replay time"></svg>
+            </figure>
+          </div>
+          <div class="mission-controls" role="group" aria-label="Replay">
+            <button class="chip plain" type="button" id="flight-play" aria-pressed="false">Play</button>
+            <input type="range" id="flight-scrub" min="0" max="1000" step="1" value="0" aria-label="Flight time">
+            <output id="flight-clock" class="mono">0.0 s</output>
+            <div class="speed" role="group" aria-label="Speed">
+              <button class="chip plain" type="button" data-speed="1" aria-pressed="false">1x</button>
+              <button class="chip plain" type="button" data-speed="4" aria-pressed="true">4x</button>
+              <button class="chip plain" type="button" data-speed="10" aria-pressed="false">10x</button>
+            </div>
+          </div>
+          <div class="mission-panels w6-panels">
+            <dl class="readout" id="flight-readout">
+              <div><dt>phase</dt><dd id="fr-phase">waiting</dd></div>
+              <div><dt>PX4 mode</dt><dd id="fr-nav"></dd></div>
+              <div><dt>altitude</dt><dd id="fr-alt">0.00 m</dd></div>
+              <div><dt>setpoint</dt><dd id="fr-sp"></dd></div>
+              <div><dt>climb rate</dt><dd id="fr-rate">0.0 m/s</dd></div>
+              <div><dt>armed</dt><dd id="fr-armed">no</dd></div>
+            </dl>
+            <dl class="readout w6-metrics" id="flight-metrics"></dl>
+            <ol class="event-log" id="flight-log" aria-live="polite"></ol>
+          </div>
+        </div>
+        <div class="table-scroll block">
+          <table class="benchmark-table lab-table">
+            <caption>Every flight, measured from its recording. Rise time is 10 to 90 percent of the goal; settled means inside 0.25 m from then on.</caption>
+            <thead><tr><th scope="col">Flight</th><th scope="col">Result</th><th scope="col" class="num">Peak</th><th scope="col" class="num">Rise</th><th scope="col" class="num">Max climb</th><th scope="col" class="num">Overshoot</th><th scope="col" class="num">Settled</th><th scope="col" class="num">Hover RMS</th><th scope="col" class="num">Drift</th><th scope="col">Landed</th></tr></thead>
+            <tbody>{{W6_FLIGHT_ROWS}}</tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="lab" aria-labelledby="lab-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="lab-title">Takeoff <em>lab.</em></h2>
+          <p class="lede">The action server's logic and the fake PX4 its launch tests fly against, running in your browser: a JavaScript port of <code>takeoff.py</code> and <code>model.py</code> that produces the same trace as the Python, bit for bit, on all {{STAT:w6_lab_scenarios}} scenarios the tests check. Break PX4 and watch what the server does.</p>
+        </div>
+        <div class="w6-lab" id="lab-app">
+          <form class="w6-lab-controls" id="lab-form" aria-label="Scenario">
+            <label>Altitude <output id="lab-alt-out" class="mono">5 m</output><input type="range" id="lab-alt" min="2" max="30" step="1" value="5"></label>
+            <label>Climb rate <output id="lab-rate-out" class="mono">1.0 m/s</output><input type="range" id="lab-rate" min="0.5" max="3" step="0.5" value="1"></label>
+            <fieldset class="chips" aria-label="Method">
+              <legend>Method</legend>
+              <button class="chip plain" type="button" data-method="offboard" aria-pressed="true">offboard</button>
+              <button class="chip plain" type="button" data-method="takeoff_mode" aria-pressed="false">takeoff mode</button>
+            </fieldset>
+            <fieldset class="chips" aria-label="What goes wrong">
+              <legend>What goes wrong</legend>
+              <button class="chip plain" type="button" data-fault="" aria-pressed="true">nothing</button>
+              <button class="chip plain" type="button" data-fault="cancel" aria-pressed="false">client cancels</button>
+              <button class="chip plain" type="button" data-fault="deny_arm" aria-pressed="false">arming refused</button>
+              <button class="chip plain" type="button" data-fault="no_offboard" aria-pressed="false">offboard refused</button>
+              <button class="chip plain" type="button" data-fault="takeover" aria-pressed="false">pilot takes over</button>
+              <button class="chip plain" type="button" data-fault="link_drop" aria-pressed="false">setpoints stop</button>
+              <button class="chip plain" type="button" data-fault="no_preflight" aria-pressed="false">preflight fails</button>
+            </fieldset>
+          </form>
+          <figure class="w6-chart">
+            <svg id="lab-chart" viewBox="0 0 720 300" role="img" aria-label="Simulated altitude against time for the chosen scenario"></svg>
+          </figure>
+          <div class="w6-lab-out">
+            <p class="w6-verdict" id="lab-verdict" aria-live="polite"></p>
+            <ol class="event-log" id="lab-log"></ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section night" id="xrce" aria-labelledby="xrce-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="xrce-title">DDS-XRCE, <em>by hand.</em></h2>
+          <p class="lede">PX4 does not speak DDS. It asks the agent, in DDS-XRCE, to create a participant, then {{STAT:w6_topics}} topics with their writers and readers, in eProsima's binary representations. <code>week06/xrce.py</code> decodes and encodes all of it from the specification; <code>week06/dissect.py</code> rebuilt this session from a capture of the 5 m flight, and <code>week06/xrce_client.py</code> uses the same code to log in to the agent itself.</p>
+        </div>
+        <div class="inspector" id="xrce-app">
+          <ol class="packet-list" id="packet-list"></ol>
+          <div class="packet">
+            <div class="packet-head" id="packet-head"></div>
+            <div class="hexgrid mono" id="hexgrid" role="region" aria-label="Packet bytes" tabindex="0"></div>
+            <div class="field-readout" id="field-readout" aria-live="polite"></div>
+            <ol class="field-tree" id="field-tree" aria-label="Fields"></ol>
+          </div>
+        </div>
+        <div class="block">
+          <div class="block-head">
+            <h3>What PX4 created, and what carried data.</h3>
+            <p>From the whole flight's capture: {{STAT:w6_kbps_out}} kbit/s from PX4 and {{STAT:w6_kbps_in}} kbit/s to it, over {{STAT:w6_created}} objects. Rates are per second of wall clock; the M1 ran Gazebo below real time for part of this flight, so in PX4's own time they are higher (sensor_combined runs at 100 Hz).</p>
+          </div>
+          <div class="table-scroll">
+            <table class="benchmark-table lab-table">
+              <thead><tr><th scope="col">Topic</th><th scope="col">Type</th><th scope="col">PX4</th><th scope="col">QoS</th><th scope="col" class="num">Samples</th><th scope="col" class="num">Rate</th><th scope="col" class="num">Bytes</th></tr></thead>
+              <tbody>{{W6_TOPIC_ROWS}}</tbody>
+            </table>
+          </div>
+        </div>
+        <dl class="metrics">
+          <div><dt>{{STAT:w6_xrce_hold}} m</dt><dd><code>python -m week06 xrce fly</code>: the takeoff server's state machine, fed by this repo's XRCE client instead of rclpy. PX4 held it after the 5 m goal, then landed, with no ROS 2 installed in the loop.</dd></div>
+          <div><dt>{{STAT:w6_xrce_msgs}} messages</dt><dd>The pure Python client's session for that flight: log in, {{STAT:w6_xrce_topics}} topics with their readers and writers, then setpoints at 20 Hz and telemetry back.</dd></div>
+          <div><dt>{{STAT:w6_px4_msgs}} types</dt><dd>px4_msgs definitions PX4 bridges by default, parsed by week 5's IDL code and encoded with its CDR, so samples decode to PX4's own field names.</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section" id="stack" aria-labelledby="stack-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="stack-title">Seven hops from <em>a goal to a motor.</em></h2>
+          <p class="lede">What happens between <code>takeoff_client</code> asking for 5 m and the x500's rotors spinning up. Every hop is something that has to be right before the drone leaves the ground.</p>
+        </div>
+        <ol class="w6-stack">
+          <li><b>takeoff_client</b><span>sends a <code>ugs_interfaces/action/Takeoff</code> goal: altitude, climb rate, method. It gets feedback at 10 Hz and the result, and can cancel.</span></li>
+          <li><b>takeoff_server</b><span>accepts or rejects the goal (altitude 1 to 120 m, one goal at a time), then runs the state machine at 20 Hz: wait for PX4, preflight, stream setpoints, switch to offboard, arm, climb a trapezoidal profile, settle.</span></li>
+          <li><b>ROS 2 topics</b><span><code>/fmu/in/offboard_control_mode</code>, <code>/fmu/in/trajectory_setpoint</code> and <code>/fmu/in/vehicle_command</code> out; <code>/fmu/out/vehicle_status_v1</code>, <code>vehicle_local_position_v1</code>, <code>vehicle_land_detected</code> and <code>vehicle_command_ack</code> in, subscribed best effort or they never match.</span></li>
+          <li><b>Micro XRCE-DDS Agent</b><span>owns the DDS participant, readers and writers PX4 asked for. To ROS 2 they look like any other node's; to PX4 they are objects in an XRCE session on UDP 8888.</span></li>
+          <li><b>uxrce_dds_client</b><span>PX4's module: turns XRCE samples into uORB messages and back. PX4 1.16 and later suffix versioned messages, hence <code>_v1</code>.</span></li>
+          <li><b>commander and the controllers</b><span>refuse offboard until setpoints stream, refuse to arm until the preflight checks pass, fall back to hold one second after the setpoints stop, and fly the position setpoints through the multicopter position and attitude controllers.</span></li>
+          <li><b>gz_bridge and Gazebo</b><span>send motor commands to the simulated x500 and sensor data (IMU, barometer, magnetometer, GPS) back to PX4's estimator, in lockstep.</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section night" id="problems" aria-labelledby="problems-title">
+      <div class="wrap">
+        <div class="section-head split">
+          <h2 id="problems-title">The problems <em>you will hit.</em></h2>
+          <p class="lede">The brief warns that this is not straightforward. The first nine are the ones this repo hit, in the order it hit them; the last four are PX4 rules it was built around, each broken on purpose by the tests. Every fix is in the code, and in <a class="text-link" href="{{REPO}}/blob/main/docs/week06/NOTES.md">docs/week06/NOTES.md</a>.</p>
+        </div>
+        <ol class="w6-problems">{{W6_PROBLEMS}}</ol>
+      </div>
+    </section>
+
+    <section class="section" id="run" aria-labelledby="run-title">
+      <div class="wrap cpp-grid">
+        <div class="prose">
+          <h2 id="run-title" style="font-size: var(--step-3)">Read it, run it.</h2>
+          <p>Everything runs in one image, <code>ugs-px4:jazzy</code>, built from <code>ros2_ws/px4/Dockerfile</code> on top of week 5's: PX4 {{STAT:w6_px4}} built for SITL, Gazebo Harmonic, px4_msgs and the agent. On Ubuntu 24.04 with ROS 2 Jazzy, the PX4 guides' own steps work just as well; <code>sitl.launch.py</code> only needs <code>PX4_DIR</code>.</p>
+          <ul class="repo-links">
+            <li><a class="text-link" href="{{REPO}}/tree/main/ros2_ws/src/ugs_px4">ros2_ws/src/ugs_px4</a>: the action server, client, fake PX4, recorder and launch files.</li>
+            <li><a class="text-link" href="{{REPO}}/blob/main/week06/README.md">week06/README.md</a>: the write up.</li>
+            <li><a class="text-link" href="{{REPO}}/blob/main/docs/week06/RESULTS.md">docs/week06/RESULTS.md</a>: every number on this page.</li>
+          </ul>
+        </div>
+        <div>
+          <figure class="terminal">
+            <header><span>Docker</span><span>python -m week06</span></header>
+            <pre><code><span class="p">$ </span>python -m week06 docker build
+<span class="p">$ </span>python -m week06 fly                 <span class="c"># 5 m, hover, land</span>
+<span class="p">$ </span>python -m week06 fly --method takeoff_mode
+<span class="p">$ </span>python -m week06 fly --xrce          <span class="c"># no ROS 2</span></code></pre>
+          </figure>
+          <figure class="terminal">
+            <header><span>ROS 2 Jazzy</span><span>ros2_ws</span></header>
+            <pre><code><span class="p">$ </span>ros2 launch ugs_px4 sitl.launch.py altitude:=5
+<span class="p">$ </span>ros2 run ugs_px4 takeoff_client 5 --land
+<span class="p">$ </span>ros2 launch ugs_px4 takeoff.launch.py fake:=true</code></pre>
+          </figure>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer night">
+    <div class="wrap">
+      <p class="big">Built for UAVs@Berkeley Software Ground School 2026.</p>
+      <div>
+        <h2>Project</h2>
+        <ul>
+          <li><a href="{{REPO}}">Repository</a></li>
+          <li><a href="{{REPO}}/tree/main/week06">Week 6 source</a></li>
+          <li><a href="{{REPO}}/tree/main/ros2_ws/src/ugs_px4">ugs_px4</a></li>
+          <li><a href="{{REPO}}/blob/main/docs/week06/RESULTS.md">Results</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Weeks</h2>
+        <ul>
+          <li><a href="./">Week 2: color and stitching</a></li>
+          <li><a href="week3">Week 3: object detection</a></li>
+          <li><a href="week4">Week 4: flight controllers</a></li>
+          <li><a href="week5">Week 5: ROS 2 nodes and communication</a></li>
+          <li><a href="week6">Week 6: PX4 SITL and a takeoff action</a></li>
+        </ul>
+      </div>
+      <p class="fine"><span>Karthik Subramanian. MIT License.</span><span class="mono">Built {{BUILD_DATE}}</span></p>
+    </div>
+  </footer>
+
+  <script src="js/week6.js" defer></script>
+  <script src="js/site.js" defer></script>
+</body>
+</html>
