@@ -86,8 +86,21 @@
           if (link) showLink(link.dataset.link);
           else if (part) showPart(part.dataset.part);
         });
+        // With the script running the diagram is a set of controls, not one picture:
+        // a group whose parts and wires are named buttons (4.1.2).
+        wiring.setAttribute("role", "group");
+        const seen = new Set();
         wiring.querySelectorAll("[data-link], [data-part]").forEach((n) => {
+          const link = n.dataset.link && data.links[n.dataset.link];
+          const part = n.dataset.part && data.parts[n.dataset.part];
+          // A wire is drawn as a path plus end dots; only its first shape is a tab stop.
+          const key = n.dataset.link ? `l:${n.dataset.link}` : `p:${n.dataset.part}`;
+          if (seen.has(key)) return;
+          seen.add(key);
           n.setAttribute("tabindex", "0");
+          n.setAttribute("role", "button");
+          if (link) n.setAttribute("aria-label", `${link.from} to ${link.to}, ${link.protocol}`);
+          else if (part) n.setAttribute("aria-label", part.name);
           n.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
@@ -112,6 +125,9 @@
           );
         }
         wiring.addEventListener("dblclick", overview);
+        wiring.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") overview();
+        });
         overview();
       })
       .catch((e) => (panel.textContent = `Could not load the design (${e.message}).`));
