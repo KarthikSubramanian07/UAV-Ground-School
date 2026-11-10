@@ -269,12 +269,16 @@
       const swatch = document.createElement("i");
       swatch.className = "swatch";
       swatch.style.background = rgb(layer.swatch);
-      name.append(swatch, layer.name);
+      // The visible text names the button (2.5.3 label in name); the hidden word
+      // only adds context between the color and its numbers.
+      const hint = document.createElement("span");
+      hint.className = "visually-hidden";
+      hint.textContent = " layer,";
+      name.append(swatch, layer.name, hint);
       const info = document.createElement("span");
       const objects = layer.objects.length;
       info.textContent = `${(layer.coverage * 100).toFixed(1)}%, ${objects} object${objects === 1 ? "" : "s"}`;
       meta.append(name, info);
-      button.setAttribute("aria-label", `${layer.name} layer, ${(layer.coverage * 100).toFixed(1)} percent of pixels, ${objects} objects`);
       button.append(thumb, meta);
       button.addEventListener("click", () => select(state.selected === index ? null : index));
       li.append(button);
