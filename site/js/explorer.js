@@ -30,6 +30,7 @@
   const image = document.getElementById("explorer-image");
   const svg = document.getElementById("explorer-rings");
   const tip = document.getElementById("explorer-tip");
+  let at = -1; // the dot the keyboard is on
   const title = document.getElementById("explorer-title-method");
   const blurb = document.getElementById("explorer-blurb");
   const colors = document.getElementById("explorer-colors");
@@ -83,6 +84,7 @@
     const result = record.methods[method];
     svg.setAttribute("viewBox", `0 0 ${record.width} ${record.height}`);
     svg.replaceChildren();
+    at = -1;
     const stroke = Math.max(record.width, record.height) / 360;
     svg.style.setProperty("--stroke", stroke.toFixed(2));
     for (const m of result.missed) svg.append(ring(m.x, m.y, m.r, "miss"));
@@ -191,6 +193,40 @@
   });
   svg.addEventListener("pointerleave", () => {
     tip.hidden = true;
+  });
+
+  // Keyboard path to the same details (2.1.1): focus the picture, then arrow keys
+  // step through the scored dots and a polite status line reads each one out.
+  // Escape hides the tooltip (1.4.13).
+  const said = document.createElement("p");
+  said.className = "visually-hidden";
+  said.setAttribute("role", "status");
+  stage.append(said);
+  svg.setAttribute("tabindex", "0");
+  svg.setAttribute("aria-label", "Detections drawn over the photo. Use the arrow keys to step through the dots.");
+  svg.addEventListener("keydown", (event) => {
+    const dots = [...svg.querySelectorAll("circle[data-info]")];
+    if (event.key === "Escape") {
+      tip.hidden = true;
+      return;
+    }
+    const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1, Home: "first", End: "last" }[event.key];
+    if (step === undefined || !dots.length) return;
+    event.preventDefault();
+    if (step === "first") at = 0;
+    else if (step === "last") at = dots.length - 1;
+    else at = (Math.max(at, step > 0 ? -1 : 0) + step + dots.length) % dots.length;
+    dots.forEach((d, i) => d.classList.toggle("kbd", i === at));
+    const box = dots[at].getBoundingClientRect();
+    showTip(dots[at], box.left + box.width / 2, box.top + box.height / 2);
+    said.textContent = `Dot ${at + 1} of ${dots.length}: ${tip.textContent}`;
+  });
+  svg.addEventListener("blur", () => {
+    tip.hidden = true;
+    svg.querySelectorAll(".kbd").forEach((d) => d.classList.remove("kbd"));
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") tip.hidden = true;
   });
 
   // Shareable state: week3?photo=polka_dots_2&method=gray#explorer
